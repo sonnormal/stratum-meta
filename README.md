@@ -51,42 +51,67 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ## 🔄 End-to-End Workflow
 
+![Stratum End-to-End Workflow](docs/assets/workflow.svg)
+
+<details open>
+<summary><b>📐 View Mermaid Source</b></summary>
+
 ```mermaid
-flowchart TD
-    User(["Human Stakeholder<br/>(Email / Zalo / Viber)"])
+graph TD
+    User["Human Stakeholder<br/>(Email / Zalo / Viber)"]
     Gateway["Omnichannel Gateway"]
     Orchestrator["Agent Orchestration Engine"]
 
-    User <--> Gateway
-    Gateway <--> Orchestrator
+    User --> Gateway
+    Gateway --> User
+    Gateway --> Orchestrator
+    Orchestrator --> Gateway
 
     subgraph DevLifecycle ["Software Synthesis and Quality"]
-        Orchestrator --> DevAgent["Dev Agent (Code and Specs)"]
-        DevAgent --> TestAgent["QA Agent (Automated Tests)"]
-        TestAgent --> ReviewGate1{"Review Gate 1<br/>Human Approval"}
+        DevAgent["Dev Agent (Code and Specs)"]
+        TestAgent["QA Agent (Automated Tests)"]
+        ReviewGate1{"Review Gate 1<br/>Human Approval"}
+
+        DevAgent --> TestAgent
+        TestAgent --> ReviewGate1
+        ReviewGate1 -->|"Changes Requested"| DevAgent
     end
 
-    ReviewGate1 -->|"Approved"| GitOpsAgent["GitOps and Delivery Agent"]
-    ReviewGate1 -->|"Changes Requested"| DevAgent
+    Orchestrator --> DevAgent
+    ReviewGate1 -->|"Approved"| GitOpsAgent
 
     subgraph DeliveryOps ["Delivery and Operations"]
-        GitOpsAgent --> StagingDeploy["Deploy Preview / Staging"]
-        StagingDeploy --> ReviewGate2{"Review Gate 2<br/>Production Gate"}
-        ReviewGate2 -->|"Approved"| ProdDeploy["Production Deployment"]
-        ReviewGate2 -->|"Rejected"| Orchestrator
-        ProdDeploy --> AIOps["Autonomous SRE and Observability"]
+        GitOpsAgent["GitOps and Delivery Agent"]
+        StagingDeploy["Deploy Preview / Staging"]
+        ReviewGate2{"Review Gate 2<br/>Production Gate"}
+        ProdDeploy["Production Deployment"]
+        AIOps["Autonomous SRE and Observability"]
+
+        GitOpsAgent --> StagingDeploy
+        StagingDeploy --> ReviewGate2
+        ReviewGate2 -->|"Approved"| ProdDeploy
+        ProdDeploy --> AIOps
     end
+
+    ReviewGate2 -->|"Rejected"| Orchestrator
 
     subgraph DataLifecycle ["Data Pipeline"]
-        ProdDeploy --> Ingest["Data Ingestion"]
-        Ingest --> Transform["Transformation"]
-        Transform --> Delivery["Delivery"]
-        Delivery --> Digest["Digest and Analytics"]
-        Digest --> AIOps
+        Ingest["Data Ingestion"]
+        Transform["Transformation"]
+        Delivery["Delivery"]
+        Digest["Digest and Analytics"]
+
+        Ingest --> Transform
+        Transform --> Delivery
+        Delivery --> Digest
     end
 
+    ProdDeploy --> Ingest
+    Digest --> AIOps
     AIOps -.->|"Alerts and Telemetry"| Gateway
 ```
+
+</details>
 
 ---
 
