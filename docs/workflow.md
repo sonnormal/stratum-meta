@@ -6,8 +6,6 @@
 
 ## 🗺️ Visual Architecture Diagram
 
-![Stratum End-to-End Workflow](assets/workflow.png)
-
 ```mermaid
 graph TD
     User["👤 [STEP-01] Human Stakeholder<br/>(Email / Zalo / Viber)"]
