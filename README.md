@@ -51,62 +51,29 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ## 🔄 End-to-End Workflow
 
-![Stratum End-to-End Workflow](docs/assets/workflow.png)
+Stratum operates as a continuous, closed-loop software delivery and operations lifecycle with explicit human review checkpoints.
 
-```mermaid
-graph TD
-    User["👤 Human Stakeholder<br/>(Email / Zalo / Viber)"]
-    Gateway["🌐 Omnichannel Gateway"]
-    Orchestrator["🧠 Agent Orchestration Engine"]
+[![Stratum End-to-End Workflow](docs/assets/workflow.png)](docs/workflow.md)
 
-    User --> Gateway
-    Gateway --> User
-    Gateway --> Orchestrator
-    Orchestrator --> Gateway
+👉 **For the complete numbered breakdown of each step, see [docs/workflow.md](docs/workflow.md).**
 
-    subgraph DevLifecycle ["🛠️ Software Synthesis and Quality"]
-        DevAgent["Dev Agent (Code and Specs)"]
-        TestAgent["QA Agent (Automated Tests)"]
-        ReviewGate1{"⚖️ Review Gate 1<br/>Human Approval"}
+### Key Lifecycle Phases & Checkpoints
 
-        DevAgent --> TestAgent
-        TestAgent --> ReviewGate1
-        ReviewGate1 -->|"Changes Requested"| DevAgent
-    end
+| Step / Gate | Phase | Actor | Description |
+| :--- | :--- | :--- | :--- |
+| **`STEP-01`** | **Intake** | Human Stakeholder | Conversational request via Email (`sonnormal@gmail.com`), Zalo, or Viber |
+| **`STEP-02`** | **Gateway** | `stratum-gateway` | Webhook ingestion, sender authentication & event normalization |
+| **`STEP-03`** | **Orchestration** | `stratum-orchestrator` | Task decomposition and assignment to specialized agent pools |
+| **`STEP-04`** | **Synthesis** | AI Dev Agent | 100% autonomous code, OpenAPI/AsyncAPI specs, and architecture docs |
+| **`STEP-05`** | **Validation** | AI QA Agent | 100% automated test generation (unit, integration, E2E) in sandbox |
+| **`GATE-01`** | **Review Gate 1** | **Human Reviewer** | **Interactive Code & Architecture Checkpoint (Approve / Revise / Reject)** |
+| **`STEP-06`** | **Staging** | GitOps Agent | Ephemeral preview environment deployment & automated smoke tests |
+| **`GATE-02`** | **Review Gate 2** | **Human Reviewer** | **Production Authorization Checkpoint** |
+| **`STEP-07`** | **Rollout** | GitOps Engine | Automated zero-downtime production deployment (Blue-Green / Canary) |
+| **`STEP-08`** | **AIOps** | `stratum-aiops` | Continuous telemetry monitoring, anomaly detection & automated RCA alerts |
+| **`DATA-01..04`**| **Data Platform** | Data Engine | End-to-end data pipeline: Ingestion $\rightarrow$ Transform $\rightarrow$ Delivery $\rightarrow$ Digest |
 
-    Orchestrator --> DevAgent
-    ReviewGate1 -->|"Approved"| GitOpsAgent
-
-    subgraph DeliveryOps ["🚀 Delivery and Operations"]
-        GitOpsAgent["GitOps and Delivery Agent"]
-        StagingDeploy["Deploy Preview / Staging"]
-        ReviewGate2{"🛡️ Review Gate 2<br/>Production Gate"}
-        ProdDeploy["Production Deployment"]
-        AIOps["Autonomous SRE and Observability"]
-
-        GitOpsAgent --> StagingDeploy
-        StagingDeploy --> ReviewGate2
-        ReviewGate2 -->|"Approved"| ProdDeploy
-        ProdDeploy --> AIOps
-    end
-
-    ReviewGate2 -->|"Rejected"| Orchestrator
-
-    subgraph DataLifecycle ["📊 Data Pipeline"]
-        Ingest["Data Ingestion"]
-        Transform["Transformation"]
-        Delivery["Delivery"]
-        Digest["Digest and Analytics"]
-
-        Ingest --> Transform
-        Transform --> Delivery
-        Delivery --> Digest
-    end
-
-    ProdDeploy --> Ingest
-    Digest --> AIOps
-    AIOps -.->|"Alerts and Telemetry"| Gateway
-```
+*Read the comprehensive operational specification in [docs/workflow.md](docs/workflow.md).*
 
 ---
 
