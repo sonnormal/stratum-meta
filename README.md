@@ -51,26 +51,23 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ## 🔄 End-to-End Workflow
 
-![Stratum End-to-End Workflow](docs/assets/workflow.svg)
-
-<details open>
-<summary><b>📐 View Mermaid Source</b></summary>
+![Stratum End-to-End Workflow](docs/assets/workflow.png)
 
 ```mermaid
 graph TD
-    User["Human Stakeholder<br/>(Email / Zalo / Viber)"]
-    Gateway["Omnichannel Gateway"]
-    Orchestrator["Agent Orchestration Engine"]
+    User["👤 Human Stakeholder<br/>(Email / Zalo / Viber)"]
+    Gateway["🌐 Omnichannel Gateway"]
+    Orchestrator["🧠 Agent Orchestration Engine"]
 
     User --> Gateway
     Gateway --> User
     Gateway --> Orchestrator
     Orchestrator --> Gateway
 
-    subgraph DevLifecycle ["Software Synthesis and Quality"]
+    subgraph DevLifecycle ["🛠️ Software Synthesis and Quality"]
         DevAgent["Dev Agent (Code and Specs)"]
         TestAgent["QA Agent (Automated Tests)"]
-        ReviewGate1{"Review Gate 1<br/>Human Approval"}
+        ReviewGate1{"⚖️ Review Gate 1<br/>Human Approval"}
 
         DevAgent --> TestAgent
         TestAgent --> ReviewGate1
@@ -80,10 +77,10 @@ graph TD
     Orchestrator --> DevAgent
     ReviewGate1 -->|"Approved"| GitOpsAgent
 
-    subgraph DeliveryOps ["Delivery and Operations"]
+    subgraph DeliveryOps ["🚀 Delivery and Operations"]
         GitOpsAgent["GitOps and Delivery Agent"]
         StagingDeploy["Deploy Preview / Staging"]
-        ReviewGate2{"Review Gate 2<br/>Production Gate"}
+        ReviewGate2{"🛡️ Review Gate 2<br/>Production Gate"}
         ProdDeploy["Production Deployment"]
         AIOps["Autonomous SRE and Observability"]
 
@@ -95,7 +92,7 @@ graph TD
 
     ReviewGate2 -->|"Rejected"| Orchestrator
 
-    subgraph DataLifecycle ["Data Pipeline"]
+    subgraph DataLifecycle ["📊 Data Pipeline"]
         Ingest["Data Ingestion"]
         Transform["Transformation"]
         Delivery["Delivery"]
@@ -110,8 +107,6 @@ graph TD
     Digest --> AIOps
     AIOps -.->|"Alerts and Telemetry"| Gateway
 ```
-
-</details>
 
 ---
 
