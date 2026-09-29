@@ -53,82 +53,136 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ```mermaid
 flowchart TD
-    User([Human Stakeholder\nEmail / Zalo / Viber]) <--> |Requests & Approvals| Gateway[Omnichannel Gateway]
-    
-    Gateway <--> Orchestrator[Agent Orchestration Engine]
-    
-    subgraph DevLifecycle [Software Synthesis & Quality]
-        Orchestrator --> DevAgent[Dev Agent: Code & Docs]
-        DevAgent --> TestAgent[QA Agent: Automated Tests]
-        TestAgent --> ReviewGate1{Review Gate 1:\nHuman Approval}
+    User(["Human Stakeholder<br/>(Email / Zalo / Viber)"])
+    Gateway["Omnichannel Gateway"]
+    Orchestrator["Agent Orchestration Engine"]
+
+    User <--> Gateway
+    Gateway <--> Orchestrator
+
+    subgraph DevLifecycle ["Software Synthesis and Quality"]
+        Orchestrator --> DevAgent["Dev Agent (Code and Specs)"]
+        DevAgent --> TestAgent["QA Agent (Automated Tests)"]
+        TestAgent --> ReviewGate1{"Review Gate 1<br/>Human Approval"}
     end
-    
-    ReviewGate1 -- Approved --> IaCAgent[Infra & CI/CD Agent]
-    ReviewGate1 -- Changes Requested --> DevAgent
-    
-    subgraph DeliveryOps [Delivery & Operations]
-        IaCAgent --> StagingDeploy[Deploy Preview / Staging]
-        StagingDeploy --> ReviewGate2{Review Gate 2:\nProduction Gate}
-        ReviewGate2 -- Approved --> ProdDeploy[Production Deployment]
-        ReviewGate2 -- Reject --> Orchestrator
-        ProdDeploy --> AIOps[Autonomous SRE & Observability]
+
+    ReviewGate1 -->|"Approved"| GitOpsAgent["GitOps and Delivery Agent"]
+    ReviewGate1 -->|"Changes Requested"| DevAgent
+
+    subgraph DeliveryOps ["Delivery and Operations"]
+        GitOpsAgent --> StagingDeploy["Deploy Preview / Staging"]
+        StagingDeploy --> ReviewGate2{"Review Gate 2<br/>Production Gate"}
+        ReviewGate2 -->|"Approved"| ProdDeploy["Production Deployment"]
+        ReviewGate2 -->|"Rejected"| Orchestrator
+        ProdDeploy --> AIOps["Autonomous SRE and Observability"]
     end
-    
-    subgraph DataLifecycle [Data Pipeline]
-        ProdDeploy --> Ingest[Data Ingest]
-        Ingest --> Transform[Transformation]
-        Transform --> Delivery[Delivery]
-        Delivery --> Digest[Digest & Analytics]
+
+    subgraph DataLifecycle ["Data Pipeline"]
+        ProdDeploy --> Ingest["Data Ingestion"]
+        Ingest --> Transform["Transformation"]
+        Transform --> Delivery["Delivery"]
+        Delivery --> Digest["Digest and Analytics"]
         Digest --> AIOps
     end
-    
-    AIOps -.-> |Alerts, Telemetry & RCAs| Gateway
+
+    AIOps -.->|"Alerts and Telemetry"| Gateway
 ```
+
+---
+
+## 🏗️ Multi-Repository Strategy
+
+To ensure security isolation, independent release lifecycles, and scoped AI agent contexts, **Stratum is organized as a multi-repository ecosystem** rather than a single monolithic repository.
+
+### Why Infrastructure as Code (IaC) Must Be Separated
+
+1. **Security & Least-Privilege Blast Radius:**
+   - IaC requires elevated cloud-provider privileges (IAM, VPC, DNS, state backends).
+   - Application dev-agents must **never** have write access to cloud infrastructure or state files, preventing accidental destruction or unauthorized privilege escalation.
+2. **Independent Lifecycle & Velocity:**
+   - Infrastructure changes (cloud networks, clusters, databases) happen on a different schedule with stricter change controls than application code.
+3. **AI Agent Context Scoping:**
+   - AI agents operate with maximum accuracy when provided clean, tightly focused repository boundaries rather than overwhelming context.
+4. **Auditability & Compliance:**
+   - Changes to infrastructure have an immutable audit trail isolated from routine code refactoring and bug fixes.
+
+---
+
+## 📦 Stratum Repository Catalog
+
+```text
+┌────────────────────────────────────────────────────────────────────────┐
+│                        stratum (Hub / Meta)                            │
+│           Global Architecture, Governance, Schemas & Docs              │
+└───────────────────┬────────────────────────────────┬───────────────────┘
+                    │                                │
+    ┌───────────────┴───────────────┐  ┌─────────────┴─────────────┐
+    │  Infrastructure & Operations  │  │    Platform & Services    │
+    ├───────────────────────────────┤  ├───────────────────────────┤
+    │ • stratum-infra (IaC)         │  │ • stratum-gateway         │
+    │ • stratum-gitops              │  │ • stratum-orchestrator    │
+    │ • stratum-aiops               │  │ • stratum-data-platform   │
+    │                               │  │ • stratum-services/*      │
+    └───────────────────────────────┘  └───────────────────────────┘
+```
+
+### 1. Ecosystem Meta & Governance
+* **[`stratum`](https://github.com/your-org/stratum)** *(Current Repo)*
+  - **Role:** Central ecosystem documentation, global architecture decision records (ADRs), cross-repo orchestration guidelines, and AI agent prompts/policies.
+
+### 2. Infrastructure as Code (Strict Isolation)
+* **`stratum-infra`**
+  - **Role:** 100% Infrastructure as Code for foundational cloud environments.
+  - **Tech:** Terraform / OpenTofu, Terragrunt, Cloud Networking, IAM, Kubernetes clusters, Managed DBs, KMS/Vault secrets.
+  - **Governance:** Dedicated Infra Review Gate. AI Infra Agent proposes `terraform plan` outputs; human must approve prior to `apply`.
+* **`stratum-gitops`**
+  - **Role:** Declarative environment definitions separating application code from cluster state.
+  - **Tech:** ArgoCD / Flux manifests, Helm charts, Kustomize overlays (staging, prod).
+
+### 3. Core Platform Services
+* **`stratum-gateway`**
+  - **Role:** Omnichannel communication hub. Handles webhook ingests and outbound messaging for **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**. Converts messages into structured events.
+* **`stratum-orchestrator`**
+  - **Role:** The AI coordination brain. Manages task delegation, state machines, review checkpoint triggers, and callback routing.
+* **`stratum-aiops`**
+  - **Role:** Runtime observability and autonomous SRE. Ingests OpenTelemetry traces, metrics, and logs. Runs anomaly detection, synthetic transactions, and triggers automated remediation proposals.
+
+### 4. Data Platform
+* **`stratum-data-platform`**
+  - **Role:** End-to-end data lifecycle services:
+    - **Ingest:** Connectors for event streams, APIs, batch uploads.
+    - **Transform:** Streaming and batch transformation pipelines (dbt, Spark/Flink).
+    - **Delivery:** Query endpoints, data warehouse synchronization, cache warming.
+    - **Digest:** Analytical aggregations, scheduled reports, and autonomous summary generation.
+
+### 5. Application Microservices
+* **`stratum-services`** (or domain-specific repos, e.g. `stratum-service-*`)
+  - **Role:** Business logic microservices.
+  - 100% AI-generated application code and unit/integration test suites.
+  - Generates container images and publishes image tags consumed by `stratum-gitops`.
 
 ---
 
 ## 🧩 Architectural Building Blocks
 
-| Component | Role | Description |
-| :--- | :--- | :--- |
-| **Omnichannel Gateway** | Interface | Connects inbound/outbound messages via Email (`sonnormal@gmail.com`), Zalo Bot API, and Viber Bot API. Translates chat/email into structured agent tasks. |
-| **Orchestration & Governance Engine** | Brain | Coordinates multi-agent workflows, task decomposition, dependency resolution, and maintains stateful human approval checkpoints. |
-| **Software Factory (Dev & QA)** | Implementation | Agent teams dedicated to generating application logic, unit/integration tests, documentation, and pull requests. |
-| **Platform & Delivery (IaC & CI/CD)** | Infrastructure | Declarative IaC management, containerization, pipeline execution, environment provisioning, and automated canary/blue-green rollouts. |
-| **Data Platform** | Data Flow | Orchestrates automated data pipelines: Ingest $\rightarrow$ Transform $\rightarrow$ Deliver $\rightarrow$ Digest. |
-| **Observability & SRE Agent** | Operations | Telemetry evaluation, automated synthetic tests, log anomaly detection, and automated remediation proposals. |
+| Component | Repository | Role | Description |
+| :--- | :--- | :--- | :--- |
+| **Omnichannel Gateway** | `stratum-gateway` | Interface | Inbound/outbound bridge for Email (`sonnormal@gmail.com`), Zalo, and Viber. Translates conversation into structured agent directives. |
+| **Orchestrator** | `stratum-orchestrator` | Coordination | Schedules agent jobs, handles state machines, and enforces Human-in-the-Loop review gates. |
+| **Software Factory** | `stratum-services/*` | Implementation | Specialized dev/test agents producing 100% of domain code, test suites, and OpenAPI specs. |
+| **Data Platform** | `stratum-data-platform` | Data Flow | End-to-end data pipeline: Ingest $\rightarrow$ Transform $\rightarrow$ Deliver $\rightarrow$ Digest. |
+| **Infra as Code (IaC)** | `stratum-infra` | Foundation | 100% declarative cloud infrastructure, cloud security, and compute clusters. |
+| **Delivery Engine** | `stratum-gitops` | Deployment | GitOps declarative delivery tracking preview, staging, and production rollouts. |
+| **Autonomous SRE** | `stratum-aiops` | Operations | Telemetry evaluation, automated synthetic tests, log anomaly detection, and incident remediation proposals. |
 
 ---
 
 ## 💬 Interaction Channels
 
 - **Primary Email:** [`sonnormal@gmail.com`](mailto:sonnormal@gmail.com)
-  - Daily digests, architectural proposals, high-level milestone signoffs, and audit trails.
-- **Messaging (Zalo / Viber):**
-  - Instant change requests, interactive approval cards (Approve / Reject / Request Revision), rapid alert notifications, and quick status queries.
-
----
-
-## 📁 Proposed Repository Layout
-
-```text
-stratum/
-├── README.md                           # Ecosystem master documentation
-├── .stratum/                           # System configs, agent policies, approval rules
-│   ├── approvals.yaml                  # Governance checkpoints & reviewer configuration
-│   └── channels.yaml                   # Email, Zalo, Viber integrations
-├── apps/                               # Core platform services
-│   ├── gateway/                        # Omnichannel bridge (Email, Zalo, Viber)
-│   ├── orchestrator/                   # Agent workflow engine & state machine
-│   ├── data-pipeline/                  # Ingestion, transformation, delivery & digest
-│   └── ops-monitor/                    # AIOps telemetry collector & health checker
-├── services/                           # AI-generated domain business microservices
-├── infra/                              # 100% Infrastructure as Code
-│   ├── terraform/                      # Cloud infrastructure declarations
-│   └── k8s/                            # Workload definitions & GitOps manifests
-├── tests/                              # Global integration & E2E test suites
-└── docs/                               # 100% AI-generated architectural & API docs
-```
+  - Architectural proposals, change request specs, milestone reviews, and formal audit logs.
+- **Instant Chat (Zalo / Viber):**
+  - Real-time notifications, interactive approval buttons (Approve / Reject / Revise), incident alerts, and conversational query interface.
 
 ---
 
