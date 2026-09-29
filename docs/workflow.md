@@ -1,6 +1,6 @@
 # 🔄 Stratum End-to-End Autonomous Workflow
 
-> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront cost-benefit analysis, multi-level impact assessment, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, gated human approvals, and continuous runtime operations.
+> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), value gate decision-making, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, gated human approvals, and continuous runtime operations.
 
 ---
 
@@ -10,21 +10,19 @@
 graph TD
     User["👤 [STEP-01] Human Stakeholder<br/>(Email / Zalo / Viber)"]
     Gateway["🌐 [STEP-02] Omnichannel Gateway"]
-    CostBenefit["📊 [STEP-03] Cost-Benefit &<br/>Operational Feasibility"]
+    Evaluation["📊 [STEP-03] Comprehensive Evaluation<br/>(Impact & Cost-Benefit Analysis)"]
     Gate1{"⚖️ [GATE-01] Value Gate<br/>Is it worth to change?"}
-    ImpactAnalysis["🔍 [STEP-04] Impact Analysis<br/>(Processes, Features, Repos)"]
-    RepoDispatch["📦 [STEP-05] Repo-Scoped CRs<br/>& Isolated Specs"]
+    RepoDispatch["📦 [STEP-04] Repo-Scoped CRs<br/>& Isolated Specs"]
 
     User --> Gateway
-    Gateway --> CostBenefit
-    CostBenefit --> Gate1
-    Gate1 -->|"Approved: Worth It"| ImpactAnalysis
+    Gateway --> Evaluation
+    Evaluation --> Gate1
+    Gate1 -->|"Approved: Worth It"| RepoDispatch
     Gate1 -->|"Rejected: Not Worth It"| Gateway
-    ImpactAnalysis --> RepoDispatch
 
     subgraph TDDLifecycle ["🛠️ Phase: Independent Repo TDD Lifecycle"]
-        TestFirst["🔴 [STEP-06] TDD Phase 1:<br/>Write Tests First (Contracts)"]
-        CodeSynth["🟢 [STEP-07] TDD Phase 2:<br/>Synthesize Code & Refactor"]
+        TestFirst["🔴 [STEP-05] TDD Phase 1:<br/>Write Tests First (Contracts)"]
+        CodeSynth["🟢 [STEP-06] TDD Phase 2:<br/>Synthesize Code & Refactor"]
         Gate2{"⚖️ [GATE-02] Review Gate:<br/>Code & Test Approval"}
 
         TestFirst --> CodeSynth
@@ -36,11 +34,11 @@ graph TD
     Gate2 -->|"Approved"| GitOpsAgent
 
     subgraph DeliveryOps ["🚀 Phase: Delivery & Operations"]
-        GitOpsAgent["[STEP-08] GitOps Delivery<br/>(Preview / Staging Deploy)"]
+        GitOpsAgent["[STEP-07] GitOps Delivery<br/>(Preview / Staging Deploy)"]
         StagingDeploy["[ENV] Preview / Staging Environment"]
         Gate3{"🛡️ [GATE-03] Production Gate<br/>Final Signoff"}
-        ProdDeploy["[STEP-09] Production Rollout<br/>(Canary / Blue-Green)"]
-        AIOps["[STEP-10] Autonomous SRE<br/>(Telemetry & AIOps)"]
+        ProdDeploy["[STEP-08] Production Rollout<br/>(Canary / Blue-Green)"]
+        AIOps["[STEP-09] Autonomous SRE<br/>(Telemetry & AIOps)"]
 
         GitOpsAgent --> StagingDeploy
         StagingDeploy --> Gate3
@@ -74,17 +72,16 @@ graph TD
 | :--- | :--- | :--- | :--- |
 | **`STEP-01`** | **Human Request & Intake** | Human Stakeholder | Submit prompt, bug report, or change idea via Email (`sonnormal@gmail.com`), Zalo, or Viber |
 | **`STEP-02`** | **Omnichannel Normalization** | `stratum-gateway` | Authenticate sender, extract intent/attachments, and emit normalized task event |
-| **`STEP-03`** | **Cost-Benefit & Operational Analysis** | Orchestration Evaluator | Calculate implementation effort + ongoing operational TCO vs. expected business benefits |
+| **`STEP-03`** | **Comprehensive Change Evaluation** | Strategic Evaluation Agent | Deep **Impact Analysis** (Processes, Features, Repos) + **Cost-Benefit Analysis** (TCO & ROI). Generates [CER Report](templates/change_evaluation_template.md) |
 | **`GATE-01`** | **Value & Feasibility Gate** | **Human Reviewer** | **Evaluate ROI and decide: Is this change worth implementing and operating?** |
-| **`STEP-04`** | **Multi-Level Impact Analysis** | Architecture Agent | Analyze downstream impact on **Processes**, **Features/APIs**, and specific **Repositories** |
-| **`STEP-05`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository |
-| **`STEP-06`** | **TDD Phase 1: Test Specification (Red)** | AI QA Agent | Write 100% automated test suites *first* to define contracts before writing code |
-| **`STEP-07`** | **TDD Phase 2: Code Synthesis (Green & Refactor)** | AI Dev Agent | Synthesize minimal code to satisfy tests, followed by automated clean refactoring |
+| **`STEP-04`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository |
+| **`STEP-05`** | **TDD Phase 1: Test Specification (Red)** | AI QA Agent | Write 100% automated test suites *first* to define contracts before writing code |
+| **`STEP-06`** | **TDD Phase 2: Code Synthesis (Green & Refactor)** | AI Dev Agent | Synthesize minimal code to satisfy tests, followed by automated clean refactoring |
 | **`GATE-02`** | **Code & Test Review Gate** | **Human Reviewer** | Review code diffs, test logs, coverage, and schema documentation via Chat/Email |
-| **`STEP-08`** | **Staging & Ephemeral Preview** | GitOps Agent | Apply declarative manifests to ephemeral preview/staging environment and run smoke tests |
+| **`STEP-07`** | **Staging & Ephemeral Preview** | GitOps Agent | Apply declarative manifests to ephemeral preview/staging environment and run smoke tests |
 | **`GATE-03`** | **Production Authorization Gate** | **Human Reviewer** | Inspect live preview environment, verify smoke test results, and approve production release |
-| **`STEP-09`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated rollback |
-| **`STEP-10`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe metrics, logs, traces, and synthetics; trigger automated RCA alerts |
+| **`STEP-08`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated rollback |
+| **`STEP-09`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe metrics, logs, traces, and synthetics; trigger automated RCA alerts |
 | **`DATA-01`** | **Data Ingestion** | Ingestion Engine | Ingest continuous event streams, webhooks, and transactional data |
 | **`DATA-02`** | **Data Transformation** | Transform Workers | Schema enforcement, validation, deduplication, and ELT/ETL transformations |
 | **`DATA-03`** | **Data Delivery** | Delivery Workers | Sync transformed data into caches, data warehouses, and API models |
@@ -94,14 +91,14 @@ graph TD
 
 ## 🔍 Detailed Step-by-Step Breakdown
 
-### Phase 1: Conversational Intake & Strategic Evaluation
+### Phase 1: Conversational Intake & Comprehensive Evaluation
 
 #### `STEP-01`: Human Stakeholder Request & Intake
 * **Actor:** Human Stakeholder (Owner, Engineer, or Product Lead)
 * **Channel:** Email (`sonnormal@gmail.com`), **Zalo**, or **Viber**.
 * **Input:** Natural language description of a requested change, feature request, bug fix, or performance enhancement.
 * **Process:**
-  - The stakeholder sends a prompt, email, or chat message with optional attachments (mockups, log snippets, architecture sketches).
+  - Stakeholder sends a prompt, email, or chat message with optional attachments (mockups, log snippets, architecture sketches).
 * **Output:** Inbound conversational thread logged in `stratum-gateway`.
 
 ---
@@ -118,56 +115,46 @@ graph TD
 
 ---
 
-#### `STEP-03`: Cost-Benefit & Operational Feasibility Analysis
-* **Actor:** `stratum-orchestrator` (Strategic Evaluation Agent)
-* **Input:** `ChangeRequestInitiatedEvent`, current architecture documentation, repository graph, and production telemetry baseline.
-* **Process:**
-  1. **Implementation Cost Modeling:**
-     - Computes estimated agent compute cycles, code complexity, required schema migrations, and potential regression risks.
-  2. **Operational Cost Modeling (Ongoing TCO):**
+#### `STEP-03`: Comprehensive Change Evaluation (Impact & Cost-Benefit Analysis)
+* **Actor:** `stratum-orchestrator` (Strategic Evaluation & Architecture Agent)
+* **Input:** `ChangeRequestInitiatedEvent`, current architecture documentation, repository topology, and production telemetry baseline.
+* **Template Used:** Standardized output conforming to [`docs/templates/change_evaluation_template.md`](templates/change_evaluation_template.md).
+* **Unified Evaluation Process:**
+  1. **Multi-Level Impact Analysis:**
+     - **Process Impact:** Identifies changes to business workflows, operational runbooks, administrative procedures, compliance policies, or CI/CD pipelines.
+     - **Feature & Contract Impact:** Analyzes functional contracts, public API changes, backward compatibility, breaking schema updates, and user journey transitions.
+     - **Repository Impact:** Maps exact changes to affected repositories (`stratum-services/*`, `stratum-gateway`, `stratum-data-platform`, `stratum-infra`, `stratum-gitops`).
+  2. **Implementation Cost Modeling:**
+     - Computes estimated agent compute cycles, code complexity, required schema migrations, and potential regression risks based on the repository impact findings.
+  3. **Operational Cost Modeling (Ongoing TCO):**
      - Forecasts incremental runtime costs: compute, memory, DB storage, network egress, third-party API licensing, and operational maintenance overhead.
-  3. **Business Benefit Assessment:**
-     - Evaluates expected performance improvements, user experience impact, system resilience, revenue potential, or risk reduction.
-  4. **Synthesis:**
-     - Calculates ROI and assigns a feasibility score with an AI recommendation: `Recommended`, `Marginal / High Cost`, or `Not Recommended`.
-* **Output:** Comprehensive **Cost-Benefit Evaluation (CBE) Report**.
+  4. **Business Benefit Assessment & ROI Calculation:**
+     - Evaluates expected performance improvements, user experience impact, system resilience, revenue potential, or risk mitigation.
+     - Computes net ROI verdict formula: $\text{Net Value} = (\text{Benefits} + \text{Risk Mitigation}) - (\text{Implementation Effort} + \text{3-Year Operational TCO})$.
+* **Output:** Comprehensive **Change Evaluation Report (CER)** formatted per [`docs/templates/change_evaluation_template.md`](templates/change_evaluation_template.md).
 
 ---
 
-### Phase 2: Upfront Value Gate & Multi-Level Impact Assessment
+### Phase 2: Upfront Value Gate & Decoupled Repository Decomposition
 
 #### `GATE-01`: Review Gate 1 — Value & Feasibility Gate
 * **Actor:** Human Reviewer (via conversational channel)
-* **Trigger:** Completion of `STEP-03` CBE Report.
+* **Trigger:** Completion of `STEP-03` CER Report.
 * **Notification Delivered:**
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
-  - Displays: High-level change summary, implementation cost vs. ongoing operational cost, expected benefits, and AI recommendation.
+  - Displays: High-level change summary, process/feature/repo impact summary, implementation vs. ongoing operational TCO, and AI strategic recommendation.
 * **Decisions:**
-  * **Option A: `[Approved: Worth It]`** $\rightarrow$ Advances to **`STEP-04`** (Multi-Level Impact Analysis).
+  * **Option A: `[Approved: Worth It]`** $\rightarrow$ Advances to **`STEP-04`** (Repo-Scoped Specifications & Isolated CRs).
   * **Option B: `[Rejected: Not Worth It]`** $\rightarrow$ Shelves the change request, records the decision to the audit log, and notifies the requester with justification (preventing wasteful compute and codebase bloat).
-  * **Option C: `[Scope Revision]`** $\rightarrow$ Prompts requester to constrain scope or modify acceptance criteria.
+  * **Option C: `[Scope Revision]`** $\rightarrow$ Prompts requester to constrain scope or modify acceptance criteria based on high-cost drivers identified in the report.
 
 ---
 
-#### `STEP-04`: Multi-Level Impact Analysis
-* **Actor:** Architecture & System Analysis Agent
-* **Input:** Approved change request from `GATE-01`.
-* **Process:** Conducts a deep, cross-cutting impact assessment across three distinct layers:
-  1. **Process Impact:**
-     - Identifies changes to business workflows, operational runbooks, administrative procedures, compliance policies, or CI/CD paths.
-  2. **Feature Impact:**
-     - Analyzes functional contracts, public API changes, backward compatibility, breaking schema updates, and user journey transitions.
-  3. **Repository Impact:**
-     - Identifies all affected repositories across the multi-repo catalog (`stratum-services/*`, `stratum-gateway`, `stratum-data-platform`, `stratum-infra`, `stratum-gitops`).
-* **Output:** Multi-Level Impact Assessment Matrix.
-
----
-
-#### `STEP-05`: Repo-Scoped Specifications & Isolated Change Requests
+#### `STEP-04`: Repo-Scoped Specifications & Isolated Change Requests
 * **Actor:** `stratum-orchestrator`
-* **Input:** Multi-Level Impact Assessment Matrix from `STEP-04`.
+* **Input:** Approved Change Evaluation Report from `GATE-01`.
 * **Process:**
-  1. **Decoupled Decomposition:** Decomposes the macro change into independent, repository-specific change requests.
+  1. **Decoupled Decomposition:** Decomposes the macro change into independent, repository-specific change requests based on the impact matrix from `STEP-03`.
   2. **Dedicated Specifications:** Generates a standalone technical specification for each affected repository:
      - Exact API schemas / data contracts (OpenAPI, protobuf, AsyncAPI).
      - Expected behavioral contracts, mock interfaces, and dependency stubs.
@@ -180,9 +167,9 @@ graph TD
 
 > **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and executed *before* implementation code is written.
 
-#### `STEP-06`: TDD Phase 1 — Test Specification & Authoring (Red)
+#### `STEP-05`: TDD Phase 1 — Test Specification & Authoring (Red)
 * **Actor:** AI QA Agent (Specialized testing model)
-* **Input:** Repository-scoped specification from `STEP-05`.
+* **Input:** Repository-scoped specification from `STEP-04`.
 * **Process:**
   1. Creates an isolated feature branch in the target repository (e.g. `agent/cr-104-auth`).
   2. Synthesizes 100% automated test suites *first*:
@@ -195,9 +182,9 @@ graph TD
 
 ---
 
-#### `STEP-07`: TDD Phase 2 — Implementation Code Synthesis & Refactoring (Green & Refactor)
+#### `STEP-06`: TDD Phase 2 — Implementation Code Synthesis & Refactoring (Green & Refactor)
 * **Actor:** AI Dev Agent (Specialized coding model)
-* **Input:** Failing test suites and technical specification from `STEP-06`.
+* **Input:** Failing test suites and technical specification from `STEP-05`.
 * **Process:**
   1. **Make Tests Pass (Green):** Synthesizes the minimal, high-quality application code required to satisfy all failing tests.
   2. **Execution & Validation:** Re-runs test automation in the sandbox until 100% of test assertions pass.
@@ -211,18 +198,18 @@ graph TD
 
 #### `GATE-02`: Review Gate 2 — Code, Test & Architecture Approval
 * **Actor:** Human Reviewer (via conversational channel)
-* **Trigger:** 100% test pass rate and clean lint/security audit in `STEP-07`.
+* **Trigger:** 100% test pass rate and clean lint/security audit in `STEP-06`.
 * **Notification Delivered:**
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
   - Includes: Change summary, code diff link, test execution matrix, code coverage metrics, and interactive action buttons.
 * **Decisions:**
-  * **Option A: `[Approve]`** $\rightarrow$ Advances to **`STEP-08`** (Staging & Ephemeral Preview Deployment).
-  * **Option B: `[Changes Requested]`** $\rightarrow$ Re-routes back to **`STEP-06`** (QA/Dev agents) with human guidance notes for autonomous revision.
+  * **Option A: `[Approve]`** $\rightarrow$ Advances to **`STEP-07`** (Staging & Ephemeral Preview Deployment).
+  * **Option B: `[Changes Requested]`** $\rightarrow$ Re-routes back to **`STEP-05`** (QA/Dev agents) with human guidance notes for autonomous revision.
   * **Option C: `[Reject]`** $\rightarrow$ Closes branch and records termination to audit log.
 
 ---
 
-#### `STEP-08`: GitOps Staging & Ephemeral Preview Deployment
+#### `STEP-07`: GitOps Staging & Ephemeral Preview Deployment
 * **Actor:** GitOps Delivery Agent (`stratum-gitops`)
 * **Input:** Approved pull request from `GATE-02`.
 * **Process:**
@@ -241,14 +228,14 @@ graph TD
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
   - Includes: Staging preview URL, smoke test verification summary, and automated rollback plan.
 * **Decisions:**
-  * **Option A: `[Approve Production]`** $\rightarrow$ Advances to **`STEP-09`** (Automated Production Rollout).
-  * **Option B: `[Reject / Abort]`** $\rightarrow$ Tears down preview environment and returns to `STEP-05` or aborts rollout.
+  * **Option A: `[Approve Production]`** $\rightarrow$ Advances to **`STEP-08`** (Automated Production Rollout).
+  * **Option B: `[Reject / Abort]`** $\rightarrow$ Tears down preview environment and returns to `STEP-04` or aborts rollout.
 
 ---
 
 ### Phase 5: Production Delivery, SRE & Data Lifecycle
 
-#### `STEP-09`: Automated Production Rollout
+#### `STEP-08`: Automated Production Rollout
 * **Actor:** GitOps Delivery Engine (ArgoCD / Flux)
 * **Input:** Signed production approval token from `GATE-03`.
 * **Process:**
@@ -260,7 +247,7 @@ graph TD
 
 ---
 
-#### `STEP-10`: Autonomous SRE Observability & Telemetry
+#### `STEP-09`: Autonomous SRE Observability & Telemetry
 * **Actor:** `stratum-aiops` (Autonomous SRE Agent)
 * **Input:** Continuous telemetry stream (OpenTelemetry traces, Prometheus metrics, structured logs, synthetic health probes).
 * **Process:**
@@ -293,5 +280,5 @@ graph TD
 
 #### `DATA-04`: Data Digest & Analytics
 * **Actor:** Autonomous Digest Worker
-* **Process:** Computes aggregated KPIs, monitors trends, and compiles scheduled business & operational digests dispatched directly to stakeholder channels. Feeds continuous quality metrics back into `STEP-10` (AIOps).
+* **Process:** Computes aggregated KPIs, monitors trends, and compiles scheduled business & operational digests dispatched directly to stakeholder channels. Feeds continuous quality metrics back into `STEP-09` (AIOps).
 * **Output:** Executive & operational summary reports delivered to Email and Chat.
