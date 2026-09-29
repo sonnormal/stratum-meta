@@ -15,9 +15,9 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ## 🏛️ Core Principles
 
-1. **100% AI-Generated Code & Automated Testing**
-   - No manual source code authoring. AI agents produce all implementation code, schemas, and API contracts.
-   - 100% test automation generated alongside code: unit, integration, regression, and end-to-end (E2E) suites.
+1. **100% AI-Generated Code & Test-Driven Development (TDD)**
+   - No manual source code authoring. AI agents strictly follow TDD—synthesizing 100% automated test suites (unit, integration, contract, E2E) *first* to specify behavior before generating implementation code.
+   - Decoupled specifications ensure each repository can be developed and tested completely independently.
 
 2. **Omnichannel Conversational Interface**
    - Natural, conversational interaction across primary communication channels:
@@ -25,9 +25,11 @@ Human stakeholders maintain strategic governance and oversight through lightweig
      - **Chat Platforms:** Zalo & Viber
    - Issues, change requests, status updates, and interactive approvals are conducted via email threads and instant messaging.
 
-3. **Human-in-the-Loop (HITL) Governance**
-   - AI agents propose plans, generate code, run validations, and stage deployments.
-   - Explicit human review checkpoints gate critical actions (architecture decisions, production deployments, sensitive data access, infrastructure teardowns).
+3. **Human-in-the-Loop (HITL) & Cost-Benefit Governance**
+   - Explicit human review checkpoints gate critical junctures:
+     - **Value & Feasibility Gate:** Evaluates implementation effort + ongoing operational TCO vs. business benefit to confirm a change is worth making before any code is generated.
+     - **Code & Test Review Gate:** Reviews implementation diffs and test logs.
+     - **Production Gate:** Explicit sign-off required prior to production release.
 
 4. **100% AI-Generated Artifacts**
    - Documentation, architecture diagrams, API specifications (OpenAPI/AsyncAPI), user manuals, and release notes are automatically generated, synced, and kept up to date.
