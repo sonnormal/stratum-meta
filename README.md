@@ -51,29 +51,11 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 ## 🔄 End-to-End Workflow
 
-Stratum operates as a continuous, closed-loop software delivery and operations lifecycle with explicit human review checkpoints.
+Stratum operates as an autonomous, closed-loop software lifecycle system—from conversational change intake to code synthesis, automated verification, gated human approvals, production delivery, and self-healing runtime operations.
 
-[![Stratum End-to-End Workflow](docs/assets/workflow.png)](docs/workflow.md)
+The complete operational lifecycle, architecture diagram, and step-by-step specifications are documented in:
 
-👉 **For the complete numbered breakdown of each step, see [docs/workflow.md](docs/workflow.md).**
-
-### Key Lifecycle Phases & Checkpoints
-
-| Step / Gate | Phase | Actor | Description |
-| :--- | :--- | :--- | :--- |
-| **`STEP-01`** | **Intake** | Human Stakeholder | Conversational request via Email (`sonnormal@gmail.com`), Zalo, or Viber |
-| **`STEP-02`** | **Gateway** | `stratum-gateway` | Webhook ingestion, sender authentication & event normalization |
-| **`STEP-03`** | **Orchestration** | `stratum-orchestrator` | Task decomposition and assignment to specialized agent pools |
-| **`STEP-04`** | **Synthesis** | AI Dev Agent | 100% autonomous code, OpenAPI/AsyncAPI specs, and architecture docs |
-| **`STEP-05`** | **Validation** | AI QA Agent | 100% automated test generation (unit, integration, E2E) in sandbox |
-| **`GATE-01`** | **Review Gate 1** | **Human Reviewer** | **Interactive Code & Architecture Checkpoint (Approve / Revise / Reject)** |
-| **`STEP-06`** | **Staging** | GitOps Agent | Ephemeral preview environment deployment & automated smoke tests |
-| **`GATE-02`** | **Review Gate 2** | **Human Reviewer** | **Production Authorization Checkpoint** |
-| **`STEP-07`** | **Rollout** | GitOps Engine | Automated zero-downtime production deployment (Blue-Green / Canary) |
-| **`STEP-08`** | **AIOps** | `stratum-aiops` | Continuous telemetry monitoring, anomaly detection & automated RCA alerts |
-| **`DATA-01..04`**| **Data Platform** | Data Engine | End-to-end data pipeline: Ingestion $\rightarrow$ Transform $\rightarrow$ Delivery $\rightarrow$ Digest |
-
-*Read the comprehensive operational specification in [docs/workflow.md](docs/workflow.md).*
+👉 **[End-to-End Workflow Specification (docs/workflow.md)](docs/workflow.md)**
 
 ---
 
