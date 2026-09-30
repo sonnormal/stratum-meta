@@ -1,6 +1,6 @@
 # 🔄 Stratum End-to-End Autonomous Workflow
 
-> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), value gate decision-making, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, deployment to the **User Acceptance Testing (UAT)** environment, stakeholder acceptance sign-off, and continuous production operations.
+> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), the 3 strategic Human-in-the-Loop governance gates (**Value Gate**, **Spec & Test Scenario Gate**, and **User Acceptance Gate**), Test-Driven Development (TDD), and continuous production operations.
 > 
 > *Note: Data services, event pipelines, and background processing are treated as standard repositories/features contributing to specific business processes and user experiences, governed by this exact same unified lifecycle.*
 
@@ -22,18 +22,18 @@ graph TD
     Gate1 -->|"Approved: Worth It"| RepoDispatch
     Gate1 -->|"Rejected: Not Worth It"| Gateway
 
-    subgraph TDDLifecycle ["🛠️ Phase: Independent Repo TDD Lifecycle"]
-        TestFirst["🔴 [STEP-05] TDD Phase 1:<br/>Write Tests First (Contracts)"]
+    subgraph TDDLifecycle ["🛠️ Phase: Test-First Specification & Code Factory"]
+        TestFirst["🔴 [STEP-05] TDD Phase 1:<br/>Author Test Scenarios (Red)"]
+        Gate2{"⚖️ [GATE-02] Contract Gate:<br/>Spec & Test Scenario Approval"}
         CodeSynth["🟢 [STEP-06] TDD Phase 2:<br/>Synthesize Code & Refactor"]
-        Gate2{"⚖️ [GATE-02] Review Gate:<br/>Code & Test Approval"}
 
-        TestFirst --> CodeSynth
-        CodeSynth --> Gate2
-        Gate2 -->|"Changes Requested"| TestFirst
+        TestFirst --> Gate2
+        Gate2 -->|"Approved"| CodeSynth
+        Gate2 -->|"Add Edge Cases"| TestFirst
     end
 
     RepoDispatch --> TestFirst
-    Gate2 -->|"Approved"| GitOpsAgent
+    CodeSynth --> GitOpsAgent
 
     subgraph DeliveryOps ["🚀 Phase: Delivery, UAT & Operations"]
         GitOpsAgent["[STEP-07] GitOps Deployment<br/>(Deploy to UAT & Smoke Check)"]
@@ -54,20 +54,32 @@ graph TD
 
 ---
 
+## 🏛️ The Three Human Governance Gates
+
+Stratum divides human governance into three distinct, high-leverage checkpoints:
+
+| Gate | Checkpoint Name | Question Answered | What Human Inspects |
+| :--- | :--- | :--- | :--- |
+| **`GATE-01`** | **Value & Feasibility Gate** | *"Why do it & is it worth it?"* | Impact on processes/features/repos + Implementation cost + Ongoing operational TCO vs. Business ROI |
+| **`GATE-02`** | **Contract & Test Scenario Gate** | *"What exact behavior will be built?"* | API schema diffs + Human-readable test scenarios (positive paths, error conditions, edge cases) |
+| **`GATE-03`** | **User Acceptance Gate (UAT)** | *"Does it work as intended for the user?"* | Live application in UAT environment + test bots on Zalo/Viber $\rightarrow$ Final Production Sign-off |
+
+---
+
 ## 📋 Quick Step Index
 
 | Identifier | Step Name | Primary Actor | Key Purpose |
 | :--- | :--- | :--- | :--- |
 | **`STEP-01`** | **Human Request & Intake** | Human Stakeholder | Submit prompt, bug report, or change idea via Email (`sonnormal@gmail.com`), Zalo, or Viber |
 | **`STEP-02`** | **Omnichannel Normalization** | `stratum-gateway` | Authenticate sender, extract intent/attachments, and emit normalized task event |
-| **`STEP-03`** | **Comprehensive Change Evaluation** | Strategic Evaluation Agent | Deep **Impact Analysis** (Processes, Features, Repos) + **Cost-Benefit Analysis** (TCO & ROI). Generates [CER Report](templates/change_evaluation_template.md) |
-| **`GATE-01`** | **Value & Feasibility Gate** | **Human Reviewer** | **Evaluate ROI and decide: Is this change worth implementing and operating?** |
+| **`STEP-03`** | **Comprehensive Change Evaluation** | Strategic Evaluation Agent | Deep **Impact Analysis** (Processes, Features, Repos) + **Cybersecurity** + **Cost-Benefit Analysis**. Generates [CER Report](templates/change_evaluation_template.md) |
+| **`GATE-01`** | **Value & Feasibility Gate** | **Human Reviewer** | **Decide if the change is worth implementing and operating based on ROI** |
 | **`STEP-04`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository (Domain, Data, Platform) |
-| **`STEP-05`** | **TDD Phase 1: Test Specification (Red)** | AI QA Agent | Write 100% automated test suites *first* to define contracts before writing code |
-| **`STEP-06`** | **TDD Phase 2: Code Synthesis (Green & Refactor)** | AI Dev Agent | Synthesize minimal code to satisfy tests, followed by automated clean refactoring |
-| **`GATE-02`** | **Code & Technical Review Gate** | **Human Reviewer** | Review code diffs, unit/integration test logs, coverage, and schema documentation |
+| **`STEP-05`** | **TDD Phase 1: Test Specification & Authoring (Red)** | AI QA Agent | Write 100% automated test suites *first* to define executable contracts before writing code |
+| **`GATE-02`** | **Contract & Test Scenario Gate** | **Human Reviewer** | **Review and approve API contracts and test scenarios (edge cases) before any implementation code is synthesized** |
+| **`STEP-06`** | **TDD Phase 2: Autonomous Code Synthesis (Green & Refactor)** | AI Dev Agent | Autonomously synthesize minimal code to satisfy approved tests, followed by clean refactoring |
 | **`STEP-07`** | **Deployment to UAT & Smoke Check** | GitOps Agent | Deploy release candidate to **User Acceptance Testing (UAT)** environment and verify basic health smoke checks |
-| **`GATE-03`** | **User Acceptance Gate (UAT Sign-off)** | **Human Stakeholder** | **Stakeholder tests and explores functionality in the UAT environment to grant final production sign-off** |
+| **`GATE-03`** | **User Acceptance Gate (UAT Sign-off)** | **Human Stakeholder** | **Stakeholder tests functionality live in UAT environment to grant final production rollout sign-off** |
 | **`STEP-08`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated smoke verification & rollback |
 | **`STEP-09`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe live telemetry, synthetic probes, and anomalies; trigger automated RCA alerts |
 
@@ -99,7 +111,7 @@ graph TD
 
 ---
 
-#### `STEP-03`: Comprehensive Change Evaluation (Impact & Cost-Benefit Analysis)
+#### `STEP-03`: Comprehensive Change Evaluation (Impact, Security & Cost-Benefit)
 * **Actor:** `stratum-orchestrator` (Strategic Evaluation & Architecture Agent)
 * **Input:** `ChangeRequestInitiatedEvent`, current architecture documentation, repository topology, and production telemetry baseline.
 * **Template Used:** Standardized output conforming to [`docs/templates/change_evaluation_template.md`](templates/change_evaluation_template.md).
@@ -109,8 +121,8 @@ graph TD
      - **Feature & Contract Impact:** Analyzes functional contracts, public API changes, backward compatibility, breaking schema updates, and user journey transitions.
      - **Repository Impact:** Maps exact changes to affected repositories (`stratum-services/*`, `stratum-gateway`, `stratum-data-platform`, `stratum-infra`, `stratum-gitops`).
   2. **Cybersecurity & Threat Assessment:**
-     - **Threat Modeling (STRIDE):** Assesses risks across spoofing, tampering, repudiation, information leakage, DoS, and privilege escalation.
-     - **Access Control & Ingress Exposure:** Verifies authentication mechanisms, role scopes (least privilege), public attack surfaces, and prompt injection defenses.
+     - **Threat Modeling (STRIDE):** Evaluates identity spoofing, data tampering, information leaks, DoS, and privilege escalation.
+     - **Ingress & Access Control:** Verifies authentication mechanisms, role scopes (least privilege), public attack surfaces, and prompt injection defenses.
      - **Data Privacy & Secrets:** Classifies PII/confidential data, checks TLS/at-rest encryption standards, and confirms zero hardcoded secrets.
      - **Supply Chain Hygiene:** Validates third-party package dependencies against known CVE vulnerabilities.
   3. **Implementation Cost Modeling:**
@@ -131,7 +143,7 @@ graph TD
 * **Trigger:** Completion of `STEP-03` CER Report.
 * **Notification Delivered:**
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
-  - Displays: High-level change summary, process/feature/repo impact summary, implementation vs. ongoing operational TCO, and AI strategic recommendation.
+  - Displays: High-level change summary, process/feature/repo impact summary, cybersecurity assessment flags, implementation vs. ongoing operational TCO, and AI strategic recommendation.
 * **Decisions:**
   * **Option A: `[Approved: Worth It]`** $\rightarrow$ Advances to **`STEP-04`** (Repo-Scoped Specifications & Isolated CRs).
   * **Option B: `[Rejected: Not Worth It]`** $\rightarrow$ Shelves the change request, records the decision to the audit log, and notifies the requester with justification (preventing wasteful compute and codebase bloat).
@@ -153,55 +165,59 @@ graph TD
 
 ---
 
-### Phase 3: Test-Driven Development (TDD) Software Factory
+### Phase 3: Test-First Specification & Code Factory
 
-> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and executed *before* implementation code is written across all repositories.
+> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and human-approved *before* implementation code is written.
 
-#### `STEP-05`: TDD Phase 1 — Test Specification & Authoring (Red)
+#### `STEP-05`: TDD Phase 1 — Test Specification & Scenario Authoring (Red)
 * **Actor:** AI QA Agent (Specialized testing model)
 * **Input:** Repository-scoped specification from `STEP-04`.
 * **Process:**
   1. Creates an isolated feature branch in the target repository (e.g. `agent/cr-104-auth` or `agent/cr-104-datapipeline`).
-  2. Synthesizes 100% automated test suites *first*:
-     - **Unit Tests:** Boundary checks, input validation, logic assertions, edge cases.
-     - **Integration Tests:** Database transactions, cache lookups, and message bus interactions with containerized dependencies (Testcontainers).
-     - **Contract Tests:** Strict verification against OpenAPI / AsyncAPI schemas.
-  3. Executes test suites in a clean sandbox container:
-     - **Verification of "Red":** Confirms that tests fail cleanly for the right reasons before implementation exists.
-* **Output:** Committed automated test suite defining the executable specification contract.
+  2. Synthesizes 100% automated test suites:
+     - **Happy Path Scenarios:** Verifying primary user journeys and business flows.
+     - **Boundary & Edge Cases:** Zero values, extreme ranges, character limits, localization/format variations.
+     - **Error & Fault Scenarios:** Invalid tokens, timeout handling, database failure simulations.
+     - **Security & Authorization Assertions:** Access control barriers, injection inputs, unauthenticated rejections.
+  3. Confirms that all newly authored tests fail cleanly in sandbox (`Red` state).
+  4. Generates a **Human-Readable Test Scenario Summary** (in plain language bullet points).
+* **Output:** Committed test suites in branch and formatted Test Scenario Summary for human review.
 
 ---
 
-#### `STEP-06`: TDD Phase 2 — Implementation Code Synthesis & Refactoring (Green & Refactor)
+#### `GATE-02`: Review Gate 2 — Contract & Test Scenario Gate
+* **Actor:** Human Reviewer (via conversational channel)
+* **Trigger:** Completion of `STEP-05` test authoring in sandbox.
+* **Why this gate is critical:**
+  - **High Leverage:** Reviewing 10–15 plain-language test scenarios takes 60 seconds and guarantees that the AI builds the *exact right thing*.
+  - **Eliminates Wasted AI Compute:** Prevents the AI Dev Agent from generating hundreds of lines of code based on a misunderstood assumption.
+* **Notification Delivered:**
+  - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
+  - Displays: Target repository name, API schema contract diff, and the bulleted list of test scenarios (Positive, Edge cases, Errors, Security).
+* **Decisions:**
+  * **Option A: `[Approve Scenarios]`** $\rightarrow$ Advances immediately to **`STEP-06`** (AI synthesizes code to satisfy tests).
+  * **Option B: `[Add / Refine Scenarios]`** $\rightarrow$ Human replies with missing edge cases (e.g., *"Also test what happens if the phone number has +84 format"*); QA Agent appends new tests and updates the suite.
+  * **Option C: `[Reject]`** $\rightarrow$ Closes branch and terminates CR.
+
+---
+
+#### `STEP-06`: TDD Phase 2 — Autonomous Code Synthesis & Refactoring (Green & Refactor)
 * **Actor:** AI Dev Agent (Specialized coding model)
-* **Input:** Failing test suites and technical specification from `STEP-05`.
+* **Input:** Approved test suites and technical specification from `GATE-02`.
 * **Process:**
-  1. **Make Tests Pass (Green):** Synthesizes the minimal, high-quality application code required to satisfy all failing tests.
+  1. **Make Tests Pass (Green):** Synthesizes the minimal, high-quality application code required to satisfy all approved failing tests.
   2. **Execution & Validation:** Re-runs test automation in the sandbox until 100% of test assertions pass.
   3. **Refactor:** Optimizes algorithms, eliminates redundancy, ensures idiomatic conventions, and updates documentation/type annotations without breaking tests.
-  4. Generates a pull request with full test execution reports and diff summaries.
+  4. Prepares pull request and artifacts for UAT deployment.
 * **Output:** Clean code pull request with 100% green test suite in the target repository.
 
 ---
 
 ### Phase 4: Delivery to UAT & User Acceptance Gate
 
-#### `GATE-02`: Review Gate 2 — Code & Technical Review Gate
-* **Actor:** Human Reviewer (via conversational channel)
-* **Trigger:** 100% unit and integration test pass rate and clean lint/security audit in `STEP-06`.
-* **Notification Delivered:**
-  - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
-  - Includes: Change summary, code diff link, test execution matrix, code coverage metrics, and interactive action buttons.
-* **Decisions:**
-  * **Option A: `[Approve]`** $\rightarrow$ Advances to **`STEP-07`** (Deployment to UAT Environment).
-  * **Option B: `[Changes Requested]`** $\rightarrow$ Re-routes back to **`STEP-05`** (QA/Dev agents) with human guidance notes for autonomous revision.
-  * **Option C: `[Reject]`** $\rightarrow$ Closes branch and records termination to audit log.
-
----
-
 #### `STEP-07`: GitOps Deployment to UAT Environment & Smoke Check
 * **Actor:** GitOps Delivery Agent (`stratum-gitops`)
-* **Input:** Approved pull request from `GATE-02`.
+* **Input:** Verified green pull request from `STEP-06`.
 * **Environment Characteristics (UAT - User Acceptance Testing):**
   - **High-Fidelity Mirror:** Stable environment configured with production-parity topology and realistic (sanitized/anonymized) test data.
   - **Connected Channels:** Wired to test chat bots (Zalo, Viber) and email test aliases to allow natural end-to-end user interaction.

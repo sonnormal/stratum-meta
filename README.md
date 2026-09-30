@@ -25,11 +25,11 @@ Human stakeholders maintain strategic governance and oversight through lightweig
      - **Chat Platforms:** Zalo & Viber
    - Issues, change requests, status updates, and interactive approvals are conducted via email threads and instant messaging.
 
-3. **Human-in-the-Loop (HITL) & Cost-Benefit Governance**
-   - Explicit human review checkpoints gate critical junctures:
-     - **Value & Feasibility Gate:** Evaluates implementation effort + ongoing operational TCO vs. business benefit to confirm a change is worth making before any code is generated.
-     - **Code & Test Review Gate:** Reviews implementation diffs and test logs.
-     - **Production Gate:** Explicit sign-off required prior to production release.
+3. **Human-in-the-Loop (HITL) Strategic Governance**
+   - Explicit human checkpoints gate critical junctures via conversational channels (Email, Zalo, Viber):
+     - **Value & Feasibility Gate (`GATE-01`):** *Why & How Much* — Evaluates implementation cost + operational TCO vs. business benefit before any development begins.
+     - **Contract & Test Scenario Gate (`GATE-02`):** *What to Build* — Reviews and approves API contracts and human-readable test scenarios (edge cases) *before* implementation code is synthesized.
+     - **User Acceptance Gate (`GATE-03`):** *Verification & Sign-off* — Stakeholder tests functionality live in the UAT environment prior to production rollout.
 
 4. **100% AI-Generated Artifacts**
    - Documentation, architecture diagrams, API specifications (OpenAPI/AsyncAPI), user manuals, and release notes are automatically generated, synced, and kept up to date.
