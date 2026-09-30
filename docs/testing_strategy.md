@@ -59,14 +59,14 @@ Unit tests verify the smallest testable units of code (functions, pure domain en
 
 ## 🔌 Tier 2: Integration Testing (Seams & Side-Effects)
 
-### 2.1 The Core Question: Is it just an API call and output check?
-**No.** While calling an API endpoint and asserting `HTTP 200 OK` is a common form of integration test, **integration testing in Stratum is fundamentally about verifying the seams and stateful side-effects between code and real external subsystems.**
+### 2.1 Definition & Scope
+Integration testing in Stratum verifies the seams, communications, and stateful side-effects between application code and real external subsystems (databases, caches, message brokers, and downstream service contracts). Rather than merely asserting HTTP response codes, integration tests validate that real data transitions and side-effects occur reliably.
 
 ```
                        ┌──────────────────────────────────────────────────┐
                        │          INTEGRATION TEST SCOPE                  │
                        │                                                  │
-   [ HTTP / gRPC Call ]──► [ Service Logic ] ──► [ Real PostgreSQL DB ]  │  (Asserts DB rows, constraints, rollbacks)
+    [ HTTP / gRPC Call ]──► [ Service Logic ] ──► [ Real PostgreSQL DB ]  │  (Asserts DB rows, constraints, rollbacks)
                        │          │                                       │
                        │          ├────────────► [ Real Redis Cache ]     │  (Asserts cache hits, invalidation & TTL)
                        │          │                                       │
