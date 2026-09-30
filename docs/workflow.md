@@ -108,11 +108,16 @@ graph TD
      - **Process Impact:** Identifies changes to business workflows, operational runbooks, administrative procedures, compliance policies, or CI/CD pipelines.
      - **Feature & Contract Impact:** Analyzes functional contracts, public API changes, backward compatibility, breaking schema updates, and user journey transitions.
      - **Repository Impact:** Maps exact changes to affected repositories (`stratum-services/*`, `stratum-gateway`, `stratum-data-platform`, `stratum-infra`, `stratum-gitops`).
-  2. **Implementation Cost Modeling:**
+  2. **Cybersecurity & Threat Assessment:**
+     - **Threat Modeling (STRIDE):** Assesses risks across spoofing, tampering, repudiation, information leakage, DoS, and privilege escalation.
+     - **Access Control & Ingress Exposure:** Verifies authentication mechanisms, role scopes (least privilege), public attack surfaces, and prompt injection defenses.
+     - **Data Privacy & Secrets:** Classifies PII/confidential data, checks TLS/at-rest encryption standards, and confirms zero hardcoded secrets.
+     - **Supply Chain Hygiene:** Validates third-party package dependencies against known CVE vulnerabilities.
+  3. **Implementation Cost Modeling:**
      - Computes estimated agent compute cycles, code complexity, required schema migrations, and potential regression risks based on the repository impact findings.
-  3. **Operational Cost Modeling (Ongoing TCO):**
+  4. **Operational Cost Modeling (Ongoing TCO):**
      - Forecasts incremental runtime costs: compute, memory, DB storage, network egress, third-party API licensing, and operational maintenance overhead.
-  4. **Business Benefit Assessment & ROI Calculation:**
+  5. **Business Benefit Assessment & ROI Calculation:**
      - Evaluates expected performance improvements, user experience impact, system resilience, revenue potential, or risk mitigation.
      - Computes net ROI verdict formula: $\text{Net Value} = (\text{Benefits} + \text{Risk Mitigation}) - (\text{Implementation Effort} + \text{3-Year Operational TCO})$.
 * **Output:** Comprehensive **Change Evaluation Report (CER)** formatted per [`docs/templates/change_evaluation_template.md`](templates/change_evaluation_template.md).
