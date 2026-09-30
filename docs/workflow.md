@@ -167,7 +167,7 @@ Stratum divides human governance into three distinct, high-leverage checkpoints:
 
 ### Phase 3: Test-First Specification & Code Factory
 
-> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and human-approved *before* implementation code is written.
+> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and human-approved *before* implementation code is written. For the detailed testing pyramid, execution topology (Local Runner vs. Cloud UAT), and Testcontainers patterns, see [`docs/testing_strategy.md`](testing_strategy.md).
 
 #### `STEP-05`: TDD Phase 1 — Test Specification & Scenario Authoring (Red)
 * **Actor:** AI QA Agent (Specialized testing model)

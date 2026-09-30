@@ -57,7 +57,8 @@ Stratum operates as an autonomous, closed-loop software lifecycle system—from 
 
 The complete operational lifecycle, architecture diagram, and step-by-step specifications are documented in:
 
-👉 **[End-to-End Workflow Specification (docs/workflow.md)](docs/workflow.md)**
+👉 **[End-to-End Workflow Specification (docs/workflow.md)](docs/workflow.md)**  
+👉 **[Comprehensive Testing Strategy (docs/testing_strategy.md)](docs/testing_strategy.md)**
 
 ---
 
