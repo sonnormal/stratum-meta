@@ -1,6 +1,6 @@
 # 🔄 Stratum End-to-End Autonomous Workflow
 
-> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), value gate decision-making, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, automated End-to-End (E2E) testing on staging, gated human approvals, and continuous runtime operations.
+> This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), value gate decision-making, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, deployment to the **User Acceptance Testing (UAT)** environment, stakeholder acceptance sign-off, and continuous production operations.
 > 
 > *Note: Data services, event pipelines, and background processing are treated as standard repositories/features contributing to specific business processes and user experiences, governed by this exact same unified lifecycle.*
 
@@ -35,22 +35,20 @@ graph TD
     RepoDispatch --> TestFirst
     Gate2 -->|"Approved"| GitOpsAgent
 
-    subgraph DeliveryOps ["🚀 Phase: Delivery & Operations"]
-        GitOpsAgent["[STEP-07] GitOps Delivery<br/>(Preview / Staging Deploy)"]
-        StagingDeploy["[ENV] Preview / Staging Environment"]
-        E2ETest["🧪 [STEP-08] Automated E2E Testing<br/>(Cross-Service User Journeys)"]
-        Gate3{"🛡️ [GATE-03] Production Gate<br/>Review E2E Results & Signoff"}
-        ProdDeploy["[STEP-09] Production Rollout<br/>(Canary / Blue-Green)"]
-        AIOps["[STEP-10] Autonomous SRE<br/>(Telemetry & AIOps)"]
+    subgraph DeliveryOps ["🚀 Phase: Delivery, UAT & Operations"]
+        GitOpsAgent["[STEP-07] GitOps Deployment<br/>(Deploy to UAT & Smoke Check)"]
+        UATDeploy["🖥️ [ENV] UAT Environment<br/>(User Acceptance Testing)"]
+        Gate3{"🛡️ [GATE-03] User Acceptance Gate<br/>Stakeholder UAT Sign-off"}
+        ProdDeploy["[STEP-08] Production Rollout<br/>(Canary / Blue-Green)"]
+        AIOps["[STEP-09] Autonomous SRE<br/>(Telemetry & AIOps)"]
 
-        GitOpsAgent --> StagingDeploy
-        StagingDeploy --> E2ETest
-        E2ETest --> Gate3
-        Gate3 -->|"Approved"| ProdDeploy
+        GitOpsAgent --> UATDeploy
+        UATDeploy --> Gate3
+        Gate3 -->|"Accepted"| ProdDeploy
         ProdDeploy --> AIOps
     end
 
-    Gate3 -->|"Rejected"| RepoDispatch
+    Gate3 -->|"Changes Requested"| RepoDispatch
     AIOps -.->|"Alerts & Telemetry"| Gateway
 ```
 
@@ -67,12 +65,11 @@ graph TD
 | **`STEP-04`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository (Domain, Data, Platform) |
 | **`STEP-05`** | **TDD Phase 1: Test Specification (Red)** | AI QA Agent | Write 100% automated test suites *first* to define contracts before writing code |
 | **`STEP-06`** | **TDD Phase 2: Code Synthesis (Green & Refactor)** | AI Dev Agent | Synthesize minimal code to satisfy tests, followed by automated clean refactoring |
-| **`GATE-02`** | **Code & Test Review Gate** | **Human Reviewer** | Review code diffs, unit/integration test logs, coverage, and schema documentation |
-| **`STEP-07`** | **Staging & Ephemeral Preview** | GitOps Agent | Apply declarative manifests to spin up preview/staging environment with all microservices |
-| **`STEP-08`** | **Automated End-to-End (E2E) Testing** | AI E2E QA Agent | Execute full cross-service automated user journeys, performance checks, and regression suites on live staging |
-| **`GATE-03`** | **Production Authorization Gate** | **Human Reviewer** | **Inspect live preview environment + full E2E test execution report to sign off on production release** |
-| **`STEP-09`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated rollback |
-| **`STEP-10`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe metrics, logs, traces, and synthetics; trigger automated RCA alerts |
+| **`GATE-02`** | **Code & Technical Review Gate** | **Human Reviewer** | Review code diffs, unit/integration test logs, coverage, and schema documentation |
+| **`STEP-07`** | **Deployment to UAT & Smoke Check** | GitOps Agent | Deploy release candidate to **User Acceptance Testing (UAT)** environment and verify basic health smoke checks |
+| **`GATE-03`** | **User Acceptance Gate (UAT Sign-off)** | **Human Stakeholder** | **Stakeholder tests and explores functionality in the UAT environment to grant final production sign-off** |
+| **`STEP-08`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated smoke verification & rollback |
+| **`STEP-09`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe live telemetry, synthetic probes, and anomalies; trigger automated RCA alerts |
 
 ---
 
@@ -182,86 +179,77 @@ graph TD
 
 ---
 
-### Phase 4: Staging, Automated E2E Testing & Pre-Production Gate
+### Phase 4: Delivery to UAT & User Acceptance Gate
 
-#### `GATE-02`: Review Gate 2 — Code, Test & Architecture Approval
+#### `GATE-02`: Review Gate 2 — Code & Technical Review Gate
 * **Actor:** Human Reviewer (via conversational channel)
 * **Trigger:** 100% unit and integration test pass rate and clean lint/security audit in `STEP-06`.
 * **Notification Delivered:**
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
   - Includes: Change summary, code diff link, test execution matrix, code coverage metrics, and interactive action buttons.
 * **Decisions:**
-  * **Option A: `[Approve]`** $\rightarrow$ Advances to **`STEP-07`** (Staging & Ephemeral Preview Deployment).
+  * **Option A: `[Approve]`** $\rightarrow$ Advances to **`STEP-07`** (Deployment to UAT Environment).
   * **Option B: `[Changes Requested]`** $\rightarrow$ Re-routes back to **`STEP-05`** (QA/Dev agents) with human guidance notes for autonomous revision.
   * **Option C: `[Reject]`** $\rightarrow$ Closes branch and records termination to audit log.
 
 ---
 
-#### `STEP-07`: GitOps Staging & Ephemeral Preview Deployment
+#### `STEP-07`: GitOps Deployment to UAT Environment & Smoke Check
 * **Actor:** GitOps Delivery Agent (`stratum-gitops`)
 * **Input:** Approved pull request from `GATE-02`.
+* **Environment Characteristics (UAT - User Acceptance Testing):**
+  - **High-Fidelity Mirror:** Stable environment configured with production-parity topology and realistic (sanitized/anonymized) test data.
+  - **Connected Channels:** Wired to test chat bots (Zalo, Viber) and email test aliases to allow natural end-to-end user interaction.
 * **Process:**
   1. Builds and tags container images for all updated repositories.
-  2. Updates declarative Kubernetes manifests / Helm charts in `stratum-gitops`.
-  3. Provisions an isolated ephemeral preview environment (or updates the shared staging cluster) with all microservices interconnected.
-  4. Runs health checks to verify that all pods, databases, and message brokers are healthy and ready to receive traffic.
-* **Output:** Live, running staging preview environment ready for comprehensive end-to-end testing.
+  2. Updates declarative Kubernetes manifests in `stratum-gitops` targeting the UAT environment overlay.
+  3. Deploys updated workloads to the UAT cluster.
+  4. Runs automated startup readiness probes and lightweight smoke pings to ensure basic connectivity (DB, cache, ingress).
+* **Output:** Live, operational UAT environment with accessible URLs and active chat/email webhooks ready for stakeholder testing.
 
 ---
 
-#### `STEP-08`: Automated End-to-End (E2E) System Testing
-* **Actor:** AI E2E QA Agent (`stratum-orchestrator:e2e-runner`)
-* **Input:** Live ephemeral preview environment deployed in `STEP-07`.
-* **Process:**
-  1. **Full User Journey Execution:**
-     - Simulates complete end-to-end flows across all services (e.g. Inbound message $\rightarrow$ Gateway $\rightarrow$ Orchestrator $\rightarrow$ Domain Microservice $\rightarrow$ Database persistence $\rightarrow$ Data platform ingestion/sync $\rightarrow$ Outbound response).
-  2. **Cross-Service Contract & Security Validation:**
-     - Tests live network communication, JWT token handoffs, CORS, rate limits, and TLS certificates across services.
-  3. **Synthetic Load & Latency Assertion:**
-     - Sends concurrent synthetic traffic to verify p95/p99 response latencies match SLO requirements.
-  4. **Regression Verification:**
-     - Executes the broader automated regression suite to ensure adjacent unaffected features continue functioning flawlessly.
-* **Output:** **Automated E2E Test Execution & Verification Report** (100% pass status, execution traces, response times, and failure diagnostics if any).
-
----
-
-#### `GATE-03`: Review Gate 3 — Production Gate Approval (E2E Sign-Off)
-* **Actor:** Human Reviewer (via conversational channel)
-* **Trigger:** Completion of `STEP-08` with 100% passing E2E test suite.
+#### `GATE-03`: Review Gate 3 — User Acceptance Gate (UAT Sign-off)
+* **Actor:** Human Stakeholder / Product Owner (via conversational channel)
+* **Trigger:** Successful deployment to UAT environment in `STEP-07`.
 * **Notification Delivered:**
   - Sent to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber**.
   - Displays:
-    - **Staging Preview URL** (for manual walkthrough or visual inspection if desired).
-    - **E2E Test Execution Summary:** Number of journeys executed, 100% pass rate badge, latency metrics.
-    - **Trace Links & Logs:** Clickable deep-links to OpenTelemetry traces from the E2E run.
-    - **Automated Rollback Plan:** Pre-configured canary rollback thresholds.
+    - **UAT Web Access Link:** URL to the running application in the UAT environment.
+    - **UAT Bot Handles:** Test bot accounts on Zalo/Viber for verifying conversational features.
+    - **Test Account Credentials & Seed Data Context.**
+    - **Change Summary & Acceptance Criteria Checklist.**
+* **User Acceptance Testing (UAT) Process:**
+  - The stakeholder interacts with the feature directly in the UAT environment (clicking web UI, sending test chat commands, verifying reports).
 * **Decisions:**
-  * **Option A: `[Approve Production]`** $\rightarrow$ Signs off on release; advances to **`STEP-09`** (Automated Production Rollout).
-  * **Option B: `[Reject / Abort]`** $\rightarrow$ Tears down preview environment, notifies requester, and re-routes back to `STEP-04` with feedback notes.
+  * **Option A: `[Accept & Sign Off Production]`** $\rightarrow$ Feature is accepted; advances immediately to **`STEP-08`** (Automated Production Rollout).
+  * **Option B: `[Request UAT Changes]`** $\rightarrow$ Stakeholder provides feedback notes describing discrepancies; re-routes back to **`STEP-04`** for autonomous agent revision.
+  * **Option C: `[Reject / Abort]`** $\rightarrow$ Reverts UAT deployment and closes the change request.
 
 ---
 
 ### Phase 5: Production Delivery, SRE & Closed-Loop Operations
 
-#### `STEP-09`: Automated Production Rollout
+#### `STEP-08`: Automated Production Rollout
 * **Actor:** GitOps Delivery Engine (ArgoCD / Flux)
 * **Input:** Cryptographically signed production approval token from `GATE-03`.
 * **Process:**
   1. Merges feature PR into `main`.
-  2. Executes progressive delivery strategy (Canary or Blue-Green rollout).
-  3. Shifts live traffic incrementally (10% $\rightarrow$ 25% $\rightarrow$ 50% $\rightarrow$ 100%) while continuously querying telemetry error rates and response latencies.
-  4. Automatically triggers an immediate rollback if latency or error thresholds breach SLO limits.
+  2. Executes progressive delivery strategy (Canary or Blue-Green rollout) directly on the Production cluster.
+  3. Runs automated production smoke tests during canary traffic shifting (10% $\rightarrow$ 25% $\rightarrow$ 50% $\rightarrow$ 100%).
+  4. Automatically triggers an immediate rollback if error rates or latency breach SLO thresholds.
 * **Output:** Successfully released production version with zero downtime.
 
 ---
 
-#### `STEP-10`: Autonomous SRE Observability & Telemetry
+#### `STEP-09`: Autonomous SRE Observability & Telemetry
 * **Actor:** `stratum-aiops` (Autonomous SRE Agent)
-* **Input:** Continuous telemetry stream (OpenTelemetry traces, Prometheus metrics, structured logs, synthetic health probes).
+* **Input:** Continuous live production telemetry stream (OpenTelemetry traces, Prometheus metrics, structured logs, synthetic heartbeat probes).
 * **Process:**
-  1. Tracks golden signals: Latency, Traffic, Errors, and Saturation.
-  2. Runs ML-driven anomaly detection to identify performance regressions or failure patterns.
-  3. When an anomaly is detected:
+  1. Tracks golden signals: Latency, Traffic, Errors, and Saturation in real time.
+  2. Runs ML-driven anomaly detection to identify performance regressions, memory leaks, or failure patterns.
+  3. Continuously executes 24/7 synthetic canary transactions to verify external network routes, DNS, and SSL certs.
+  4. When an anomaly is detected:
      - Automatically isolates logs and traces to conduct Root Cause Analysis (RCA).
      - Synthesizes a diagnostic report and recommended remediation patch.
      - Dispatches real-time alerts back through `STEP-02` (Gateway) to **Email**, **Zalo**, and **Viber**.
