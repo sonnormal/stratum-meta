@@ -44,9 +44,9 @@ Human stakeholders maintain strategic governance and oversight through lightweig
 
 7. **Unified End-to-End Ecosystem**
    - All capabilities exist in a single coordinated ecosystem of microservices and applications:
-     - **Management & Planning:** Change requests, issue prioritization, backlog management.
-     - **Implementation:** Code synthesis, refactoring, test execution.
-     - **Data Lifecycle:** Data ingestion $\rightarrow$ Transformation $\rightarrow$ Delivery $\rightarrow$ Digestion/Analytics.
+     - **Management & Planning:** Change requests, cost-benefit evaluation, issue prioritization, backlog management.
+     - **Implementation:** Code synthesis, test-driven development (TDD), automated refactoring.
+     - **Domain & Data Services:** Business microservices, event streaming, and data processing repositories contributing directly to core processes and user experiences.
      - **Operations:** Provisioning, CI/CD, telemetry monitoring, incident response.
 
 ---

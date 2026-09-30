@@ -1,6 +1,8 @@
 # 🔄 Stratum End-to-End Autonomous Workflow
 
 > This document provides the complete, numbered step-by-step breakdown of how **Stratum** processes an idea or change request. It details the upfront comprehensive change evaluation (unifying impact analysis and cost-benefit feasibility), value gate decision-making, decoupled repository specifications, Test-Driven Development (TDD) lifecycle, automated End-to-End (E2E) testing on staging, gated human approvals, and continuous runtime operations.
+> 
+> *Note: Data services, event pipelines, and background processing are treated as standard repositories/features contributing to specific business processes and user experiences, governed by this exact same unified lifecycle.*
 
 ---
 
@@ -49,20 +51,6 @@ graph TD
     end
 
     Gate3 -->|"Rejected"| RepoDispatch
-
-    subgraph DataLifecycle ["📊 Phase: Data Platform"]
-        Ingest["[DATA-01] Data Ingestion"]
-        Transform["[DATA-02] Transformation"]
-        Delivery["[DATA-03] Delivery"]
-        Digest["[DATA-04] Digest & Analytics"]
-
-        Ingest --> Transform
-        Transform --> Delivery
-        Delivery --> Digest
-    end
-
-    ProdDeploy --> Ingest
-    Digest --> AIOps
     AIOps -.->|"Alerts & Telemetry"| Gateway
 ```
 
@@ -76,7 +64,7 @@ graph TD
 | **`STEP-02`** | **Omnichannel Normalization** | `stratum-gateway` | Authenticate sender, extract intent/attachments, and emit normalized task event |
 | **`STEP-03`** | **Comprehensive Change Evaluation** | Strategic Evaluation Agent | Deep **Impact Analysis** (Processes, Features, Repos) + **Cost-Benefit Analysis** (TCO & ROI). Generates [CER Report](templates/change_evaluation_template.md) |
 | **`GATE-01`** | **Value & Feasibility Gate** | **Human Reviewer** | **Evaluate ROI and decide: Is this change worth implementing and operating?** |
-| **`STEP-04`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository |
+| **`STEP-04`** | **Repo-Scoped CRs & Isolated Specs** | Orchestrator Engine | Decompose change into standalone specifications and isolated CRs per repository (Domain, Data, Platform) |
 | **`STEP-05`** | **TDD Phase 1: Test Specification (Red)** | AI QA Agent | Write 100% automated test suites *first* to define contracts before writing code |
 | **`STEP-06`** | **TDD Phase 2: Code Synthesis (Green & Refactor)** | AI Dev Agent | Synthesize minimal code to satisfy tests, followed by automated clean refactoring |
 | **`GATE-02`** | **Code & Test Review Gate** | **Human Reviewer** | Review code diffs, unit/integration test logs, coverage, and schema documentation |
@@ -85,10 +73,6 @@ graph TD
 | **`GATE-03`** | **Production Authorization Gate** | **Human Reviewer** | **Inspect live preview environment + full E2E test execution report to sign off on production release** |
 | **`STEP-09`** | **Automated Production Rollout** | GitOps Engine | Execute zero-downtime progressive deployment (Canary / Blue-Green) with automated rollback |
 | **`STEP-10`** | **Autonomous SRE Observability** | `stratum-aiops` | Continuously observe metrics, logs, traces, and synthetics; trigger automated RCA alerts |
-| **`DATA-01`** | **Data Ingestion** | Ingestion Engine | Ingest continuous event streams, webhooks, and transactional data |
-| **`DATA-02`** | **Data Transformation** | Transform Workers | Schema enforcement, validation, deduplication, and ELT/ETL transformations |
-| **`DATA-03`** | **Data Delivery** | Delivery Workers | Sync transformed data into caches, data warehouses, and API models |
-| **`DATA-04`** | **Data Digest & Analytics** | Digest Worker | Automated KPI aggregates, scheduled executive digests, and telemetry feedback |
 
 ---
 
@@ -158,6 +142,7 @@ graph TD
 * **Input:** Approved Change Evaluation Report from `GATE-01`.
 * **Process:**
   1. **Decoupled Decomposition:** Decomposes the macro change into independent, repository-specific change requests based on the impact matrix from `STEP-03`.
+     - *Applies equally to domain services, data pipelines/streams, and platform integrations.*
   2. **Dedicated Specifications:** Generates a standalone technical specification for each affected repository:
      - Exact API schemas / data contracts (OpenAPI, protobuf, AsyncAPI).
      - Expected behavioral contracts, mock interfaces, and dependency stubs.
@@ -168,13 +153,13 @@ graph TD
 
 ### Phase 3: Test-Driven Development (TDD) Software Factory
 
-> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and executed *before* implementation code is written.
+> **Stratum strictly follows Test-Driven Development (TDD):** Automated tests are synthesized and executed *before* implementation code is written across all repositories.
 
 #### `STEP-05`: TDD Phase 1 — Test Specification & Authoring (Red)
 * **Actor:** AI QA Agent (Specialized testing model)
 * **Input:** Repository-scoped specification from `STEP-04`.
 * **Process:**
-  1. Creates an isolated feature branch in the target repository (e.g. `agent/cr-104-auth`).
+  1. Creates an isolated feature branch in the target repository (e.g. `agent/cr-104-auth` or `agent/cr-104-datapipeline`).
   2. Synthesizes 100% automated test suites *first*:
      - **Unit Tests:** Boundary checks, input validation, logic assertions, edge cases.
      - **Integration Tests:** Database transactions, cache lookups, and message bus interactions with containerized dependencies (Testcontainers).
@@ -229,14 +214,12 @@ graph TD
 * **Input:** Live ephemeral preview environment deployed in `STEP-07`.
 * **Process:**
   1. **Full User Journey Execution:**
-     - Simulates complete end-to-end flows across all services (e.g. Inbound message $\rightarrow$ Gateway $\rightarrow$ Orchestrator $\rightarrow$ Domain Microservice $\rightarrow$ Database persistence $\rightarrow$ Data platform ingestion $\rightarrow$ Outbound response).
+     - Simulates complete end-to-end flows across all services (e.g. Inbound message $\rightarrow$ Gateway $\rightarrow$ Orchestrator $\rightarrow$ Domain Microservice $\rightarrow$ Database persistence $\rightarrow$ Data platform ingestion/sync $\rightarrow$ Outbound response).
   2. **Cross-Service Contract & Security Validation:**
      - Tests live network communication, JWT token handoffs, CORS, rate limits, and TLS certificates across services.
-  3. **Data Pipeline E2E Verification:**
-     - Asserts that events triggered during user journeys flow through Ingestion $\rightarrow$ Transformation $\rightarrow$ Delivery $\rightarrow$ Digest.
-  4. **Performance & Stress Probing:**
+  3. **Synthetic Load & Latency Assertion:**
      - Sends concurrent synthetic traffic to verify p95/p99 response latencies match SLO requirements.
-  5. **Regression Verification:**
+  4. **Regression Verification:**
      - Executes the broader automated regression suite to ensure adjacent unaffected features continue functioning flawlessly.
 * **Output:** **Automated E2E Test Execution & Verification Report** (100% pass status, execution traces, response times, and failure diagnostics if any).
 
@@ -258,7 +241,7 @@ graph TD
 
 ---
 
-### Phase 5: Production Delivery, SRE & Data Lifecycle
+### Phase 5: Production Delivery, SRE & Closed-Loop Operations
 
 #### `STEP-09`: Automated Production Rollout
 * **Actor:** GitOps Delivery Engine (ArgoCD / Flux)
@@ -283,27 +266,3 @@ graph TD
      - Synthesizes a diagnostic report and recommended remediation patch.
      - Dispatches real-time alerts back through `STEP-02` (Gateway) to **Email**, **Zalo**, and **Viber**.
 * **Output:** Real-time health metrics, automated RCAs, and incident alerts.
-
----
-
-### Parallel Stream: End-to-End Data Platform Lifecycle
-
-#### `DATA-01`: Data Ingestion
-* **Actor:** Data Pipeline Ingestion Service (`stratum-data-platform`)
-* **Process:** Ingests raw data from external APIs, webhooks, transaction databases, and event streaming brokers (Kafka/RabbitMQ).
-* **Output:** Raw partitioned data landing zones with event validation.
-
-#### `DATA-02`: Data Transformation
-* **Actor:** Transformation Engine (dbt / stream processing workers)
-* **Process:** Applies schema enforcement, deduplication, business logic transformations, and data quality assertions.
-* **Output:** Curated, query-optimized datasets and dimensional models.
-
-#### `DATA-03`: Data Delivery
-* **Actor:** Delivery Engine
-* **Process:** Distributes transformed data to consumer endpoints: analytical data warehouses, operational cache stores, and downstream microservice databases.
-* **Output:** Ready-to-query synchronized operational state.
-
-#### `DATA-04`: Data Digest & Analytics
-* **Actor:** Autonomous Digest Worker
-* **Process:** Computes aggregated KPIs, monitors trends, and compiles scheduled business & operational digests dispatched directly to stakeholder channels. Feeds continuous quality metrics back into `STEP-10` (AIOps).
-* **Output:** Executive & operational summary reports delivered to Email and Chat.
