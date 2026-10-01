@@ -9,7 +9,7 @@
 
 | Field | Detail |
 | :--- | :--- |
-| **Change ID** | `CR-YYaXXX` (e.g. `CR-26J001`) |
+| **Change ID** | `CR-YYaXXX` (e.g. `CR-26j001`) |
 | **Request Title** | *Brief 1-sentence descriptive title* |
 | **Requester** | Human Stakeholder (`sonnormal@gmail.com` / Zalo User / Viber User) |
 | **Intake Channel** | Email / Zalo / Viber |

@@ -9,10 +9,12 @@ This directory maintains the immutable, historical records of all **Change Reque
 Every change is assigned a unique ID following the format: **`CR-YYaXXX`**
 
 * **`YY`**: 2-digit Year (`26` for 2026).
-* **`a`**: Month letter (`A`=Jan, `B`=Feb, `C`=Mar, `D`=Apr, `E`=May, `F`=Jun, `G`=Jul, `H`=Aug, `I`=Sep, `J`=Oct, `K`=Nov, `L`=Dec).
+* **`a`**: Single **lowercase letter** denoting the month:
+  * `a`=Jan, `b`=Feb, `c`=Mar, `d`=Apr, `e`=May, `f`=Jun
+  * `g`=Jul, `h`=Aug, `i`=Sep, **`j`=Oct**, `k`=Nov, `l`=Dec
 * **`XXX`**: 3-digit monthly sequence number (`001`, `002`, `003`...).
 
-*Example:* **`CR-26J001`** is the 1st change request initiated in October 2026.
+*Example:* **`CR-26j001`** is the 1st change request initiated in October 2026.
 
 ---
 
@@ -33,4 +35,4 @@ changes/CR-YYaXXX-<short-title>/
 
 | ID | Title | Status | Date | Folder |
 | :--- | :--- | :--- | :--- | :--- |
-| `CR-26J001` | Initial Implementation: VIB Email Transaction Alert & Digest | In Discussion | 2026-10-01 | [`CR-26J001-vib-tracker/`](CR-26J001-vib-tracker/) |
+| `CR-26j001` | Initial Implementation: VIB Email Transaction Alert & Digest | In Discussion | 2026-10-01 | [`CR-26j001-vib-tracker/`](CR-26j001-vib-tracker/) |

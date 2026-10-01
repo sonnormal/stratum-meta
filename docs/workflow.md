@@ -2,7 +2,7 @@
 
 > **Core Philosophy:** 100% AI-generated code, strict Test-Driven Development (TDD), and containerized portability—governed by three strategic Human-in-the-Loop review gates via **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**.
 >
-> *Scope & Applicability:* This workflow applies universally to **every change**—from initial platform setup (e.g., `CR-26J001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
+> *Scope & Applicability:* This workflow applies universally to **every change**—from initial platform setup (e.g., `CR-26j001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
 
 ---
 
@@ -73,7 +73,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Process:** 
   1. Authenticates sender against allowed list (`sonnormal@gmail.com`, verified chat ID).
   2. Extracts intent, parameters, and attachments.
-  3. Assigns a formal tracking ID conforming to the `CR-YYaXXX` convention (e.g. `CR-26J001`).
+  3. Assigns a formal tracking ID conforming to the `CR-YYaXXX` convention (e.g. `CR-26j001`).
 * **Output:** Normalized `ChangeRequestInitiatedEvent`.
 
 #### `STEP-03`: Comprehensive Change Evaluation & Cybersecurity Assessment
@@ -156,11 +156,11 @@ All changes are archived in the `changes/` directory of `stratum-meta`. Every ch
 
 ### 1. Change ID Convention (`CR-YYaXXX`)
 * **`YY`**: 2-digit Year (e.g. `26` for 2026).
-* **`a`**: Single letter denoting the month:
-  * `A` = January, `B` = February, `C` = March, `D` = April, `E` = May, `F` = June
-  * `G` = July, `H` = August, `I` = September, `J` = October, `K` = November, `L` = December
+* **`a`**: Single **lowercase letter** denoting the month:
+  * `a` = January, `b` = February, `c` = March, `d` = April, `e` = May, `f` = June
+  * `g` = July, `h` = August, `i` = September, **`j` = October**, `k` = November, `l` = December
 * **`XXX`**: 3-digit sequence in that month (`001`, `002`, `003`...).
-* *Example:* **`CR-26J001`** is the 1st change request in October 2026.
+* *Example:* **`CR-26j001`** is the 1st change request in October 2026.
 
 ### 2. Folder Structure per Change
 ```text
