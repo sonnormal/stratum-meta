@@ -1,7 +1,8 @@
 # 🧪 Stratum Comprehensive Testing Strategy
 
 > **Architecture Reference:** Test Pyramid, Execution Topology, and Lifecycle Governance  
-> **Applies to:** All Stratum Repositories (`stratum-services/*`, `stratum-gateway`, `stratum-data-platform`, `stratum-infra`)
+> **Phase 1 Focus:** Focus is strictly on Tier 1 (Unit) and Tier 2 (Integration via Docker/OrbStack). Tier 3 (E2E) is deferred to later multi-service phases.  
+> **Applies to:** All Stratum Repositories (`stratum-services/*`, `stratum-gateway`, `stratum-meta`)
 
 ---
 

@@ -1,176 +1,92 @@
 # Stratum
 
-> **An Autonomous, AI-Agent-Driven Software Engineering and Operations Ecosystem**  
-> *100% AI Generated Code, Tests, Artifacts, and Infrastructure — Governed by Human-in-the-Loop Review.*
+> **Autonomous, AI-Agent-Driven Software Engineering & Operations**  
+> *100% AI-Generated Code, Tests, and Infrastructure — Governed by Human-in-the-Loop Review.*
 
 ---
 
 ## 🌟 Vision & Overview
 
-**Stratum** is a unified, fully autonomous software lifecycle system where AI agents execute the entire software engineering lifecycle—from change request intake to code synthesis, test automation, infrastructure provisioning, production deployment, data pipelining, and runtime operations.
+**Stratum** is an autonomous software lifecycle ecosystem where AI agents design, test, build, deploy, and operate software systems. Human stakeholders maintain strategic control through lightweight conversational checkpoints delivered via **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**.
 
-Human stakeholders maintain strategic governance and oversight through lightweight approval checkpoints delivered directly via conversational channels (**Email**, **Zalo**, and **Viber**).
-
----
-
-## 🏛️ Core Principles
-
-1. **100% AI-Generated Code & Test-Driven Development (TDD)**
-   - No manual source code authoring. AI agents strictly follow TDD—synthesizing 100% automated test suites (unit, integration, contract, E2E) *first* to specify behavior before generating implementation code.
-   - Decoupled specifications ensure each repository can be developed and tested completely independently.
-
-2. **Omnichannel Conversational Interface**
-   - Natural, conversational interaction across primary communication channels:
-     - **Email:** `sonnormal@gmail.com`
-     - **Chat Platforms:** Zalo & Viber
-   - Issues, change requests, status updates, and interactive approvals are conducted via email threads and instant messaging.
-
-3. **Human-in-the-Loop (HITL) Strategic Governance**
-   - Explicit human checkpoints gate critical junctures via conversational channels (Email, Zalo, Viber):
-     - **Value & Feasibility Gate (`GATE-01`):** *Why & How Much* — Evaluates implementation cost + operational TCO vs. business benefit before any development begins.
-     - **Contract & Test Scenario Gate (`GATE-02`):** *What to Build* — Reviews and approves API contracts and human-readable test scenarios (edge cases) *before* implementation code is synthesized.
-     - **User Acceptance Gate (`GATE-03`):** *Verification & Sign-off* — Stakeholder tests functionality live in the UAT environment prior to production rollout.
-
-4. **100% AI-Generated Artifacts**
-   - Documentation, architecture diagrams, API specifications (OpenAPI/AsyncAPI), user manuals, and release notes are automatically generated, synced, and kept up to date.
-
-5. **100% Infrastructure as Code (IaC) & Autonomous CI/CD**
-   - Declarative infrastructure definitions managed through code (e.g., OpenTofu/Terraform, Kubernetes manifests, Helm, or CloudFormation).
-   - Automated continuous integration and deployment pipelines trigger based on agent PRs and human approval signals.
-
-6. **AI-Observed & Self-Healing Operations (AIOps)**
-   - Continuous observability: Metrics, logs, traces, and synthetics are monitored in real time by autonomous SRE agents.
-   - Anomaly detection, root cause analysis (RCA), and remediation plans are generated autonomously and dispatched for human review when necessary.
-
-7. **Unified End-to-End Ecosystem**
-   - All capabilities exist in a single coordinated ecosystem of microservices and applications:
-     - **Management & Planning:** Change requests, cost-benefit evaluation, issue prioritization, backlog management.
-     - **Implementation:** Code synthesis, test-driven development (TDD), automated refactoring.
-     - **Domain & Data Services:** Business microservices, event streaming, and data processing repositories contributing directly to core processes and user experiences.
-     - **Operations:** Provisioning, CI/CD, telemetry monitoring, incident response.
+To prove this platform in practice, Stratum starts with a concrete, containerized **walking skeleton (CR-001)** that exercises the full autonomous lifecycle from day one.
 
 ---
 
-## 🔄 End-to-End Workflow
+## 🎯 Initial Walking Skeleton (`CR-001`): VIB Transaction Alert & Digest
 
-Stratum operates as an autonomous, closed-loop software lifecycle system—from conversational change intake to code synthesis, automated verification, gated human approvals, production delivery, and self-healing runtime operations.
+The initial implementation is treated as **Change Request 001 (`CR-001`)**, following the exact same autonomous governance lifecycle as any future feature:
 
-The complete operational lifecycle, architecture diagram, and step-by-step specifications are documented in:
-
-👉 **[End-to-End Workflow Specification (docs/workflow.md)](docs/workflow.md)**  
-👉 **[Comprehensive Testing Strategy (docs/testing_strategy.md)](docs/testing_strategy.md)**
-
----
-
-## 🏗️ Multi-Repository Strategy
-
-To ensure security isolation, independent release lifecycles, and scoped AI agent contexts, **Stratum is organized as a multi-repository ecosystem** rather than a single monolithic repository.
-
-### Why Infrastructure as Code (IaC) Must Be Separated
-
-1. **Security & Least-Privilege Blast Radius:**
-   - IaC requires elevated cloud-provider privileges (IAM, VPC, DNS, state backends).
-   - Application dev-agents must **never** have write access to cloud infrastructure or state files, preventing accidental destruction or unauthorized privilege escalation.
-2. **Independent Lifecycle & Velocity:**
-   - Infrastructure changes (cloud networks, clusters, databases) happen on a different schedule with stricter change controls than application code.
-3. **AI Agent Context Scoping:**
-   - AI agents operate with maximum accuracy when provided clean, tightly focused repository boundaries rather than overwhelming context.
-4. **Auditability & Compliance:**
-   - Changes to infrastructure have an immutable audit trail isolated from routine code refactoring and bug fixes.
-
----
-
-## 📦 Stratum Repository Catalog
-
-```text
-┌────────────────────────────────────────────────────────────────────────┐
-│                     stratum-meta (Hub / Meta)                          │
-│           Global Architecture, Governance, Schemas & Docs              │
-└───────────────────┬────────────────────────────────┬───────────────────┘
-                    │                                │
-    ┌───────────────┴───────────────┐  ┌─────────────┴─────────────┐
-    │  Infrastructure & Operations  │  │    Platform & Services    │
-    ├───────────────────────────────┤  ├───────────────────────────┤
-    │ • stratum-infra (IaC)         │  │ • stratum-gateway         │
-    │ • stratum-gitops              │  │ • stratum-orchestrator    │
-    │ • stratum-aiops               │  │ • stratum-data-platform   │
-    │                               │  │ • stratum-services/*      │
-    └───────────────────────────────┘  └───────────────────────────┘
+```
+[ Email from vib.com.vn ] ──► [ stratum-gateway ] ──► [ VIB Parser Service ]
+(sonnormal@gmail.com)          (IMAP / OAuth)             │
+                                                          ├──► [ PostgreSQL (OrbStack/Docker) ]
+                                                          │    (Persists transactions & balances)
+                                                          │
+                                                          └──► [ Zalo / Viber Bot Alert ]
+                                                               ("💳 Spent 150k VND at Coffee House")
 ```
 
-### 1. Ecosystem Meta & Governance
-* **[`stratum-meta`](https://github.com/your-org/stratum-meta)** *(Current Repo)*
-  - **Role:** Central ecosystem documentation, global architecture decision records (ADRs), cross-repo orchestration guidelines, and AI agent prompts/policies.
-
-### 2. Infrastructure as Code (Strict Isolation)
-* **`stratum-infra`**
-  - **Role:** 100% Infrastructure as Code for foundational cloud environments.
-  - **Tech:** Terraform / OpenTofu, Terragrunt, Cloud Networking, IAM, Kubernetes clusters, Managed DBs, KMS/Vault secrets.
-  - **Governance:** Dedicated Infra Review Gate. AI Infra Agent proposes `terraform plan` outputs; human must approve prior to `apply`.
-* **`stratum-gitops`**
-  - **Role:** Declarative environment definitions separating application code from cluster state.
-  - **Tech:** ArgoCD / Flux manifests, Helm charts, Kustomize overlays (staging, prod).
-
-### 3. Core Platform Services
-* **`stratum-gateway`**
-  - **Role:** Omnichannel communication hub. Handles webhook ingests and outbound messaging for **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**. Converts messages into structured events.
-* **`stratum-orchestrator`**
-  - **Role:** The AI coordination brain. Manages task delegation, state machines, review checkpoint triggers, and callback routing.
-* **`stratum-aiops`**
-  - **Role:** Runtime observability and autonomous SRE. Ingests OpenTelemetry traces, metrics, and logs. Runs anomaly detection, synthetic transactions, and triggers automated remediation proposals.
-
-### 4. Data Platform
-* **`stratum-data-platform`**
-  - **Role:** End-to-end data lifecycle services:
-    - **Ingest:** Connectors for event streams, APIs, batch uploads.
-    - **Transform:** Streaming and batch transformation pipelines (dbt, Spark/Flink).
-    - **Delivery:** Query endpoints, data warehouse synchronization, cache warming.
-    - **Digest:** Analytical aggregations, scheduled reports, and autonomous summary generation.
-
-### 5. Application Microservices
-* **`stratum-services`** (or domain-specific repos, e.g. `stratum-service-*`)
-  - **Role:** Business logic microservices.
-  - 100% AI-generated application code and unit/integration test suites.
-  - Generates container images and publishes image tags consumed by `stratum-gitops`.
+### What It Does:
+1. **Ingress:** Reads incoming emails in `sonnormal@gmail.com` filtered from `*@vib.com.vn` (Vietnam International Bank transaction notices, debit alerts, balance changes).
+2. **Process:** Autonomously parses transaction details:
+   - Transaction Amount & Currency
+   - Masked Account / Card Number
+   - Merchant Name & Description
+   - Timestamp & Remaining Account Balance
+3. **Store:** Persists records into a containerized **PostgreSQL** database.
+4. **Notify:** Dispatches an instant, clean transaction summary to your **Zalo / Viber** bot.
+5. **Runtime:** Runs 100% locally on **Docker / OrbStack** on Mac Studio, with zero cloud lock-in—ready to deploy to any cloud VM/Kubernetes later.
 
 ---
 
-## 🧩 Architectural Building Blocks
+## 🏛️ Core Principles (Pragmatic Phase 1)
 
-| Component | Repository | Role | Description |
-| :--- | :--- | :--- | :--- |
-| **Omnichannel Gateway** | `stratum-gateway` | Interface | Inbound/outbound bridge for Email (`sonnormal@gmail.com`), Zalo, and Viber. Translates conversation into structured agent directives. |
-| **Orchestrator** | `stratum-orchestrator` | Coordination | Schedules agent jobs, handles state machines, and enforces Human-in-the-Loop review gates. |
-| **Software Factory** | `stratum-services/*` | Implementation | Specialized dev/test agents producing 100% of domain code, test suites, and OpenAPI specs. |
-| **Data Platform** | `stratum-data-platform` | Data Flow | End-to-end data pipeline: Ingest $\rightarrow$ Transform $\rightarrow$ Deliver $\rightarrow$ Digest. |
-| **Infra as Code (IaC)** | `stratum-infra` | Foundation | 100% declarative cloud infrastructure, cloud security, and compute clusters. |
-| **Delivery Engine** | `stratum-gitops` | Deployment | GitOps declarative delivery tracking preview, staging, and production rollouts. |
-| **Autonomous SRE** | `stratum-aiops` | Operations | Telemetry evaluation, automated synthetic tests, log anomaly detection, and incident remediation proposals. |
+1. **100% AI-Generated Code via Strict TDD**
+   * No manual coding. AI agents write automated tests *first* (`Red`), get human approval, then synthesize minimal code (`Green`).
+   * **Phase 1 Testing Scope:** Focus strictly on **Tier 1 (Unit Tests)** for parsing/logic and **Tier 2 (Integration Tests)** with containerized databases (PostgreSQL via Testcontainers/Docker). Full multi-service E2E automation is intentionally deferred to later phases.
+
+2. **Omnichannel Conversational Interface**
+   * All stakeholder interactions (change requests, approval gates, alerts) occur via **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**.
+
+3. **Three Human Governance Gates (HITL)**
+   * **`GATE-01` (Value Gate):** *Why do it?* — Approves business value, cost, and cybersecurity before development.
+   * **`GATE-02` (Contract & Scenario Gate):** *What to build?* — Approves plain-language test scenarios and edge cases *before* code is written.
+   * **`GATE-03` (User Acceptance Gate):** *Does it work?* — Stakeholder tests the live container in UAT before production sign-off.
+
+4. **Containerized & Portable by Design**
+   * Everything runs in standardized containers (`Dockerfile`, `docker-compose.yml`) on **OrbStack / Docker** locally.
+   * Frictionless transition to cloud environments (Fly.io, AWS, GCP, or Kubernetes) whenever needed.
+
+5. **Self-Observing Runtime**
+   * Container health probes, structured logging, and automated error alerting back to your chat channels.
 
 ---
 
-## 💬 Interaction Channels
+## 🗂️ Lean Repository Structure
 
-- **Primary Email:** [`sonnormal@gmail.com`](mailto:sonnormal@gmail.com)
-  - Architectural proposals, change request specs, milestone reviews, and formal audit logs.
-- **Instant Chat (Zalo / Viber):**
-  - Real-time notifications, interactive approval buttons (Approve / Reject / Revise), incident alerts, and conversational query interface.
+Rather than premature multi-repo sprawl, Stratum begins with a focused set of repositories inside the local workspace:
+
+```text
+/Users/son/Projects/Stratum/                 <-- Workspace Root (Mac Studio)
+├── stratum-meta/                            <-- (Current Repo) Global Docs, Governance, Schemas & ADRs
+│   ├── README.md
+│   └── docs/
+│       ├── workflow.md                      <-- Simplified 7-step lifecycle & 3 gates
+│       ├── testing_strategy.md              <-- Unit + Integration test architecture
+│       └── templates/
+│           └── change_evaluation_template.md
+│
+├── stratum-gateway/                         <-- Omnichannel Gateway (Email IMAP/OAuth + Zalo/Viber)
+│
+└── stratum-services/                        <-- Domain Services
+    └── vib-expense-tracker/                 <-- Containerized VIB Parser & DB Service
+```
 
 ---
 
-## 🚀 Getting Started & Roadmap
+## 🚀 Quick Reference Documents
 
-### Phase 1: Foundation & Gateway
-- [ ] Configure Omnichannel Gateway for Email, Zalo, and Viber.
-- [ ] Setup Agent Orchestration runtime and Human-in-the-Loop checkpoint engine.
-- [ ] Establish repository conventions and automated Git workflows.
-
-### Phase 2: Autonomous Development & Delivery
-- [ ] AI-driven code and test generation pipeline with branch protection and review gates.
-- [ ] Automated IaC and CI/CD pipelines deploying to ephemeral test environments.
-- [ ] Review-and-approve mechanisms via interactive chat/email callbacks.
-
-### Phase 3: Autonomous Data & Operations
-- [ ] Data lifecycle service (Ingest $\rightarrow$ Transform $\rightarrow$ Delivery $\rightarrow$ Digest).
-- [ ] Autonomous SRE monitoring, telemetry analysis, and incident alerting back to user channels.
-- [ ] Continuous self-optimization loop.
+* 👉 **[Simplified Workflow & 3 Governance Gates (`docs/workflow.md`)](docs/workflow.md)**
+* 👉 **[Testing Strategy: Unit & Integration Tiers (`docs/testing_strategy.md`)](docs/testing_strategy.md)**
+* 👉 **[Change Evaluation Template (`docs/templates/change_evaluation_template.md`)](docs/templates/change_evaluation_template.md)**
