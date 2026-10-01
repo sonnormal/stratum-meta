@@ -84,7 +84,7 @@ To ensure security isolation, independent release lifecycles, and scoped AI agen
 
 ```text
 ┌────────────────────────────────────────────────────────────────────────┐
-│                        stratum (Hub / Meta)                            │
+│                     stratum-meta (Hub / Meta)                          │
 │           Global Architecture, Governance, Schemas & Docs              │
 └───────────────────┬────────────────────────────────┬───────────────────┘
                     │                                │
@@ -99,7 +99,7 @@ To ensure security isolation, independent release lifecycles, and scoped AI agen
 ```
 
 ### 1. Ecosystem Meta & Governance
-* **[`stratum`](https://github.com/your-org/stratum)** *(Current Repo)*
+* **[`stratum-meta`](https://github.com/your-org/stratum-meta)** *(Current Repo)*
   - **Role:** Central ecosystem documentation, global architecture decision records (ADRs), cross-repo orchestration guidelines, and AI agent prompts/policies.
 
 ### 2. Infrastructure as Code (Strict Isolation)
