@@ -158,7 +158,7 @@ All changes are archived in the `changes/` directory of `stratum-meta`. Every ch
 * **`YY`**: 2-digit Year (e.g. `26` for 2026).
 * **`a`**: Single **lowercase letter** denoting the month:
   * `a` = January, `b` = February, `c` = March, `d` = April, `e` = May, `f` = June
-  * `g` = July, `h` = August, `i` = September, **`j` = October**, `k` = November, `l` = December
+  * `g` = July, `h` = August, `i` = September, **`j` = October**, `k` = November, **`m` = December** *(skips `l` to prevent confusion with `1`)*
 * **`XXX`**: 3-digit sequence in that month (`001`, `002`, `003`...).
 * *Example:* **`CR-26j001`** is the 1st change request in October 2026.
 

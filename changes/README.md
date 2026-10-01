@@ -11,7 +11,7 @@ Every change is assigned a unique ID following the format: **`CR-YYaXXX`**
 * **`YY`**: 2-digit Year (`26` for 2026).
 * **`a`**: Single **lowercase letter** denoting the month:
   * `a`=Jan, `b`=Feb, `c`=Mar, `d`=Apr, `e`=May, `f`=Jun
-  * `g`=Jul, `h`=Aug, `i`=Sep, **`j`=Oct**, `k`=Nov, `l`=Dec
+  * `g`=Jul, `h`=Aug, `i`=Sep, **`j`=Oct**, `k`=Nov, **`m`=Dec** *(skips `l` to avoid confusion with `1`)*
 * **`XXX`**: 3-digit monthly sequence number (`001`, `002`, `003`...).
 
 *Example:* **`CR-26j001`** is the 1st change request initiated in October 2026.
