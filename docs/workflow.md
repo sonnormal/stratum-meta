@@ -2,7 +2,7 @@
 
 > **Core Philosophy:** 100% AI-generated code, strict Test-Driven Development (TDD), and containerized portability—governed by three strategic Human-in-the-Loop review gates via **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**.
 >
-> *Scope & Applicability:* This workflow applies universally to **every change**—from initial platform setup (`CR-001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
+> *Scope & Applicability:* This workflow applies universally to **every change**—from initial platform setup (e.g., `CR-26J001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
 
 ---
 
@@ -73,7 +73,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Process:** 
   1. Authenticates sender against allowed list (`sonnormal@gmail.com`, verified chat ID).
   2. Extracts intent, parameters, and attachments.
-  3. Assigns a formal tracking ID (`CR-XXX`).
+  3. Assigns a formal tracking ID conforming to the `CR-YYaXXX` convention (e.g. `CR-26J001`).
 * **Output:** Normalized `ChangeRequestInitiatedEvent`.
 
 #### `STEP-03`: Comprehensive Change Evaluation & Cybersecurity Assessment
@@ -152,7 +152,21 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 
 ## 🗃️ Change Tracking in `changes/`
 
-All changes are archived in the `changes/` directory of `stratum-meta`. Every change folder or document records the complete lifecycle trail:
-1. The **Change Evaluation Report** from `STEP-03` / `GATE-01`.
-2. The **Approved Test Scenarios** from `STEP-04` / `GATE-02`.
-3. The **UAT Sign-Off & Release Notes** from `STEP-06` / `GATE-03`.
+All changes are archived in the `changes/` directory of `stratum-meta`. Every change is organized using the **One Folder per Change** model with the **`CR-YYaXXX`** identification standard:
+
+### 1. Change ID Convention (`CR-YYaXXX`)
+* **`YY`**: 2-digit Year (e.g. `26` for 2026).
+* **`a`**: Single letter denoting the month:
+  * `A` = January, `B` = February, `C` = March, `D` = April, `E` = May, `F` = June
+  * `G` = July, `H` = August, `I` = September, `J` = October, `K` = November, `L` = December
+* **`XXX`**: 3-digit sequence in that month (`001`, `002`, `003`...).
+* *Example:* **`CR-26J001`** is the 1st change request in October 2026.
+
+### 2. Folder Structure per Change
+```text
+changes/CR-YYaXXX-<short-title>/
+├── change.md         # Master overview, status, and gate approval audit log (Gate 1, 2, 3)
+├── evaluation.md     # STEP-03 / GATE-01 Report (Scope, Security, Cost-Benefit)
+├── scenarios.md      # STEP-04 / GATE-02 Approved plain-language test scenarios
+└── fixtures/         # Sample test data, raw emails (.eml), mock payloads (optional)
+```

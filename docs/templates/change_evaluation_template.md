@@ -9,7 +9,7 @@
 
 | Field | Detail |
 | :--- | :--- |
-| **Change ID** | `CR-YYYYMMDD-XXXX` (e.g. `CR-20261001-0842`) |
+| **Change ID** | `CR-YYaXXX` (e.g. `CR-26J001`) |
 | **Request Title** | *Brief 1-sentence descriptive title* |
 | **Requester** | Human Stakeholder (`sonnormal@gmail.com` / Zalo User / Viber User) |
 | **Intake Channel** | Email / Zalo / Viber |
@@ -144,7 +144,7 @@
 *Upon Gate 1 approval, the change will be decomposed into independent repository specifications:*
 
 ```text
-[CR-YYYYMMDD-XXXX] Macro Change
+[CR-YYaXXX] Macro Change
   ├── stratum-services/auth: Spec & TDD Task (Independent Unit & Integration Tests)
   ├── stratum-gateway: Spec & TDD Task (Independent Ingestion Tests)
   └── stratum-gitops: Environment manifest update (UAT config)
