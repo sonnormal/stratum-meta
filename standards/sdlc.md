@@ -1,8 +1,8 @@
-# 🔄 Stratum Universal Autonomous Workflow
+# 🔄 Stratum Universal Autonomous Development Lifecycle (SDLC)
 
-> **Core Philosophy:** 100% AI-generated code, strict Test-Driven Development (TDD), and containerized portability—governed by three strategic Human-in-the-Loop review gates via **Email (`sonnormal@gmail.com`)**, **Zalo**, and **Viber**.
+> **Core Philosophy:** 100% AI-generated code, strict Test-Driven Development (TDD), and containerized portability—governed by three strategic Human-in-the-Loop review gates via **Email**, **Zalo**, and **Viber**.
 >
-> *Scope & Applicability:* This workflow applies universally to **every change**—from initial platform setup (e.g., `CR-26j001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
+> *Scope & Applicability:* This lifecycle governs **every change**—from initial platform setup (e.g., `CR-26j001`) to new microservices, features, refactoring, and bug fixes. Testing currently focuses on **Tier 1 (Unit Tests)** and **Tier 2 (Integration Tests with containerized dependencies)**.
 
 ---
 
@@ -71,10 +71,11 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 #### `STEP-02`: Gateway Normalization & Identity Verification
 * **Actor:** `stratum-gateway`
 * **Process:** 
-  1. Authenticates sender against allowed list (`sonnormal@gmail.com`, verified chat ID).
+  1. Authenticates sender against allowed list (verified email, verified chat ID).
   2. Extracts intent, parameters, and attachments.
   3. Assigns a formal tracking ID conforming to the `CR-YYaXXX` convention (e.g. `CR-26j001`).
-* **Output:** Normalized `ChangeRequestInitiatedEvent`.
+  4. Initializes the master change record `request.md` in `stratum-meta/changes/CR-YYaXXX-<short-title>/`.
+* **Output:** Normalized `ChangeRequestInitiatedEvent` and initialized `request.md`.
 
 #### `STEP-03`: Comprehensive Change Evaluation & Cybersecurity Assessment
 * **Actor:** Strategic Evaluation Agent
@@ -82,37 +83,42 @@ Human oversight is concentrated at three strategic, high-leverage decision point
   1. **Impact Analysis:** Affected repositories (`stratum-services/*`, `stratum-gateway`, `stratum-meta`), data schemas, and API contracts.
   2. **Cybersecurity & Secrets Assessment:** Authentication mechanisms, credentials/tokens management (zero hardcoded secrets), data sensitivity/masking, and attack surface.
   3. **Cost-Benefit Modeling:** Implementation compute effort vs. operational benefits.
-* **Output:** Formatted Change Evaluation Report (saved to `changes/` per [CER Template](templates/change_evaluation_template.md)).
+* **Output:** Formatted Change Evaluation Report (saved to `stratum-meta/changes/CR-YYaXXX-<short-title>/evaluation.md` per [CER Template](../templates/evaluation.md)).
 
 #### `GATE-01`: Review Gate 1 — Value & Feasibility Gate
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
 * **Human Action:** Stakeholder reviews scope, security posture, and business value.
+* **Audit Trail:** Decision recorded in `request.md`.
 * **Decisions:**
-  * `[Approved: Worth It]` $\rightarrow$ Proceeds to `STEP-04`.
-  * `[Rejected: Not Worth It]` $\rightarrow$ Shelves the change with justification.
-  * `[Scope Revision]` $\rightarrow$ Prompts requester to constrain scope.
+  * `[Approved: Worth It]` → Proceeds to `STEP-04`.
+  * `[Rejected: Not Worth It]` → Shelves the change with justification.
+  * `[Scope Revision]` → Prompts requester to constrain scope.
 
 ---
 
 ### Phase 2: Test-First Engineering & Code Synthesis
 
 > **Testing Policy:** Only **Tier 1 (Unit)** and **Tier 2 (Integration)** tests are required during early development. External dependencies and databases use containerized test sandboxes (**Docker / Testcontainers**). Multi-service E2E automation is added when architecture stabilizes.
+>
+> **Repository Scoping:** Unit and integration tests involve only one repository. Consequently, test specifications (`scenario.md`) and test fixtures (`fixtures/`) are authored and stored directly in the specific target repository being modified.
 
 #### `STEP-04`: TDD Phase 1 — Test Specification & Scenario Authoring (Red)
 * **Actor:** AI QA Agent
-* **Process:** Synthesizes automated tests *before* writing application code:
+* **Process:** Synthesizes automated tests *before* writing application code in the target repository:
   * **Unit Tests (Tier 1):** Domain business logic, mathematical/state transitions, parsing regex, boundary values, and edge cases.
   * **Integration Tests (Tier 2):** Database persistence, schema migrations, unique constraints, transactional rollbacks, and event bus emissions in an ephemeral container sandbox.
+  * Authors `scenario.md` and populates `fixtures/` within the target repository (`<target-repo>/changes/CR-YYaXXX-<short-title>/`).
   * Confirms all new tests fail cleanly in sandbox (`Red` state).
-* **Output:** Committed test suites in branch + formatted Test Scenario Checklist for human review.
+* **Output:** Committed test suites + repo-specific `scenario.md` and `fixtures/` for human review.
 
 #### `GATE-02`: Review Gate 2 — Contract & Test Scenario Gate
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
-* **Human Action:** Stakeholder reviews plain-language test scenarios and edge cases.
+* **Human Action:** Stakeholder reviews plain-language test scenarios and edge cases from `scenario.md`.
+* **Audit Trail:** Decision recorded in `request.md`.
 * **Decisions:**
-  * `[Approve Scenarios]` $\rightarrow$ Advances to `STEP-05`.
-  * `[Add / Refine Scenarios]` $\rightarrow$ Stakeholder adds missing real-world edge cases; QA Agent updates test suite.
-  * `[Reject]` $\rightarrow$ Closes branch and terminates CR.
+  * `[Approve Scenarios]` → Advances to `STEP-05`.
+  * `[Add / Refine Scenarios]` → Stakeholder adds missing real-world edge cases; QA Agent updates test suite.
+  * `[Reject]` → Closes branch and terminates CR.
 
 #### `STEP-05`: TDD Phase 2 — Autonomous Code Synthesis & Refactoring (Green & Refactor)
 * **Actor:** AI Dev Agent
@@ -137,10 +143,11 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 #### `GATE-03`: Review Gate 3 — User Acceptance Gate (UAT Sign-off)
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
 * **Human Action:** Stakeholder tests the feature live in the local UAT container environment (feeding real/sample data, clicking web UI, or testing chat bots).
+* **Audit Trail:** Sign-off recorded in `request.md`.
 * **Decisions:**
-  * `[Accept & Sign Off]` $\rightarrow$ Feature accepted; advances to `STEP-07`.
-  * `[Request Changes]` $\rightarrow$ Feedback notes provided; re-routes to `STEP-04`.
-  * `[Reject / Abort]` $\rightarrow$ Reverts deployment.
+  * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-07`.
+  * `[Request Changes]` → Feedback notes provided; re-routes to `STEP-04`.
+  * `[Reject / Abort]` → Reverts deployment.
 
 #### `STEP-07`: Continuous Container Operation & Cloud Readiness
 * **Actor:** Local Container Daemon / Future Cloud Runner
@@ -163,10 +170,29 @@ All changes are archived in the `changes/` directory of `stratum-meta`. Every ch
 * *Example:* **`CR-26j001`** is the 1st change request in October 2026.
 
 ### 2. Folder Structure per Change
+
+Stratum enforces a strict separation of concerns between **central change governance & documentation** (in `stratum-meta`) and **repo-scoped executable test contracts & fixtures** (in specific repositories).
+
+#### A. Central Change Record (`stratum-meta/changes/CR-YYaXXX-<short-title>/`)
 ```text
 changes/CR-YYaXXX-<short-title>/
-├── change.md         # Master overview, status, and gate approval audit log (Gate 1, 2, 3)
+├── request.md        # Master request intake, overview, status, and gate approval audit log (Gate 1, 2, 3)
 ├── evaluation.md     # STEP-03 / GATE-01 Report (Scope, Security, Cost-Benefit)
-├── scenarios.md      # STEP-04 / GATE-02 Approved plain-language test scenarios
-└── fixtures/         # Sample test data, raw emails (.eml), mock payloads (optional)
+└── docs/             # Supporting documentation (domain research, RFCs, API contracts, schemas) (optional)
 ```
+
+* **`request.md`**: Master audit document capturing the original stakeholder prompt, intake channel, requester metadata, lifecycle status, and decision audit logs for `GATE-01`, `GATE-02`, and `GATE-03`.
+* **`evaluation.md`**: Change Evaluation Report (CER) detailing impact analysis, STRIDE threat model, and cost-benefit feasibility.
+* **`docs/` (Supporting Docs)**: Each change may have supporting docs (e.g. domain research, architecture spikes, user flow diagrams, or reference specifications).
+
+#### B. Repo-Specific Test Scenarios & Fixtures (`<target-repo>/changes/CR-YYaXXX-<short-title>/`)
+Because Tier 1 (Unit) and Tier 2 (Integration) tests verify an isolated single repository without cross-repo coupling, the test scenarios and fixture data are stored within the specific target repository:
+
+```text
+<target-repo>/changes/CR-YYaXXX-<short-title>/
+├── scenario.md       # STEP-04 / GATE-02 Approved plain-language test scenarios for this repo
+└── fixtures/         # Sample test data, raw emails (.eml), mock payloads for Unit & Integration tests
+```
+
+* **`scenario.md`**: Plain-language test scenarios and edge cases authored specifically for this repository's unit and integration tests.
+* **`fixtures/`**: Repository-specific test fixtures, sample inputs (e.g., sample raw `.eml` emails, mock HTTP responses, seed database rows).

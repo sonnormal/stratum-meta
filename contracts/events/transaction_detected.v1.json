@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "stratum://contracts/events/transaction_detected.v1.json",
+  "title": "TransactionDetectedEvent",
+  "description": "Emitted by stratum-gateway when a financial transaction alert email or webhook is parsed",
+  "type": "object",
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this event instance (idempotency key)"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the transaction occurred according to the bank alert"
+    },
+    "bank_code": {
+      "type": "string",
+      "enum": ["VIB", "VCB", "TCB", "MBB"],
+      "description": "Bank identification code"
+    },
+    "account_number_mask": {
+      "type": "string",
+      "description": "Masked bank account or card number (e.g. *1234)"
+    },
+    "transaction_type": {
+      "type": "string",
+      "enum": ["DEBIT", "CREDIT"],
+      "description": "Whether money was deducted (DEBIT) or added (CREDIT)"
+    },
+    "amount": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Transaction monetary amount"
+    },
+    "currency": {
+      "type": "string",
+      "default": "VND",
+      "description": "Currency code (ISO 4217)"
+    },
+    "remaining_balance": {
+      "type": ["number", "null"],
+      "description": "Available balance after transaction, if reported"
+    },
+    "description": {
+      "type": "string",
+      "description": "Raw or normalized transaction description / merchant memo"
+    },
+    "raw_source_ref": {
+      "type": "string",
+      "description": "Reference ID back to original raw email message-id or webhook id"
+    }
+  },
+  "required": [
+    "event_id",
+    "occurred_at",
+    "bank_code",
+    "transaction_type",
+    "amount",
+    "currency",
+    "raw_source_ref"
+  ],
+  "additionalProperties": false
+}

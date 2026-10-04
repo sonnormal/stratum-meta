@@ -11,7 +11,7 @@
 | :--- | :--- |
 | **Change ID** | `CR-YYaXXX` (e.g. `CR-26j001`) |
 | **Request Title** | *Brief 1-sentence descriptive title* |
-| **Requester** | Human Stakeholder (`sonnormal@gmail.com` / Zalo User / Viber User) |
+| **Requester** | Human Stakeholder (Email / Zalo / Viber) |
 | **Intake Channel** | Email / Zalo / Viber |
 | **Timestamp** | `YYYY-MM-DD HH:MM:SS UTC+7` |
 | **AI Evaluation Agent** | `stratum-orchestrator:evaluation-agent-v1` |
@@ -134,7 +134,7 @@
 * **Business / Revenue Value:** *e.g., Enables enterprise tier onboarding, complies with SLA targets.*
 
 ### 5.4 Net ROI Evaluation
-> **Verdict Formula:** $\text{Net Value} = (\text{Business Benefits} + \text{Risk Mitigation}) - (\text{Implementation Effort} + \text{3-Year Operational TCO})$  
+> **Verdict Formula:** `Net Value = (Business Benefits + Risk Mitigation) - (Implementation Effort + 3-Year Operational TCO)`  
 > **Value Assessment:** *e.g., High Net Positive ROI / Marginally Positive / Negative ROI.*
 
 ---
@@ -145,8 +145,8 @@
 
 ```text
 [CR-YYaXXX] Macro Change
-  ├── stratum-services/auth: Spec & TDD Task (Independent Unit & Integration Tests)
-  ├── stratum-gateway: Spec & TDD Task (Independent Ingestion Tests)
+  ├── stratum-services/auth: Spec & TDD Task (scenario.md & fixtures/ in target repo)
+  ├── stratum-gateway: Spec & TDD Task (scenario.md & fixtures/ in target repo)
   └── stratum-gitops: Environment manifest update (UAT config)
 ```
 
@@ -156,7 +156,7 @@
 
 ## ⚖️ 7. GATE-01 Decision & Human Review Block
 
-*This section is rendered directly to **Email** (`sonnormal@gmail.com`), **Zalo**, and **Viber** for interactive review.*
+*This section is rendered directly to **Email**, **Zalo**, and **Viber** for interactive review.*
 
 ### Review Options
 
@@ -170,9 +170,9 @@
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
-* **Option 1: `[Approve]`** $\rightarrow$ Proceeds immediately to `STEP-04` (generate repo-scoped specs and trigger TDD pipelines).
-* **Option 2: `[Reject]`** $\rightarrow$ Shelves the change request with recorded feedback; zero code generated.
-* **Option 3: `[Request Scope Revision]`** $\rightarrow$ Returns feedback to requester to trim high-cost components or address security flags.
+* **Option 1: `[Approve]`** → Proceeds immediately to `STEP-04` (generate repo-scoped specs and trigger TDD pipelines).
+* **Option 2: `[Reject]`** → Shelves the change request with recorded feedback; zero code generated.
+* **Option 3: `[Request Scope Revision]`** → Returns feedback to requester to trim high-cost components or address security flags.
 
 ---
 

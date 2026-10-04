@@ -37,7 +37,7 @@ Stratum strictly follows **Test-Driven Development (TDD)** and organizes verific
 | **Dependencies** | 100% mocked in memory (zero network/disk) | Real containerized dependencies via **Testcontainers** (Docker) | Fully deployed, interconnected live environment |
 | **Execution Location** | Local Workstation (Mac Studio / PC) | Local Workstation (Docker / OrbStack sandbox) | **Runner on Local PC ➔ Target on Cloud UAT** |
 | **Repository Scope** | Single repository, single module | Single repository, isolated boundary | Cross-repository, full system ecosystem |
-| **TDD Timing** | Authored in `STEP-05` (TDD Phase 1: Red) | Authored in `STEP-05` (TDD Phase 1: Red) | Executed in `STEP-07`/`STEP-08` before `GATE-03` |
+| **SDLC Phase** | Authored in `STEP-04` (Red), verified in `STEP-05` (Green) | Authored in `STEP-04` (Red), verified in `STEP-05` (Green) | Executed in `STEP-06` (Pre-flight before `GATE-03`) |
 
 ---
 
@@ -97,7 +97,7 @@ In Stratum's multi-repository architecture, each repository must be developed an
 * Instead, integration tests use **Testcontainers** (ephemeral Docker containers managed programmatically):
   - When tests start, Testcontainers spins up a real, clean PostgreSQL or Redis container in OrbStack/Docker.
   - Sibling microservices and external third-party APIs (e.g. Zalo Bot API, Payment Gateways) are simulated using strict **HTTP WireMocks** or **OpenAPI Contract Mocks**.
-  - When tests finish, the containers are automatically destroyed.
+* **Repository-Scoped Scenarios & Fixtures:** Because Tier 1 (Unit) and Tier 2 (Integration) tests run against a single isolated repository, both the test scenarios (`scenario.md` reviewed at `GATE-02`) and test fixtures (`fixtures/` containing sample emails, mock payloads, or seed data) are housed **directly in that specific repository** (e.g., `<repo>/changes/CR-YYaXXX-<short-title>/`). They do not live in the global `stratum-meta` archive.
 * **Benefit:** 100% of integration tests pass in complete isolation on your local machine before staging is ever touched.
 
 ---
@@ -191,43 +191,45 @@ The optimal hybrid setup for Stratum is:
 
 ## ⚖️ Mapping Testing Tiers to the 3 Human Governance Gates
 
-Stratum's testing tiers integrate directly with its **Three Human Governance Gates**:
+Stratum's testing tiers integrate directly with its **Three Human Governance Gates** across the 7-step SDLC:
 
 ```
-[STEP-03] Change Evaluation
+[STEP-01 & 02] Request Intake & Gateway Normalization
+    │
+    ▼
+[STEP-03] Comprehensive Change Evaluation
     │
     ▼
 [GATE-01] VALUE GATE ("Why do it & is it worth it?")
     │     Human reviews Cost-Benefit & Testing Scope estimate before work begins.
     ▼
-[STEP-05] TDD Phase 1: Author Test Scenarios (Red)
-    │
+[STEP-04] TDD Phase 1: Author Test Scenarios (Red)
+    │     AI QA Agent authors Tier 1 (Unit) and Tier 2 (Integration) tests.
+    │     Compiles plain-language scenario.md & fixtures/ in target repository.
     ▼
 [GATE-02] CONTRACT & TEST SCENARIO GATE ("What exact behavior to build?")
     │     Human reviews & approves plain-language Test Scenarios & edge cases
     │     BEFORE any implementation code is synthesized.
     ▼
-[STEP-06] TDD Phase 2: Autonomous Code Synthesis (Green & Refactor)
-    │     AI synthesizes code to make Tier 1 (Unit) and Tier 2 (Integration) tests pass.
+[STEP-05] TDD Phase 2: Autonomous Code Synthesis (Green & Refactor)
+    │     AI Dev Agent synthesizes code until 100% of Tier 1 & Tier 2 tests pass.
     ▼
-[STEP-07] Deploy to Cloud UAT & Execute Pre-Flight E2E (Tier 3)
-    │     Lightweight smoke check or full automated E2E verifies live system.
+[STEP-06] Container Build & UAT Deployment (Pre-Flight Tier 3 Checks)
+    │     Builds Docker container, verifies /healthz and lightweight smoke/E2E checks.
     ▼
 [GATE-03] USER ACCEPTANCE GATE (UAT Sign-off)
-    │     Human tests live in UAT (web/mobile) and authorizes Production Rollout.
+    │     Human tests live in UAT (conversational/container) and authorizes release.
     ▼
-[STEP-08] Automated Production Rollout (Canary + Automated Smoke Rollback)
-    │
-    ▼
-[STEP-09] Autonomous SRE Observability & Telemetry (AIOps 24/7)
+[STEP-07] Continuous Container Operation & Cloud Readiness
+          Container runs stably in background on OrbStack (cloud lift-and-shift ready).
 ```
 
 ---
 
 ## 🎯 Summary Takeaways
 
-1. **Unit Tests (Tier 1):** Fast, in-memory, zero-dependency. Catch logic flaws instantly.
-2. **Integration Tests (Tier 2):** Essential. Test real database constraints, transactions, and event streams via Testcontainers inside isolated repositories. Catch 85–90% of bugs before staging.
-3. **End-to-End Tests (Tier 3):** Validate full user journeys across services. Defer complex multi-repo E2E automation early on; rely on integration tests + lightweight smoke pings until APIs stabilize.
-4. **E2E Runs Before UAT:** Always pre-flight test automatically before asking a human to inspect UAT.
-5. **Hybrid Architecture:** Run the heavy **Test Runner on your local PC/Mac Studio** ($0 cost, massive speed) targeting the **UAT Application on the Cloud** (24/7 uptime, real webhooks, mobile-friendly).
+1. **Unit Tests (Tier 1):** Fast, in-memory, zero-dependency. Catch logic flaws instantly. Authored in `STEP-04` (Red), satisfied in `STEP-05` (Green).
+2. **Integration Tests (Tier 2):** Essential. Test real database constraints, transactions, and event streams via Testcontainers inside isolated repositories. Catch 85–90% of bugs before staging. Authored in `STEP-04` (Red), satisfied in `STEP-05` (Green).
+3. **End-to-End Tests (Tier 3):** Validate full user journeys across services. Defer complex multi-repo E2E automation early on; rely on integration tests + lightweight smoke pings until APIs stabilize. Executed in `STEP-06` before `GATE-03`.
+4. **Pre-Flight Runs Before UAT:** Always pre-flight test automatically in `STEP-06` before asking a human to inspect UAT at `GATE-03`.
+5. **Local Portability:** Run Tier 1 and Tier 2 tests locally with zero cloud dependencies; run live UAT containers locally on OrbStack or deploy seamlessly to cloud.
