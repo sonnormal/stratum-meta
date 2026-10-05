@@ -12,10 +12,11 @@
 | :--- | :--- |
 | **Change ID** | `CR-26j001` |
 | **Title** | Bank Transaction Ingestion & Cashflow Alerting |
-| **Requester** | Human Stakeholder |
-| **Intake Channel** | Conversational Steering / Direct Intent |
+| **Requester** | Human Stakeholder (`sonnormal@gmail.com` / `+84981801931`) |
+| **Ingress Channel** | Gmail IMAP (`sonnormal@gmail.com`, daily scheduled batch) |
+| **Egress Channel** | Viber Bot (`+84981801931`) |
 | **Created Timestamp** | `2026-10-05 21:00:00 UTC+7` |
-| **Current Lifecycle State** | `INTAKE` (Ready for Evaluation) |
+| **Current Lifecycle State** | `INTAKE` (Configuring Concrete Parameters) |
 
 ---
 
@@ -23,16 +24,24 @@
 
 ### Original Inbound Prompt
 ```text
-Automate the ingestion of bank transaction alert emails (starting with VIB), parse debit/credit amounts and account balance movements, persist them in our cashflow domain service, and deliver instantaneous conversational push alerts to stakeholder over Zalo/Viber.
+Automate the ingestion of bank transaction alert emails (starting with VIB), parse debit/credit amounts, counterparty, and category/item, persist them in our cashflow domain service via daily run, and deliver conversational push alerts to stakeholder over Viber.
 ```
 
 ### Initial Intent & Objectives
-* **Core Problem / Need:** Stakeholder needs real-time visibility over bank account balance movements (debits, credits, settlements, cashouts) without logging into individual bank mobile apps.
+* **Core Problem / Need:** Stakeholder needs automated cashflow tracking (amount, counterparty, item/category, datetime) without balance tracking or manual spreadsheet entry.
 * **Target Outcome:** 
-  1. `gateway` polls and parses bank alert emails, publishing canonical `TransactionDetectedEvent` (v1).
-  2. `services/cashflow` consumes events, verifies idempotency, updates `account_movements` and account balances in PostgreSQL.
-  3. `gateway` dispatches formatted conversational alerts to the stakeholder's verified Zalo/Viber chat.
+  1. `gateway` runs on a daily schedule, fetches unread bank emails from Gmail via IMAP, extracts transaction amount, datetime, counterparty, and category.
+  2. `services/cashflow` consumes events, verifies idempotency, and records the movements in PostgreSQL.
+  3. `gateway` sends a daily digest / transaction alert over Viber Bot to `+84981801931`.
 * **Urgency / Priority:** Standard (Foundational Platform Capability).
+
+### Concrete Channel & Target Parameters
+* **Ingress Mailbox:** `sonnormal@gmail.com` (Gmail IMAP over SSL, port 993)
+* **Ingress Cadence:** Daily scheduled batch run (once per day)
+* **Ingress Auth Method:** Google App Password (`GATEWAY_GMAIL_APP_PASSWORD` env var, zero hardcoded secrets)
+* **Egress Channel:** Viber Bot (`+84981801931`)
+* **Data Scope:** Transaction amount, counterparty (merchant/sender), category/item, datetime, description (account balance is explicitly not tracked)
+* **Default Currency:** `VND`
 
 ---
 

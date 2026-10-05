@@ -47,6 +47,14 @@
       "type": "string",
       "description": "Raw or normalized transaction description / merchant memo"
     },
+    "counterparty": {
+      "type": ["string", "null"],
+      "description": "Normalized merchant, payee, sender, or counterparty name extracted by LLM"
+    },
+    "category": {
+      "type": ["string", "null"],
+      "description": "Semantic expense or income category (e.g. Food & Beverage, Transport, Utility, Salary)"
+    },
     "raw_source_ref": {
       "type": "string",
       "description": "Reference ID back to original raw email message-id or webhook id"
