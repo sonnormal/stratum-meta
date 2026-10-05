@@ -10,7 +10,7 @@
 
 ## 📌 1. Context & Problem Statement
 
-Stratum operates as an autonomous, multi-repository ecosystem running on a local workstation (Mac Studio) while maintaining full capability for future cloud deployment (Fly.io, AWS ECS, Kubernetes).
+Stratum operates as an autonomous, multi-repository ecosystem running on a local workstation (Mac Studio) while maintaining full capability for future deployment exclusively on Kubernetes.
 
 Without an ecosystem-wide runtime standard:
 * Different repositories might demand incompatible local runtime runtimes (native PostgreSQL vs MySQL daemons, host-level Redis versions).
@@ -41,7 +41,7 @@ Without an ecosystem-wide runtime standard:
 ## 🛡️ 4. Consequences & Multi-Repo Enforcement
 
 ### Positive Consequences
-* **100% Cloud Portability:** Any container that runs on OrbStack runs identically on any OCI-compliant cloud provider.
+* **100% Kubernetes Portability:** Any container that runs on OrbStack runs identically inside Kubernetes pods without modification.
 * **Hermetic Environments:** Deleting or recreating the workspace leaves zero lingering state on the host system.
 
 ### Negative / Trade-offs

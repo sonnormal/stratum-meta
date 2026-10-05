@@ -153,7 +153,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Actor:** Local Container Daemon / Future Cloud Runner
 * **Process:**
   - Container runs stably in the background on OrbStack.
-  - Architecture is 100% standard Docker—ready to be deployed to any cloud provider (AWS ECS, Fly.io, or Kubernetes) whenever 24/7 public access is needed.
+  - Architecture is 100% standard Docker/OCI—ready to be deployed to Kubernetes whenever 24/7 public access is needed.
 
 ---
 

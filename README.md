@@ -29,7 +29,7 @@ Every initiative—from the initial system setup to new features, optimizations,
 
 4. **Containerized & Portable by Design**
    * Workloads run in standardized containers (`Dockerfile`, `docker-compose.yml`) on **OrbStack / Docker** locally.
-   * Frictionless transition to cloud environments (Fly.io, AWS, GCP, or Kubernetes) whenever public 24/7 access is required.
+   * Frictionless transition to production Kubernetes clusters whenever public 24/7 access is required.
 
 5. **Self-Observing Runtime**
    * Container health probes, structured logging, and automated error alerting back to conversational channels.
