@@ -1,7 +1,7 @@
 # 📖 Stratum Global Glossary & Ubiquitous Language
 
 > **Purpose:** Canonical dictionary of terms, acronyms, and concepts for human stakeholders and AI agents across all Stratum repositories.  
-> **Location:** `stratum-meta/standards/glossary.md`  
+> **Location:** `meta/standards/glossary.md`  
 > **Rule:** All agents and documentation must strictly use these definitions to prevent semantic drift.
 
 ---
@@ -10,7 +10,7 @@
 
 | Term | Full Name | Definition |
 | :--- | :--- | :--- |
-| **`CR`** | Change Request | A formal, auditable unit of evolution in Stratum, tracked under `stratum-meta/changes/CR-YYaXXX-<short-title>/`. Contains `request.md`, `evaluation.md`, and supporting docs. |
+| **`CR`** | Change Request | A formal, auditable unit of evolution in Stratum, tracked under `meta/changes/CR-YYaXXX-<short-title>/`. Contains `request.md`, `evaluation.md`, and supporting docs. |
 | **`CR-YYaXXX`** | Change ID Standard | Unique ID format: `YY` = 2-digit year (e.g. `26`), `a` = lowercase month letter (`a`=Jan...`j`=Oct, skipping `l`), `XXX` = 3-digit monthly sequence number. |
 | **`CER`** | Change Evaluation Report | The analytical artifact produced in `STEP-03` evaluating scope, cybersecurity threats (STRIDE), and cost-benefit feasibility before any code is written. |
 | **`HITL`** | Human-in-the-Loop | The governing architectural pattern where AI generates 100% of code, but humans retain strategic control via conversational review gates. |
@@ -52,8 +52,9 @@
 
 | Term | Definition |
 | :--- | :--- |
-| **`stratum-meta`** | The central orchestration repository containing global architecture, SDLC lifecycle, change archives, flows, features, contracts, and ADRs. |
-| **`stratum-gateway`** | The omnichannel ingress hub handling IMAP email polling, OAuth authentication, and webhook bridges for Zalo and Viber bots. |
-| **`stratum-services/*`** | Focused domain microservices (e.g., `vib-tracker`, `billing`) executing business logic and database persistence. |
+| **`meta`** | The central orchestration repository containing global architecture, SDLC lifecycle, change archives, flows, features, contracts, and ADRs. |
+| **`gateway`** | The omnichannel perimeter edge adapter handling IMAP email polling, OAuth authentication, and webhook bridges for Zalo and Viber bots. |
+| **`services/*`** | Focused domain microservices (e.g., `services/cashflow`, `services/billing`) executing business logic and database persistence. |
+| **`web`** | The web application repository delivering dashboards, charts, and stakeholder user interfaces. |
 | **`OrbStack`** | High-performance, lightweight container runtime for macOS (Mac Studio), replacing Docker Desktop for fast local containerized execution. |
 | **`Omnichannel`** | The communication approach where stakeholder notifications, approvals, and commands are delivered simultaneously or interchangeably via Email, Zalo, and Viber. |

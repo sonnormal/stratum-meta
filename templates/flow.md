@@ -3,7 +3,7 @@
 > **Flow ID:** `FLOW-XXX`  
 > **Status:** `ACTIVE` / `IN_DESIGN` / `DEPRECATED`  
 > **Trigger:** Inbound Webhook / Scheduled Cron / User Command / IMAP Poll  
-> **Participating Repositories:** `stratum-gateway`, `stratum-services/<service>`  
+> **Participating Repositories:** `gateway`, `services/<service>`  
 > **Relevant Contracts:** [`contracts/events/...`](../contracts/)
 
 ---
@@ -20,9 +20,9 @@
 sequenceDiagram
     autonumber
     actor Bank as External Bank / User
-    participant Gateway as stratum-gateway
+    participant Gateway as gateway
     participant Bus as Event Bus / Queue
-    participant Service as stratum-services/<service>
+    participant Service as services/<service>
     actor User as Stakeholder (Zalo/Viber)
 
     Bank->>Gateway: Inbound Payload / Email
@@ -38,13 +38,13 @@ sequenceDiagram
 ## 🔄 3. Step-by-Step Execution & Data Transformation (Dataflow)
 
 ### Step 1: Ingress & Normalization
-* **Responsible Repo:** `stratum-gateway`
+* **Responsible Repo:** `gateway`
 * **Input Shape:** Raw external protocol (e.g. RFC 5322 MIME email, webhook payload).
 * **Processing:** Validates signatures, strips headers, extracts domain entity.
 * **Output / Handoff:** Publishes canonical event conforming to [`contracts/events/...`](../contracts/).
 
 ### Step 2: Domain Processing & Persistence
-* **Responsible Repo:** `stratum-services/<service>`
+* **Responsible Repo:** `services/<service>`
 * **Input Shape:** Validated canonical event.
 * **Processing:** Idempotency check, state updates, business calculation, database transaction.
 * **Side Effects:** Stores record in PostgreSQL; dispatches notifications.
@@ -55,6 +55,6 @@ sequenceDiagram
 
 | Failure Scenario | Where Detected | Recovery / Retry Strategy |
 | :--- | :--- | :--- |
-| **Malformed Inbound Payload** | `stratum-gateway` | Log warning, send to Dead Letter Queue (DLQ), zero retries. |
-| **Database Connection Timeout** | `stratum-services/*` | Exponential backoff retry (up to 3 attempts), transaction rollback. |
-| **Duplicate Event Delivery** | `stratum-services/*` | Idempotent deduplication via unique `event_id`. |
+| **Malformed Inbound Payload** | `gateway` | Log warning, send to Dead Letter Queue (DLQ), zero retries. |
+| **Database Connection Timeout** | `services/*` | Exponential backoff retry (up to 3 attempts), transaction rollback. |
+| **Duplicate Event Delivery** | `services/*` | Idempotent deduplication via unique `event_id`. |

@@ -1,7 +1,7 @@
 # 📋 Stratum Document Templates
 
 > **Purpose:** Canonical template registry for all governance, change lifecycle, architecture, and specification documents in the Stratum ecosystem.  
-> **Location:** `stratum-meta/templates/`  
+> **Location:** `meta/templates/`  
 > **Naming Standard:** Every template is named **identically to the file or artifact it produces** (no redundant `_template` suffix).
 
 ---
@@ -25,10 +25,10 @@ When generating a new document for a change or architecture evolution, copy the 
 
 ```bash
 # Example 1: Initiating a Change Evaluation Report (STEP-03)
-cp templates/evaluation.md changes/CR-26j001-vib-tracker/evaluation.md
+cp templates/evaluation.md changes/CR-26j001-bank-cashflow-ingestion/evaluation.md
 
 # Example 2: Authoring Test Scenarios for a specific service (STEP-04)
-cp templates/scenario.md ../stratum-services/vib-tracker/changes/CR-26j001-vib-tracker/scenario.md
+cp templates/scenario.md ../services/cashflow/changes/CR-26j001-bank-cashflow-ingestion/scenario.md
 
 # Example 3: Documenting a new multi-repo flow
 cp templates/flow.md flows/email-transaction-ingestion.md

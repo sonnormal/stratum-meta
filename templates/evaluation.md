@@ -14,7 +14,7 @@
 | **Requester** | Human Stakeholder (Email / Zalo / Viber) |
 | **Intake Channel** | Email / Zalo / Viber |
 | **Timestamp** | `YYYY-MM-DD HH:MM:SS UTC+7` |
-| **AI Evaluation Agent** | `stratum-orchestrator:evaluation-agent-v1` |
+| **AI Evaluation Agent** | `orchestrator:evaluation-agent-v1` |
 | **Status** | `PENDING_REVIEW` (Awaiting `GATE-01` Sign-Off) |
 
 ---
@@ -58,11 +58,10 @@
 
 | Repository | Component Role | Impact Level | Primary Changes Required |
 | :--- | :--- | :--- | :--- |
-| `stratum-gateway` | Omnichannel Hub | `None / Low / Medium / High` | *e.g., New webhook handler or message parser* |
-| `stratum-services/{name}` | Business Microservice | `None / Low / Medium / High` | *e.g., Domain entity updates, new REST/gRPC endpoints* |
-| `stratum-data-platform` | Data Pipeline | `None / Low / Medium / High` | *e.g., Schema transform update, new event ingestion sink* |
-| `stratum-infra` | Isolated IaC | `None / Low / Medium / High` | *e.g., Dedicated Redis cache instance, IAM policy updates* |
-| `stratum-gitops` | Delivery Manifests | `None / Low / Medium / High` | *e.g., Environment variables, configmap diffs, traffic split* |
+| `gateway` | Omnichannel Hub | `None / Low / Medium / High` | *e.g., New webhook handler or message parser* |
+| `services/{name}` | Business Microservice | `None / Low / Medium / High` | *e.g., Domain entity updates, new REST/gRPC endpoints* |
+| `web` | Web Application | `None / Low / Medium / High` | *e.g., UI dashboard views, client components* |
+| `infra` | Infrastructure / Manifests | `None / Low / Medium / High` | *e.g., Dedicated Redis cache instance, IAM policy updates* |
 
 ---
 
@@ -145,9 +144,9 @@
 
 ```text
 [CR-YYaXXX] Macro Change
-  ├── stratum-services/auth: Spec & TDD Task (scenario.md & fixtures/ in target repo)
-  ├── stratum-gateway: Spec & TDD Task (scenario.md & fixtures/ in target repo)
-  └── stratum-gitops: Environment manifest update (UAT config)
+  ├── services/cashflow: Spec & TDD Task (scenario.md & fixtures/ in target repo)
+  ├── gateway: Spec & TDD Task (scenario.md & fixtures/ in target repo)
+  └── web: View & component updates (scenario.md in target repo)
 ```
 
 * **Independent Testability:** *Confirmation that each repository can run its test suite in isolation using mocks without cross-repo deadlocks.*

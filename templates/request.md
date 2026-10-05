@@ -2,7 +2,7 @@
 
 > **Document Type:** Master Change Request Record & Governance Audit Log  
 > **Lifecycle:** Maintained continuously across `GATE-01`, `GATE-02`, and `GATE-03`.  
-> **Location:** `stratum-meta/changes/CR-YYaXXX-<short-title>/request.md`
+> **Location:** `meta/changes/CR-YYaXXX-<short-title>/request.md`
 
 ---
 
@@ -35,7 +35,7 @@
 
 ## 📚 3. Supporting Documentation
 
-*Each change in `stratum-meta` may include supporting documentation to provide deeper domain or technical context:*
+*Each change in `meta` may include supporting documentation to provide deeper domain or technical context:*
 
 | Document | Path / Link | Description |
 | :--- | :--- | :--- |
@@ -52,8 +52,8 @@
 
 | Repository | Role in Change | Branch / PR | Target Repo Scenario Spec |
 | :--- | :--- | :--- | :--- |
-| `stratum-services/<service>` | Core business logic & persistence | `cr-YYaXXX-...` | [`scenario.md` in target repo](<target-repo>/changes/CR-YYaXXX-<short-title>/scenario.md) |
-| `stratum-gateway` | Ingress ingestion & payload parsing | `cr-YYaXXX-...` | [`scenario.md` in target repo](<target-repo>/changes/CR-YYaXXX-<short-title>/scenario.md) |
+| `services/<service>` | Core business logic & persistence | `cr-YYaXXX-...` | [`scenario.md` in target repo](<target-repo>/changes/CR-YYaXXX-<short-title>/scenario.md) |
+| `gateway` | Ingress ingestion & payload parsing | `cr-YYaXXX-...` | [`scenario.md` in target repo](<target-repo>/changes/CR-YYaXXX-<short-title>/scenario.md) |
 
 ---
 

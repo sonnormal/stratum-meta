@@ -1,7 +1,7 @@
 # 🔄 Stratum System Flows
 
 > **Purpose:** Living catalog of cross-repository dataflows and interaction choreographies in the Stratum ecosystem.  
-> **Location:** `stratum-meta/flows/`  
+> **Location:** `meta/flows/`  
 > **Rule:** Every multi-service interaction must have an evergreen flow document that evolves as the system grows.
 
 ---
@@ -22,7 +22,7 @@ Unlike ephemeral tickets or task branches, **flows are evergreen**:
 
 | ID | Title | Primary Repositories Involved | Relevant Contracts |
 | :--- | :--- | :--- | :--- |
-| [`FLOW-001`](email-transaction-ingestion.md) | Inbound Email Transaction Ingestion & Alerting | `stratum-gateway`, `stratum-services/vib-tracker` | `transaction_detected.v1.json` |
+| [`FLOW-001`](email-transaction-ingestion.md) | Inbound Email Transaction Ingestion & Alerting | `gateway`, `services/cashflow` | `transaction_detected.v1.json` |
 
 ---
 

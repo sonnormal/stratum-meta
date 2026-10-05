@@ -1,7 +1,7 @@
 # 📜 Stratum Shared Contracts
 
 > **Purpose:** Canonical repository of formal, machine-readable interfaces between independent Stratum repositories.  
-> **Location:** `stratum-meta/contracts/`  
+> **Location:** `meta/contracts/`  
 > **Rule:** Repositories must never communicate using ad-hoc, unversioned payloads. All cross-repo messages and APIs must adhere to contracts defined here.
 
 ---
@@ -36,5 +36,5 @@ contracts/
    * Adding optional fields or additive endpoints is a **non-breaking change** (remains `v1`).
    * Renaming fields, removing fields, or changing data types is a **breaking change** and requires introducing a new file (`v2`).
 3. **Producer & Consumer Testing:**
-   * **Producers** (e.g. `stratum-gateway`) validate outbound payloads against the contract in Tier 2 integration tests.
-   * **Consumers** (e.g. `stratum-services/vib-tracker`) validate inbound deserialization against the contract in Tier 2 integration tests.
+   * **Producers** (e.g. `gateway`) validate outbound payloads against the contract in Tier 2 integration tests.
+   * **Consumers** (e.g. `services/cashflow`) validate inbound deserialization against the contract in Tier 2 integration tests.

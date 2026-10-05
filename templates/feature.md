@@ -2,7 +2,7 @@
 
 > **Feature ID:** `FEAT-XXX`  
 > **Status:** `ACTIVE` / `PLANNED` / `DEPRECATED`  
-> **Implementing Repository:** `stratum-services/<service>` (or `stratum-gateway`)  
+> **Implementing Repository:** `services/<service>` (or `gateway`)  
 > **Related Flow:** [`flows/FLOW-XXX-...`](../flows/)  
 > **Relevant Contracts:** [`contracts/events/...`](../contracts/)
 
@@ -36,7 +36,7 @@
 
 ## 📦 4. Implementation & Repository Mapping
 
-* **Primary Codebase:** `stratum-services/<service>`
+* **Primary Codebase:** `services/<service>`
 * **Data Persistence:** Table schema / entity definitions.
 * **Inbound Contract:** [`contracts/events/...`](../contracts/)
 * **Outbound Contract / Notification:** Notification format / Webhook.

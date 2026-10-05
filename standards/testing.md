@@ -2,7 +2,7 @@
 
 > **Architecture Reference:** Test Pyramid, Execution Topology, and Lifecycle Governance  
 > **Phase 1 Focus:** Focus is strictly on Tier 1 (Unit) and Tier 2 (Integration via Docker/OrbStack). Tier 3 (E2E) is deferred to later multi-service phases.  
-> **Applies to:** All Stratum Repositories (`stratum-services/*`, `stratum-gateway`, `stratum-meta`)
+> **Applies to:** All Stratum Repositories (`services/*`, `gateway`, `web`, `meta`)
 
 ---
 
@@ -52,9 +52,9 @@ Unit tests verify the smallest testable units of code (functions, pure domain en
 * **Blistering Speed:** Thousands of unit tests must execute in seconds to enable rapid inner-loop AI development.
 
 ### 1.3 Examples in Stratum
-* Verifying that an email address parser in `stratum-gateway` correctly parses RFC 5322 headers and flags invalid domains.
-* Validating that a currency calculation utility in `stratum-services/billing` rounds fractions according to business accounting rules.
-* Checking that state machine transitions in `stratum-orchestrator` correctly transition from `PENDING_REVIEW` to `APPROVED`.
+* Verifying that an email address parser in `gateway` correctly parses RFC 5322 headers and flags invalid domains.
+* Validating that a currency calculation utility in `services/cashflow` rounds fractions according to business accounting rules.
+* Checking that state machine transitions in `services/cashflow` correctly transition from `PENDING_REVIEW` to `SETTLED`.
 
 ---
 
@@ -93,11 +93,11 @@ Integration testing in Stratum verifies the seams, communications, and stateful 
 
 ### 2.3 Independent Repository Isolation via Testcontainers
 In Stratum's multi-repository architecture, each repository must be developed and tested **completely independently**:
-* Microservice repositories (`stratum-services/billing`) must **never** depend on running sibling services (`stratum-services/auth`) during integration tests.
+* Microservice repositories (`services/cashflow`) must **never** depend on running sibling services (`services/auth`) during integration tests.
 * Instead, integration tests use **Testcontainers** (ephemeral Docker containers managed programmatically):
   - When tests start, Testcontainers spins up a real, clean PostgreSQL or Redis container in OrbStack/Docker.
   - Sibling microservices and external third-party APIs (e.g. Zalo Bot API, Payment Gateways) are simulated using strict **HTTP WireMocks** or **OpenAPI Contract Mocks**.
-* **Repository-Scoped Scenarios & Fixtures:** Because Tier 1 (Unit) and Tier 2 (Integration) tests run against a single isolated repository, both the test scenarios (`scenario.md` reviewed at `GATE-02`) and test fixtures (`fixtures/` containing sample emails, mock payloads, or seed data) are housed **directly in that specific repository** (e.g., `<repo>/changes/CR-YYaXXX-<short-title>/`). They do not live in the global `stratum-meta` archive.
+* **Repository-Scoped Scenarios & Fixtures:** Because Tier 1 (Unit) and Tier 2 (Integration) tests run against a single isolated repository, both the test scenarios (`scenario.md` reviewed at `GATE-02`) and test fixtures (`fixtures/` containing sample emails, mock payloads, or seed data) are housed **directly in that specific repository** (e.g., `<repo>/changes/CR-YYaXXX-<short-title>/`). They do not live in the global `meta` archive.
 * **Benefit:** 100% of integration tests pass in complete isolation on your local machine before staging is ever touched.
 
 ---

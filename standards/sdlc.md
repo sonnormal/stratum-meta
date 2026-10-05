@@ -66,24 +66,24 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 #### `STEP-01`: Change Request Intake
 * **Actor:** Human Stakeholder (via Email, Zalo, or Viber)
 * **Input:** Natural language prompt describing a change, new service, bug fix, or integration.
-* **Output:** Inbound raw message received by `stratum-gateway`.
+* **Output:** Inbound raw message received by `gateway`.
 
 #### `STEP-02`: Gateway Normalization & Identity Verification
-* **Actor:** `stratum-gateway`
+* **Actor:** `gateway`
 * **Process:** 
   1. Authenticates sender against allowed list (verified email, verified chat ID).
   2. Extracts intent, parameters, and attachments.
   3. Assigns a formal tracking ID conforming to the `CR-YYaXXX` convention (e.g. `CR-26j001`).
-  4. Initializes the master change record `request.md` in `stratum-meta/changes/CR-YYaXXX-<short-title>/`.
+  4. Initializes the master change record `request.md` in `meta/changes/CR-YYaXXX-<short-title>/`.
 * **Output:** Normalized `ChangeRequestInitiatedEvent` and initialized `request.md`.
 
 #### `STEP-03`: Comprehensive Change Evaluation & Cybersecurity Assessment
 * **Actor:** Strategic Evaluation Agent
 * **Analysis Performed:**
-  1. **Impact Analysis:** Affected repositories (`stratum-services/*`, `stratum-gateway`, `stratum-meta`), data schemas, and API contracts.
+  1. **Impact Analysis:** Affected repositories (`services/*`, `gateway`, `web`, `meta`), data schemas, and API contracts.
   2. **Cybersecurity & Secrets Assessment:** Authentication mechanisms, credentials/tokens management (zero hardcoded secrets), data sensitivity/masking, and attack surface.
   3. **Cost-Benefit Modeling:** Implementation compute effort vs. operational benefits.
-* **Output:** Formatted Change Evaluation Report (saved to `stratum-meta/changes/CR-YYaXXX-<short-title>/evaluation.md` per [CER Template](../templates/evaluation.md)).
+* **Output:** Formatted Change Evaluation Report (saved to `meta/changes/CR-YYaXXX-<short-title>/evaluation.md` per [CER Template](../templates/evaluation.md)).
 
 #### `GATE-01`: Review Gate 1 — Value & Feasibility Gate
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
@@ -159,7 +159,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 
 ## 🗃️ Change Tracking in `changes/`
 
-All changes are archived in the `changes/` directory of `stratum-meta`. Every change is organized using the **One Folder per Change** model with the **`CR-YYaXXX`** identification standard:
+All changes are archived in the `changes/` directory of `meta`. Every change is organized using the **One Folder per Change** model with the **`CR-YYaXXX`** identification standard:
 
 ### 1. Change ID Convention (`CR-YYaXXX`)
 * **`YY`**: 2-digit Year (e.g. `26` for 2026).
@@ -171,9 +171,9 @@ All changes are archived in the `changes/` directory of `stratum-meta`. Every ch
 
 ### 2. Folder Structure per Change
 
-Stratum enforces a strict separation of concerns between **central change governance & documentation** (in `stratum-meta`) and **repo-scoped executable test contracts & fixtures** (in specific repositories).
+Stratum enforces a strict separation of concerns between **central change governance & documentation** (in `meta`) and **repo-scoped executable test contracts & fixtures** (in specific repositories).
 
-#### A. Central Change Record (`stratum-meta/changes/CR-YYaXXX-<short-title>/`)
+#### A. Central Change Record (`meta/changes/CR-YYaXXX-<short-title>/`)
 ```text
 changes/CR-YYaXXX-<short-title>/
 ├── request.md        # Master request intake, overview, status, and gate approval audit log (Gate 1, 2, 3)

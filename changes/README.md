@@ -20,11 +20,11 @@ Every change is assigned a unique ID following the format: **`CR-YYaXXX`**
 
 ## 📂 Structure: Change Organization & Separation of Concerns
 
-Stratum maintains a clean architectural boundary between **global change governance** (in `stratum-meta`) and **repo-scoped executable test contracts** (in specific repositories).
+Stratum maintains a clean architectural boundary between **global change governance** (in `meta`) and **repo-scoped executable test contracts** (in specific repositories).
 
-### 1. Global Change Archive (`stratum-meta/changes/`)
+### 1. Global Change Archive (`meta/changes/`)
 
-Every change maintains its overarching governance, intake record, evaluation, and supporting documentation in `stratum-meta`:
+Every change maintains its overarching governance, intake record, evaluation, and supporting documentation in `meta`:
 
 ```text
 changes/CR-YYaXXX-<short-title>/
@@ -56,4 +56,4 @@ Because early-phase verification strictly focuses on **Tier 1 (Unit Tests)** and
 
 | ID | Title | Status | Date | Folder |
 | :--- | :--- | :--- | :--- | :--- |
-| `CR-26j001` | Initial Implementation: VIB Email Transaction Alert & Digest | In Discussion | 2026-10-01 | [`CR-26j001-vib-tracker/`](CR-26j001-vib-tracker/) |
+| `CR-26j001` | Bank Email Ingestion & Cashflow Alerting | `INTAKE` | 2026-10-05 | [`CR-26j001-bank-cashflow-ingestion/`](CR-26j001-bank-cashflow-ingestion/) |

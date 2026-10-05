@@ -42,7 +42,7 @@ Stratum is organized as an umbrella workspace containing focused, decoupled repo
 
 ```text
 /Users/son/Projects/Stratum/                 <-- Workspace Root (Mac Studio)
-├── stratum-meta/                            <-- (Current Repo) Global Governance, Living Specs, Schemas & ADRs
+├── meta/                                    <-- (Current Repo) Global Governance, Living Specs, Schemas & ADRs
 │   ├── README.md                            <-- Platform Overview
 │   ├── changes/                             <-- Dedicated archive of all Change Requests (CRs)
 │   ├── flows/                               <-- Cross-repo end-to-end event/data flows & sequence choreographies
@@ -57,9 +57,12 @@ Stratum is organized as an umbrella workspace containing focused, decoupled repo
 │   │   └── glossary.md                      <-- Ubiquitous language dictionary
 │   └── templates/                           <-- Canonical document blueprints (request, evaluation, scenario, flow, feature, adr)
 │
-├── stratum-gateway/                         <-- Omnichannel Gateway (Email IMAP/OAuth + Zalo/Viber)
+├── gateway/                                 <-- Omnichannel Perimeter Edge (Email IMAP + Zalo/Viber Egress)
 │
-└── stratum-services/                        <-- Domain Services & Microservices
+├── services/                                <-- Domain Microservices
+│   └── cashflow/                            <-- Financial Core: settlements, account balances, debits/credits
+│
+└── web/                                     <-- Stakeholder Web UI Dashboard
 ```
 
 ---

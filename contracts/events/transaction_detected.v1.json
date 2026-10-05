@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "stratum://contracts/events/transaction_detected.v1.json",
   "title": "TransactionDetectedEvent",
-  "description": "Emitted by stratum-gateway when a financial transaction alert email or webhook is parsed",
+  "description": "Emitted by gateway when a financial transaction alert email or webhook is parsed",
   "type": "object",
   "properties": {
     "event_id": {

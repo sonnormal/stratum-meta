@@ -1,7 +1,7 @@
 # ⚖️ Stratum Engineering Standards & Governance
 
 > **Purpose:** Canonical registry of cross-repository operational rules, development lifecycles, testing policies, and ubiquitous language governing all repositories in the Stratum ecosystem.  
-> **Location:** `stratum-meta/standards/`  
+> **Location:** `meta/standards/`  
 > **Audience:** Human stakeholders and autonomous AI development agents.
 
 ---
@@ -10,7 +10,7 @@
 
 While [**`architecture/`**](file:///Users/son/Projects/Stratum/stratum-meta/architecture) defines **the technical machine** (system topology, container configurations, and ADRs), **`standards/`** defines **the operating rules** for how software is specified, built, tested, and verified:
 
-* **Ecosystem-Wide:** Every repository (`stratum-services/*`, `stratum-gateway`, `stratum-meta`) must adhere to these policies.
+* **Ecosystem-Wide:** Every repository (`services/*`, `gateway`, `web`, `meta`) must adhere to these policies.
 * **Autonomous Guardrails:** AI development agents must strictly abide by these lifecycle and testing constraints before generating code.
 
 ---

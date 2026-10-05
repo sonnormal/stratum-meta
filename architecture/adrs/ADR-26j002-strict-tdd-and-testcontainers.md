@@ -3,7 +3,7 @@
 > **Decision ID:** `ADR-26j002`  
 > **Status:** `ACCEPTED`  
 > **Date:** `2026-10-01`  
-> **Applies to:** `stratum-services/*`, `stratum-gateway`  
+> **Applies to:** `services/*`, `gateway`, `web`  
 > **Related CR:** `CR-26j001`
 
 ---

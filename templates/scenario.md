@@ -12,13 +12,13 @@
 | Field | Detail |
 | :--- | :--- |
 | **Change ID** | `CR-YYaXXX` (e.g. `CR-26j001`) |
-| **Target Repository** | `stratum-services/<service>` / `stratum-gateway` / `stratum-web` |
-| **Feature Fulfillments** | [Link to `stratum-meta/features/FEAT-XXX...`](file:///Users/son/Projects/Stratum/stratum-meta/features/) |
-| **Associated Flow** | [Link to `stratum-meta/flows/FLOW-XXX...`](file:///Users/son/Projects/Stratum/stratum-meta/flows/) |
-| **Bound Contracts** | [Link to `stratum-meta/contracts/...`](file:///Users/son/Projects/Stratum/stratum-meta/contracts/) |
+| **Target Repository** | `services/<service>` / `gateway` / `web` |
+| **Feature Fulfillments** | [Link to `meta/features/FEAT-XXX...`](file:///Users/son/Projects/Stratum/meta/features/) |
+| **Associated Flow** | [Link to `meta/flows/FLOW-XXX...`](file:///Users/son/Projects/Stratum/meta/flows/) |
+| **Bound Contracts** | [Link to `meta/contracts/...`](file:///Users/son/Projects/Stratum/meta/contracts/) |
 | **Author** | AI QA / Architect Agent |
 | **Status** | `PENDING_GATE_02_APPROVAL` |
-| **Master CR Record** | [Link to `stratum-meta/changes/CR-YYaXXX-.../request.md`](file:///Users/son/Projects/Stratum/stratum-meta/changes/) |
+| **Master CR Record** | [Link to `meta/changes/CR-YYaXXX-.../request.md`](file:///Users/son/Projects/Stratum/meta/changes/) |
 
 ---
 
@@ -73,7 +73,7 @@
 ### Scenario 2.2: [Contract Event Serialization & Bus Emission]
 * **Given:** A valid internal domain state transition.
 * **When:** The service emits an event to the local message broker.
-* **Then:** The serialized payload strictly validates against the JSON Schema in `stratum-meta/contracts/`.
+* **Then:** The serialized payload strictly validates against the JSON Schema in `meta/contracts/`.
 
 ---
 

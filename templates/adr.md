@@ -3,7 +3,7 @@
 > **Decision ID:** `ADR-YYaXXX` (e.g. `ADR-26j001`)  
 > **Status:** `PROPOSED` / `ACCEPTED` / `SUPERSEDED` by [ADR-YYaXXX](ADR-YYaXXX.md) / `REJECTED`  
 > **Date:** `YYYY-MM-DD`  
-> **Applies to:** `All Repositories` / `stratum-services/*` / `stratum-gateway`  
+> **Applies to:** `All Repositories` / `services/*` / `gateway` / `web`  
 > **Related CR:** `CR-YYaXXX`
 
 ---
