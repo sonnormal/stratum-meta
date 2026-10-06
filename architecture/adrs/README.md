@@ -37,6 +37,7 @@ Every architectural decision is assigned a unique ID conforming to the Stratum t
 | [`ADR-26j001`](ADR-26j001-containerized-local-runtime.md) | Standardized Containerized Runtime & OrbStack Environment | `ACCEPTED` | 2026-10-01 | All Repositories |
 | [`ADR-26j002`](ADR-26j002-strict-tdd-and-testcontainers.md) | Strict Test-Driven Development & Isolated Testcontainers | `ACCEPTED` | 2026-10-01 | All Service Repos |
 | [`ADR-26j003`](ADR-26j003-local-llm-extraction-ollama.md) | Standardized Local LLM Document Extraction via Ollama | `ACCEPTED` | 2026-10-05 | `gateway`, `services/*` |
+| [`ADR-26j004`](ADR-26j004-ecosystem-technology-stack.md) | Standardized Ecosystem Technology Stack | `ACCEPTED` | 2026-10-06 | All Repositories |
 
 ---
 
