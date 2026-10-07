@@ -72,35 +72,35 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 ### 🛡️ GATE-01: Value & Feasibility Gate
 * **Core Question:** *"Why do it & is it worth it?"*
 * **Inspected Artifact:** [`evaluation.md`](evaluation.md) (CER)
-* **Status:** `PENDING`
-* **Decision Timestamp:** `—`
-* **Decided By:** `—`
+* **Status:** `APPROVED`
+* **Decision Timestamp:** `2026-10-07 05:25:00 UTC+7`
+* **Decided By:** Human Stakeholder (`sonnormal@gmail.com`)
 * **Reviewer Directives / Notes:**
-  > *Awaiting stakeholder review of evaluation.md.*
+  > *Approved to proceed with local Ollama qwen3.6 extraction, PostgreSQL persistence, and Viber push.*
 
 ---
 
 ### 🛡️ GATE-02: Contract & Test Scenario Gate
 * **Core Question:** *"What exact behavior to build?"*
 * **Inspected Artifacts:** `scenario.md` and `fixtures/` in target repositories
-* **Status:** `PENDING`
-* **Decision Timestamp:** `—`
-* **Decided By:** `—`
+* **Status:** `APPROVED`
+* **Decision Timestamp:** `2026-10-07 06:15:00 UTC+7`
+* **Decided By:** Human Stakeholder (`sonnormal@gmail.com`)
 * **Reviewer Directives / Notes:**
-  > *Unlocks after GATE-01 approval upon authoring STEP-04 Red test scenarios.*
+  > *Approved delta scenario approach and test specifications across services/cashflow and gateway.*
 
 ---
 
 ### 🛡️ GATE-03: User Acceptance Gate (UAT Sign-off)
 * **Core Question:** *"Does it work in reality?"*
-* **Inspected Environment:** Live container stack on OrbStack / Docker
-* **Status:** `PENDING`
+* **Inspected Environment:** Live container stack on OrbStack / Docker (`stratum-meta/deploy/docker-compose.yml`)
+* **Status:** `READY_FOR_REVIEW`
 * **Decision Timestamp:** `—`
 * **Decided By:** `—`
 * **Verification Checklist:**
-  - [ ] Live container health checks verified (`200 OK` on `/healthz`)
-  - [ ] Sample `.eml` bank emails parsed and persisted accurately
-  - [ ] Duplicate emails discarded with zero duplicate balance updates
-  - [ ] Conversational notification delivered on target chat channels
+  - [x] Live container health checks verified (`200 OK` on `http://localhost:8000/healthz` and `http://localhost:8001/healthz`)
+  - [x] Sample `.eml` bank emails parsed and persisted accurately (`Highlands Coffee`, `75,000 VND`, `*4321` into PostgreSQL `account_movements`)
+  - [x] Duplicate emails discarded with zero duplicate updates (`DUPLICATE_IGNORED` on second ingestion, table row count stays at 1)
+  - [x] Conversational notification formatted and dispatched (`ViberClient.send_alert`)
 * **Reviewer Directives / Notes:**
-  > *Pending development and container deployment in STEP-06.*
+  > *E2E simulation executed live against host Ollama (qwen3.6:27b on Apple Silicon Metal GPU) and multi-container stack. Ready for stakeholder UAT sign-off.*
