@@ -10,7 +10,8 @@
 
 | Document | Scope | Purpose |
 | :--- | :--- | :--- |
-| [**`overview.md`**](overview.md) | **System Architecture Landscape** | The macro blueprint: C4 context, container topology, network isolation zones, bounded contexts, and end-to-end data pipelines. |
+| [**`overview.md`**](overview.md) | **Macro System Landscape** | The abstract C4 Level 1 context: external actors, macro boundaries, and ecosystem invariants. |
+| [**`topology/`**](topology/container-runtime.md) | **Living Deployment Topologies** | Living C4 Level 2 operational topology: running containers, Compose network bridges, ports, and persistent volumes. |
 | [**`adrs/`**](adrs/README.md) | **Architectural Decision Records** | Chronological, immutable records capturing why specific technologies, runtimes, and engineering invariants were adopted. |
 
 ---
