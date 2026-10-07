@@ -34,8 +34,8 @@ graph TD
     subgraph Delivery ["🚀 Phase: Containerized Delivery & User Acceptance"]
         DeployUAT["📦 [STEP-06] Build & Run Container Stack<br/>(Docker / OrbStack Container Sandbox)"]
         Gate3{"🛡️ [GATE-03] User Acceptance Gate (UAT)<br/>Stakeholder Verifies Real Behavior in UAT"}
-        SyncDoc["📚 [STEP-06B] Living Specs Sync & Promotion<br/>(Merge to main & synchronize features, flows, architecture)"]
-        Operate["🚀 [STEP-07] Container Operation & Observability<br/>(Ready for Cloud Lift-and-Shift)"]
+        SyncDoc["📚 [STEP-07] Living Specs Sync & Promotion<br/>(Merge to main & synchronize features, flows, architecture)"]
+        Operate["🚀 [STEP-08] Container Operation & Observability<br/>(Ready for Cloud Lift-and-Shift)"]
 
         TDDPhase2 --> DeployUAT
         DeployUAT --> Gate3
@@ -147,11 +147,11 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Human Action:** Stakeholder tests the feature live in the local UAT container environment (feeding real/sample data, clicking web UI, or testing chat bots).
 * **Audit Trail:** Sign-off recorded in `request.md`.
 * **Decisions:**
-  * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-06B`.
+  * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-07`.
   * `[Request Changes]` → Feedback notes provided; re-routes to `STEP-04`.
   * `[Reject / Abort]` → Reverts deployment.
 
-#### `STEP-06B`: Living Specifications Synchronization & Production Promotion
+#### `STEP-07`: Living Specifications Synchronization & Production Promotion
 * **Actor:** AI Documentation & Platform Agent
 * **Trigger:** Stakeholder approves `GATE-03` (`[Accept & Sign Off]`).
 * **Process:**
@@ -164,7 +164,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
   3. **Change Request Archival:** Marks the Change Request folder (`meta/changes/CR-YYaXXX/`) as `PROMOTED`, preserving it as an immutable historical delta record.
 * **Output:** Clean `main` branches, updated living documentation, and archived CR audit trail.
 
-#### `STEP-07`: Continuous Container Operation & Cloud Readiness
+#### `STEP-08`: Continuous Container Operation & Cloud Readiness
 * **Actor:** Local Container Daemon / Future Cloud Runner
 * **Process:**
   - Container runs stably in the background on OrbStack.

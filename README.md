@@ -49,10 +49,11 @@ Stratum is organized as an umbrella workspace containing focused, decoupled repo
 │   ├── features/                            <-- Living domain feature specifications (with implementing repo links)
 │   ├── contracts/                           <-- Canonical schemas, protobufs & cross-repo API contracts
 │   ├── architecture/                        <-- Technical blueprints & Architectural Decision Records (ADRs)
+│   │   ├── topology/                        <-- Living accumulated container & network topologies
 │   │   └── adrs/                            <-- ADR-YYaXXX immutable technical decisions
 │   ├── standards/                           <-- Ecosystem engineering standards & governance
 │   │   ├── README.md                        <-- Standards catalog
-│   │   ├── sdlc.md                          <-- Universal 7-step lifecycle & 3 gates
+│   │   ├── sdlc.md                          <-- Universal 8-step lifecycle & 3 gates
 │   │   ├── testing.md                       <-- Testing tiers (Unit, Integration, E2E)
 │   │   └── glossary.md                      <-- Ubiquitous language dictionary
 │   └── templates/                           <-- Canonical document blueprints (request, evaluation, scenario, flow, feature, adr)

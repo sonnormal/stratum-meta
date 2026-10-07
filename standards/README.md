@@ -19,6 +19,6 @@ While [**`architecture/`**](file:///Users/son/Projects/Stratum/stratum-meta/arch
 
 | Standard Document | Scope | Purpose |
 | :--- | :--- | :--- |
-| [**`sdlc.md`**](sdlc.md) | Universal Lifecycle & 3 Gates | The 7-step autonomous development lifecycle governed by 3 Human-in-the-Loop review gates (Value, Scenario, UAT). |
+| [**`sdlc.md`**](sdlc.md) | Universal Lifecycle & 3 Gates | The 8-step autonomous development lifecycle governed by 3 Human-in-the-Loop review gates (Value, Scenario, UAT). |
 | [**`testing.md`**](testing.md) | Quality Assurance & Verification | Tier 1 (Unit), Tier 2 (Integration with Testcontainers), and Tier 3 (E2E) testing definitions, speeds, and rules. |
 | [**`glossary.md`**](glossary.md) | Ubiquitous Language Dictionary | Platform-wide terminology definitions (`CR`, `Gates`, `Flow`, `Feature`, `Contract`, `ADR`, `Seam`) to prevent semantic drift. |

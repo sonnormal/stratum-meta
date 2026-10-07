@@ -191,7 +191,7 @@ The optimal hybrid setup for Stratum is:
 
 ## ⚖️ Mapping Testing Tiers to the 3 Human Governance Gates
 
-Stratum's testing tiers integrate directly with its **Three Human Governance Gates** across the 7-step SDLC:
+Stratum's testing tiers integrate directly with its **Three Human Governance Gates** across the 8-step SDLC:
 
 ```
 [STEP-01 & 02] Request Intake & Gateway Normalization
@@ -220,8 +220,11 @@ Stratum's testing tiers integrate directly with its **Three Human Governance Gat
 [GATE-03] USER ACCEPTANCE GATE (UAT Sign-off)
     │     Human tests live in UAT (conversational/container) and authorizes release.
     ▼
-[STEP-07] Continuous Container Operation & Cloud Readiness
-          Container runs stably in background on OrbStack (cloud lift-and-shift ready).
+[STEP-07] Living Specifications Synchronization & Production Promotion
+    │     Merges to main, updates living features, flows, and architecture topologies.
+    ▼
+[STEP-08] Continuous Container Operation & Cloud Readiness
+          Container runs stably in background on OrbStack (cloud lift-and-Shift ready).
 ```
 
 ---
