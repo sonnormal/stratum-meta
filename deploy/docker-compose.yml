@@ -1,0 +1,81 @@
+services:
+  cashflow-db:
+    image: postgres:16-alpine
+    container_name: stratum-cashflow-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: cashflow
+    ports:
+      - "5432:5432"
+    networks:
+      - stratum-data-net
+    volumes:
+      - cashflow-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cashflow"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
+
+  cashflow-service:
+    build:
+      context: ../../services/cashflow
+      dockerfile: Dockerfile
+    container_name: stratum-cashflow-service
+    restart: unless-stopped
+    depends_on:
+      cashflow-db:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql+psycopg://postgres:postgres@cashflow-db:5432/cashflow
+      PYTHONUNBUFFERED: "1"
+    ports:
+      - "8001:8001"
+    networks:
+      - stratum-data-net
+      - stratum-internal-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8001/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  gateway:
+    build:
+      context: ../../gateway
+      dockerfile: Dockerfile
+    container_name: stratum-gateway
+    restart: unless-stopped
+    depends_on:
+      cashflow-service:
+        condition: service_healthy
+    environment:
+      CASHFLOW_API_URL: http://cashflow-service:8001
+      OLLAMA_HOST_URL: http://host.docker.internal:11434
+      OLLAMA_MODEL: qwen3.6:27b
+      PYTHONUNBUFFERED: "1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "8000:8000"
+    networks:
+      - stratum-internal-net
+      - stratum-perimeter-net
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/healthz')"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+networks:
+  stratum-perimeter-net:
+    driver: bridge
+  stratum-internal-net:
+    driver: bridge
+  stratum-data-net:
+    driver: bridge
+
+volumes:
+  cashflow-data:
