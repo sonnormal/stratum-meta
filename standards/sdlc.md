@@ -34,11 +34,13 @@ graph TD
     subgraph Delivery ["🚀 Phase: Containerized Delivery & User Acceptance"]
         DeployUAT["📦 [STEP-06] Build & Run Container Stack<br/>(Docker / OrbStack Container Sandbox)"]
         Gate3{"🛡️ [GATE-03] User Acceptance Gate (UAT)<br/>Stakeholder Verifies Real Behavior in UAT"}
+        SyncDoc["📚 [STEP-06B] Living Specs Sync & Promotion<br/>(Merge to main & synchronize features, flows, architecture)"]
         Operate["🚀 [STEP-07] Container Operation & Observability<br/>(Ready for Cloud Lift-and-Shift)"]
 
         TDDPhase2 --> DeployUAT
         DeployUAT --> Gate3
-        Gate3 -->|"Approved"| Operate
+        Gate3 -->|"Approved"| SyncDoc
+        SyncDoc --> Operate
         Gate3 -->|"Revision Needed"| TDDPhase1
     end
 ```
@@ -145,9 +147,22 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Human Action:** Stakeholder tests the feature live in the local UAT container environment (feeding real/sample data, clicking web UI, or testing chat bots).
 * **Audit Trail:** Sign-off recorded in `request.md`.
 * **Decisions:**
-  * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-07`.
+  * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-06B`.
   * `[Request Changes]` → Feedback notes provided; re-routes to `STEP-04`.
   * `[Reject / Abort]` → Reverts deployment.
+
+#### `STEP-06B`: Living Specifications Synchronization & Production Promotion
+* **Actor:** AI Documentation & Platform Agent
+* **Trigger:** Stakeholder approves `GATE-03` (`[Accept & Sign Off]`).
+* **Process:**
+  1. **Git Main Promotion:** Merges feature branches (`cr-YYaXXX-...`) into `main` across all affected repositories (`services/*`, `gateway`, `meta`).
+  2. **Living Cumulative Specifications Update (The Delta Merge):**
+     * **Living Features (`features/<feature>.md`):** Merges new user journeys, acceptance criteria, and edge cases from the CR into cumulative living feature specs.
+     * **Living Flows (`flows/<flow>.md`):** Merges updated sequence choreographies, event payloads, and communication paths.
+     * **Living Architecture (`architecture/topology/<topology>.md`):** Merges newly operational containers, networks, ports, and storage volumes into the cumulative topology spec.
+     * **Living Contracts (`contracts/`):** Seals and promotes backward-compatible schema updates.
+  3. **Change Request Archival:** Marks the Change Request folder (`meta/changes/CR-YYaXXX/`) as `PROMOTED`, preserving it as an immutable historical delta record.
+* **Output:** Clean `main` branches, updated living documentation, and archived CR audit trail.
 
 #### `STEP-07`: Continuous Container Operation & Cloud Readiness
 * **Actor:** Local Container Daemon / Future Cloud Runner
