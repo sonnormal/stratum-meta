@@ -12,7 +12,7 @@
 | :--- | :--- | :--- | :--- |
 | [**`request.md`**](request.md) | `changes/CR-YYaXXX-<title>/request.md` | Intake → `GATE-01/02/03` | Master change request record, original stakeholder prompt, status, and 3-gate audit trail. |
 | [**`evaluation.md`**](evaluation.md) | `changes/CR-YYaXXX-<title>/evaluation.md` | `STEP-03` → `GATE-01` | Change Evaluation Report (CER): Scope, STRIDE cybersecurity threat model, cost-benefit analysis. |
-| [**`scenario.md`**](scenario.md) | `<target-repo>/changes/CR-YYaXXX-<title>/scenario.md` | `STEP-04` → `GATE-02` | Repo Technical Spec & Test Scenarios: internal scope, DB schema, Tier 1 (Unit) and Tier 2 (Integration) tests. |
+| [**`scenario.md`**](scenario.md) | `<target-repo>/changes/CR-YYaXXX-<title>/scenario.md` | `STEP-04` → `GATE-02` | Repo Technical Spec & Delta Test Scenarios: internal scope, DB schema, Tier 1 & Tier 2 tests (Delta Principle: documents only new/modified scenarios for this CR). |
 | [**`flow.md`**](flow.md) | `flows/FLOW-XXX-<title>.md` | Architecture Spec | Cross-repo multi-service interaction, sequence diagram, and payload dataflow pipeline. |
 | [**`feature.md`**](feature.md) | `features/FEAT-XXX-<title>.md` | Architecture Spec | Living domain capability specification, acceptance criteria, and implementing repository mapping. |
 | [**`adr.md`**](adr.md) | `architecture/adrs/ADR-YYaXXX-<title>.md` | Architecture Standard | Architectural Decision Record: immutable cross-repo technical invariants and standards. |

@@ -3,7 +3,7 @@
 > **Document Type:** Repo-Specific Technical Specification & Executable Acceptance Tests (`STEP-04` Red Phase)  
 > **Target Checkpoint:** `GATE-02` (Contract & Test Scenario Gate)  
 > **Location:** `<target-repo>/changes/CR-YYaXXX-<short-title>/scenario.md`  
-> **Scope:** Strictly isolated to this single repository for **Technical Design**, **Tier 1 (Unit Tests)**, and **Tier 2 (Integration Tests)**.
+> **Scope:** Strictly isolated to the **DELTA** of this Change Request (Tier 1 Unit and Tier 2 Integration tests). Existing behaviors are guarded by existing regression test suites. Tag scenarios as `[NEW]`, `[MODIFIED]`, or `[DEPRECATED]`.
 
 ---
 
