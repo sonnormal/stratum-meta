@@ -1,7 +1,7 @@
 # ADR-YYaXXX: [Short Title of Architectural Decision]
 
 > **Decision ID:** `ADR-YYaXXX` (e.g. `ADR-26j001`)  
-> **Status:** `PROPOSED` / `ACCEPTED` / `SUPERSEDED` by [ADR-YYaXXX](ADR-YYaXXX.md) / `REJECTED`  
+> **Status:** `PROPOSED` / `ACCEPTED` / `SUPERSEDED` (by `ADR-YYaXXX`) / `REJECTED`  
 > **Date:** `YYYY-MM-DD`  
 > **Applies to:** `All Repositories` / `services/*` / `gateway` / `web`  
 > **Related CR:** `CR-YYaXXX`

@@ -41,7 +41,7 @@ Every initiative—from the initial system setup to new features, optimizations,
 Stratum is organized as an umbrella workspace containing focused, decoupled repositories:
 
 ```text
-/Users/son/Projects/Stratum/                 <-- Workspace Root (Mac Studio)
+Stratum/                                    <-- Workspace Root (Local Workstation)
 ├── meta/                                    <-- (Current Repo) Global Governance, Living Specs, Schemas & ADRs
 │   ├── README.md                            <-- Platform Overview
 │   ├── changes/                             <-- Dedicated archive of all Change Requests (CRs)

@@ -3,7 +3,7 @@
 > **Flow ID:** `FLOW-001`  
 > **Status:** `ACTIVE`  
 > **Trigger:** Polling bank transaction alert emails via IMAP/OAuth  
-> **Participating Repositories:** [`gateway`](file:///Users/son/Projects/Stratum/gateway), [`services/cashflow`](file:///Users/son/Projects/Stratum/services/cashflow)  
+> **Participating Repositories:** [`gateway`](../../gateway), [`services/cashflow`](../../services/cashflow)  
 > **Relevant Contracts:** [`contracts/events/transaction_detected.v1.json`](../contracts/events/transaction_detected.v1.json)  
 > **Related Features:** [`features/vib-transaction-alert.md`](../features/vib-transaction-alert.md)
 

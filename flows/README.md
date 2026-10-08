@@ -14,7 +14,7 @@ Unlike ephemeral tickets or task branches, **flows are evergreen**:
 * When a new service or processing step is introduced via a Change Request (CR), the corresponding flow document is updated.
 * Each flow document integrates two complementary views:
   1. **Choreography (The Workflow):** Sequence diagram of service calls, events, and retry policies.
-  2. **Data Transformation (The Dataflow):** How raw data shapes evolve across boundaries, mapped to formal [Contracts](file:///Users/son/Projects/Stratum/stratum-meta/contracts/).
+  2. **Data Transformation (The Dataflow):** How raw data shapes evolve across boundaries, mapped to formal [Contracts](../contracts/).
 
 ---
 

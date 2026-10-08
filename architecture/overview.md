@@ -46,7 +46,7 @@ To avoid context pollution for AI agents, each repository maintains strict bound
 | :--- | :--- | :--- | :--- | :--- |
 | [**`gateway`**](../../gateway) | Perimeter Ingress & Egress Edge | IMAP fetcher, MIME parsing, Ollama prompt client, Viber dispatcher | Ledger state, account balances, financial categorization | [TransactionDetectedEvent (v1)](../contracts/events/transaction_detected.v1.json) |
 | [**`services/cashflow`**](../../services/cashflow) | Financial Core Domain | Account movements, balances, idempotency keys, category tracking, DB migrations | IMAP credentials, MIME parsing, Viber webhook tokens | PostgreSQL DDL, [contracts/](../contracts) |
-| [**`web`**](../../web) | Stakeholder Dashboard | React SPA, Vite configuration, UI components | Business calculations, persistence | OpenAPI schemas exposed by `services/cashflow` |
+| **`web`** *(Planned)* | Stakeholder Dashboard | React SPA, Vite configuration, UI components | Business calculations, persistence | OpenAPI schemas exposed by `services/cashflow` |
 | [**`stratum-meta`**](../) | Governance & Specifications | Architecture blueprints, ADRs, engineering standards, contracts, flows, CR archive | Implementation code, test runners | All ecosystem standards |
 
 ---

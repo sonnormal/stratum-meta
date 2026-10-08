@@ -13,12 +13,12 @@
 | :--- | :--- |
 | **Change ID** | `CR-YYaXXX` (e.g. `CR-26j001`) |
 | **Target Repository** | `services/<service>` / `gateway` / `web` |
-| **Feature Fulfillments** | [Link to `meta/features/FEAT-XXX...`](file:///Users/son/Projects/Stratum/meta/features/) |
-| **Associated Flow** | [Link to `meta/flows/FLOW-XXX...`](file:///Users/son/Projects/Stratum/meta/flows/) |
-| **Bound Contracts** | [Link to `meta/contracts/...`](file:///Users/son/Projects/Stratum/meta/contracts/) |
+| **Feature Fulfillments** | [FEAT-XXX: Short Title](<relative-path-to-meta>/features/FEAT-XXX-title.md) |
+| **Associated Flow** | [FLOW-XXX: Short Title](<relative-path-to-meta>/flows/FLOW-XXX-title.md) |
+| **Bound Contracts** | [ContractName (v1)](<relative-path-to-meta>/contracts/events/name.v1.json) |
 | **Author** | AI QA / Architect Agent |
 | **Status** | `PENDING_GATE_02_APPROVAL` |
-| **Master CR Record** | [Link to `meta/changes/CR-YYaXXX-.../request.md`](file:///Users/son/Projects/Stratum/meta/changes/) |
+| **Master CR Record** | [CR-YYaXXX Evaluation Report](<relative-path-to-meta>/changes/CR-YYaXXX-title/evaluation.md) |
 
 ---
 

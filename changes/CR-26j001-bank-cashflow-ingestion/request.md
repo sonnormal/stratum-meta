@@ -62,8 +62,8 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 
 | Repository | Role in Change | Branch / PR | Target Repo Scenario Spec |
 | :--- | :--- | :--- | :--- |
-| `services/cashflow` | Account movement persistence, balance updates & idempotency | `cr-26j001-cashflow-baseline` | [`scenario.md` in target repo](services/cashflow/changes/CR-26j001-bank-cashflow-ingestion/scenario.md) |
-| `gateway` | Inbound IMAP email polling & outbound Zalo/Viber dispatch | `cr-26j001-gateway-ingestion` | [`scenario.md` in target repo](gateway/changes/CR-26j001-bank-cashflow-ingestion/scenario.md) |
+| `services/cashflow` | Account movement persistence, balance updates & idempotency | `cr-26j001-cashflow-baseline` | [`scenario.md` in target repo](../../../services/cashflow/changes/CR-26j001-bank-cashflow-ingestion/scenario.md) |
+| `gateway` | Inbound IMAP email polling & outbound Zalo/Viber dispatch | `cr-26j001-gateway-ingestion` | [`scenario.md` in target repo](../../../gateway/changes/CR-26j001-bank-cashflow-ingestion/scenario.md) |
 
 ---
 

@@ -8,7 +8,7 @@
 
 ## 🎯 What are Stratum Standards?
 
-While [**`architecture/`**](file:///Users/son/Projects/Stratum/stratum-meta/architecture) defines **the technical machine** (system topology, container configurations, and ADRs), **`standards/`** defines **the operating rules** for how software is specified, built, tested, and verified:
+While [**`architecture/`**](../architecture) defines **the technical machine** (system topology, container configurations, and ADRs), **`standards/`** defines **the operating rules** for how software is specified, built, tested, and verified:
 
 * **Ecosystem-Wide:** Every repository (`services/*`, `gateway`, `web`, `meta`) must adhere to these policies.
 * **Autonomous Guardrails:** AI development agents must strictly abide by these lifecycle and testing constraints before generating code.
