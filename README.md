@@ -72,11 +72,6 @@ Stratum/                                    <-- Workspace Root (Local Workstatio
 
 All changes in Stratum are proposed, evaluated, approved, and archived in the [**`changes/`**](changes/) directory. Every change follows the universal lifecycle documented in [`standards/sdlc.md`](standards/sdlc.md).
 
-## 📐 Documentation & Portability Standards
-
-* **Link Portability Invariant:** All cross-document and cross-repository links in Markdown files must strictly use portable relative paths (e.g. `../contracts/`, `../../gateway`). Absolute `file:///` URLs and machine-specific user paths (`/Users/...`, `/home/...`) are strictly forbidden in committed repository files.
-* **Strict Pure Markdown:** Standard GitHub Flavored Markdown only; zero LaTeX math delimiters (`$`).
-
 ---
 
 ## 🚀 Quick Reference Documents

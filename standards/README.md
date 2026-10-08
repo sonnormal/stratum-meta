@@ -12,7 +12,6 @@ While [**`architecture/`**](../architecture) defines **the technical machine** (
 
 * **Ecosystem-Wide:** Every repository (`services/*`, `gateway`, `web`, `meta`) must adhere to these policies.
 * **Autonomous Guardrails:** AI development agents must strictly abide by these lifecycle and testing constraints before generating code.
-* **Documentation Portability Invariant:** All links within repository Markdown files, living specs, templates, and ADRs must strictly be relative paths (`../`, `../../`). Never commit absolute `file:///` URLs or host-specific user paths (`/Users/...`, `/home/...`).
 
 ---
 
