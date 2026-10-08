@@ -3,7 +3,7 @@
 > **Document Type:** System Architecture Blueprint & Topology Specification  
 > **Status:** `ACTIVE`  
 > **Applies to:** Entire Stratum Ecosystem (`gateway`, `services/*`, `web`, `meta`)  
-> **Governing Decisions:** [ADR-26j001](file:///Users/son/Projects/Stratum/stratum-meta/architecture/adrs/ADR-26j001-containerized-local-runtime.md), [ADR-26j002](file:///Users/son/Projects/Stratum/stratum-meta/architecture/adrs/ADR-26j002-strict-tdd-and-testcontainers.md), [ADR-26j003](file:///Users/son/Projects/Stratum/stratum-meta/architecture/adrs/ADR-26j003-local-llm-extraction-ollama.md), [ADR-26j004](file:///Users/son/Projects/Stratum/stratum-meta/architecture/adrs/ADR-26j004-ecosystem-technology-stack.md)
+> **Governing Decisions:** [ADR-26j001](adrs/ADR-26j001-containerized-local-runtime.md), [ADR-26j002](adrs/ADR-26j002-strict-tdd-and-testcontainers.md), [ADR-26j003](adrs/ADR-26j003-local-llm-extraction-ollama.md), [ADR-26j004](adrs/ADR-26j004-ecosystem-technology-stack.md)
 
 ---
 
@@ -44,10 +44,10 @@ To avoid context pollution for AI agents, each repository maintains strict bound
 
 | Repository | Scope & Role | Owns | Does NOT Own | Authoritative Contracts |
 | :--- | :--- | :--- | :--- | :--- |
-| [**`gateway`**](file:///Users/son/Projects/Stratum/gateway) | Perimeter Ingress & Egress Edge | IMAP fetcher, MIME parsing, Ollama prompt client, Viber dispatcher | Ledger state, account balances, financial categorization | [TransactionDetectedEvent (v1)](file:///Users/son/Projects/Stratum/stratum-meta/contracts/events/transaction_detected.v1.json) |
-| [**`services/cashflow`**](file:///Users/son/Projects/Stratum/services/cashflow) | Financial Core Domain | Account movements, balances, idempotency keys, category tracking, DB migrations | IMAP credentials, MIME parsing, Viber webhook tokens | PostgreSQL DDL, [contracts/](file:///Users/son/Projects/Stratum/stratum-meta/contracts) |
-| [**`web`**](file:///Users/son/Projects/Stratum/web) | Stakeholder Dashboard | React SPA, Vite configuration, UI components | Business calculations, persistence | OpenAPI schemas exposed by `services/cashflow` |
-| [**`stratum-meta`**](file:///Users/son/Projects/Stratum/stratum-meta) | Governance & Specifications | Architecture blueprints, ADRs, engineering standards, contracts, flows, CR archive | Implementation code, test runners | All ecosystem standards |
+| [**`gateway`**](../../gateway) | Perimeter Ingress & Egress Edge | IMAP fetcher, MIME parsing, Ollama prompt client, Viber dispatcher | Ledger state, account balances, financial categorization | [TransactionDetectedEvent (v1)](../contracts/events/transaction_detected.v1.json) |
+| [**`services/cashflow`**](../../services/cashflow) | Financial Core Domain | Account movements, balances, idempotency keys, category tracking, DB migrations | IMAP credentials, MIME parsing, Viber webhook tokens | PostgreSQL DDL, [contracts/](../contracts) |
+| [**`web`**](../../web) | Stakeholder Dashboard | React SPA, Vite configuration, UI components | Business calculations, persistence | OpenAPI schemas exposed by `services/cashflow` |
+| [**`stratum-meta`**](../) | Governance & Specifications | Architecture blueprints, ADRs, engineering standards, contracts, flows, CR archive | Implementation code, test runners | All ecosystem standards |
 
 ---
 
@@ -65,8 +65,8 @@ To avoid context pollution for AI agents, each repository maintains strict bound
 
 AI development agents must refer directly to the canonical documents below rather than assuming details:
 
-* **Detailed Sequence Choreography:** See [**`flows/email-transaction-ingestion.md`**](file:///Users/son/Projects/Stratum/stratum-meta/flows/email-transaction-ingestion.md) (owns the step-by-step event pipeline).
-* **Domain Acceptance Criteria:** See [**`features/vib-transaction-alert.md`**](file:///Users/son/Projects/Stratum/stratum-meta/features/vib-transaction-alert.md).
-* **Data Schemas & JSON Contracts:** See [**`contracts/`**](file:///Users/son/Projects/Stratum/stratum-meta/contracts).
-* **Technology & Stack Decisions:** See [**`architecture/adrs/`**](file:///Users/son/Projects/Stratum/stratum-meta/architecture/adrs/README.md).
-* **Universal SDLC & Testing Rules:** See [**`standards/sdlc.md`**](file:///Users/son/Projects/Stratum/stratum-meta/standards/sdlc.md) and [**`standards/testing.md`**](file:///Users/son/Projects/Stratum/stratum-meta/standards/testing.md).
+* **Detailed Sequence Choreography:** See [**`flows/email-transaction-ingestion.md`**](../flows/email-transaction-ingestion.md) (owns the step-by-step event pipeline).
+* **Domain Acceptance Criteria:** See [**`features/vib-transaction-alert.md`**](../features/vib-transaction-alert.md).
+* **Data Schemas & JSON Contracts:** See [**`contracts/`**](../contracts).
+* **Technology & Stack Decisions:** See [**`architecture/adrs/`**](adrs/README.md).
+* **Universal SDLC & Testing Rules:** See [**`standards/sdlc.md`**](../standards/sdlc.md) and [**`standards/testing.md`**](../standards/testing.md).
