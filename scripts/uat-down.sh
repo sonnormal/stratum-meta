@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+echo "=================================================="
+echo "🛑 Stratum UAT Stack Teardown"
+echo "=================================================="
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+COMPOSE_FILE="$SCRIPT_DIR/../deploy/docker-compose.yml"
+
+docker compose -f "$COMPOSE_FILE" down
+echo "✅ UAT containers stopped and removed."
