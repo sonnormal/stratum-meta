@@ -38,5 +38,7 @@
 1. **Strict Pure Markdown (NO LaTeX Math Delimiters):**
    * **FORBIDDEN:** Do NOT use LaTeX math syntax (`$`, `\rightarrow`, `\leftrightarrow`, `\text{...}`) in chat or documentation.
    * **REQUIRED:** Use standard Unicode arrows (`→`, `↔`) or ASCII (`->`, `<->`).
-2. **Clickable Links:** Always provide valid GitHub-style markdown links using the `file://` scheme for every referenced file or directory.
+2. **Link Portability & Context Separation (MANDATORY):**
+   * **In Chat Conversations:** ALWAYS provide valid GitHub-style markdown links using the `file://` scheme (e.g. `[filename](file:///path/to/file)`) for every referenced file, directory, or symbol so the stakeholder can click and open them directly in the IDE chat window.
+   * **In Repository Files & Documentation (Committed Code/Markdown):** NEVER use absolute `file:///...` URIs or user-specific home paths (`/Users/...`, `/home/...`). ALL cross-references within repository markdown files, specs, change requests, and templates MUST be strictly portable relative Markdown paths (e.g. `../architecture`, `../../stratum-meta/features/...`). Absolute `file://` links break in VS Code Markdown Preview, GitHub, and CI/CD pipelines.
 3. **Conciseness & Structure:** Use clear tables, bullet points, and sequence diagrams. No rambling paragraphs.
