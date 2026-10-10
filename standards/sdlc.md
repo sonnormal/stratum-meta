@@ -54,8 +54,8 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 | Gate | Name | Core Question | What the Human Inspects |
 | :--- | :--- | :--- | :--- |
 | **`GATE-01`** | **Value & Feasibility Gate** | *"Why do it & is it worth it?"* | Scope, cybersecurity (credentials, secrets, access control), and cost-benefit feasibility before any code is written. |
-| **`GATE-02`** | **Contract & Test Scenario Gate** | *"What exact behavior to build?"* | Plain-language test scenarios and edge cases *before* implementation code is synthesized. |
-| **`GATE-03`** | **User Acceptance Gate (UAT)** | *"Does it work in reality?"* | Live container execution with sample/real inputs, verifying persistence, APIs, and conversational notifications. |
+| **`GATE-02`** | **Contract & Test Scenario Gate** | *"What exact behavior to build?"* | Plain-language test scenarios, edge cases, AND the complete Tier 3 UAT Test Suite (happy, edge, and unhappy paths) *before* implementation code is synthesized. |
+| **`GATE-03`** | **User Acceptance Gate (UAT)** | *"Does it work in reality?"* | Automated execution scorecard of pre-approved UAT suite, and live verification of physical stakeholder outcomes (e.g. mobile chat alerts, web UI). |
 
 ---
 
@@ -106,26 +106,30 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 
 #### `STEP-04`: TDD Phase 1 — Test Specification & Scenario Authoring (Red)
 * **Actor:** AI QA Agent
-* **Process:** Synthesizes automated tests *before* writing application code in the target repository:
+* **Process:** Synthesizes automated tests and acceptance suites *before* writing application code:
   * **Unit Tests (Tier 1):** Domain business logic, mathematical/state transitions, parsing regex, boundary values, and edge cases.
   * **Integration Tests (Tier 2):** Database persistence, schema migrations, unique constraints, transactional rollbacks, and event bus emissions in an ephemeral container sandbox.
-  * Authors `scenario.md` and populates `fixtures/` within the target repository (`<target-repo>/changes/CR-YYaXXX-<short-title>/`).
+  * **UAT Test Suite Specification (Tier 3):** Authors the complete UAT suite covering Happy Paths, Edge Cases (e.g. empty inputs), and Unhappy/Failure Paths (e.g. third-party network outages, timeouts).
+  * Authors `scenario.md` and populates initial `fixtures/` within the target repository (`<target-repo>/changes/CR-YYaXXX-<short-title>/`).
   * Confirms all new tests fail cleanly in sandbox (`Red` state).
 * **Output:** Committed test suites + repo-specific `scenario.md` and `fixtures/` for human review.
 
 #### `GATE-02`: Review Gate 2 — Contract & Test Scenario Gate
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
-* **Human Action:** Stakeholder reviews plain-language test scenarios and edge cases from `scenario.md`.
+* **Human Action:** Stakeholder reviews:
+  1. Plain-language technical specifications and schema invariants.
+  2. Tier 1 & Tier 2 automated test specifications.
+  3. **Complete Tier 3 UAT Test Suite:** Happy paths, edge cases, and critical failure/unhappy modes.
 * **Audit Trail:** Decision recorded in `request.md`.
 * **Decisions:**
-  * `[Approve Scenarios]` → Advances to `STEP-05`.
+  * `[Approve Scenarios]` → Advances to `STEP-05`. AI Dev Agent now has explicit requirements for resilient error handling, retries, and structured logging.
   * `[Add / Refine Scenarios]` → Stakeholder adds missing real-world edge cases; QA Agent updates test suite.
   * `[Reject]` → Closes branch and terminates CR.
 
 #### `STEP-05`: TDD Phase 2 — Autonomous Code Synthesis & Refactoring (Green & Refactor)
 * **Actor:** AI Dev Agent
 * **Process:**
-  1. Synthesizes minimal code required to satisfy all approved tests (`Green`).
+  1. Synthesizes minimal code required to satisfy all approved tests, including graceful handling of all approved unhappy paths (`Green`).
   2. Refactors algorithms, cleans architecture, and ensures structured logging without breaking tests.
   3. Validates that 100% of test assertions pass in the local sandbox.
 * **Output:** Clean code PR with 100% green test suite.
@@ -134,17 +138,21 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 
 ### Phase 3: Containerized Delivery & User Acceptance
 
-#### `STEP-06`: Container Build & Local UAT Deployment
+#### `STEP-06`: Container Build & Pre-Flight UAT Execution
 * **Actor:** Delivery Agent
 * **Process:**
   1. Builds standardized container image via `Dockerfile`.
   2. Launches container stack via `docker compose up -d` in **OrbStack / Docker**.
   3. Verifies container health checks (`/healthz` returns `200 OK`).
-* **Output:** Operational local container stack ready for verification.
+  4. **Executes Automated Pre-Flight UAT Suite:** Runs pre-approved UAT test cases against live containers and external boundaries.
+  5. **Generates Timestamped UAT Scorecard:** Outputs execution report to `meta/changes/CR-YYaXXX/uat_results_YYYYMMDD_HHMMSS.md`.
+* **Output:** Operational container stack and timestamped UAT scorecard ready for human sign-off.
 
 #### `GATE-03`: Review Gate 3 — User Acceptance Gate (UAT Sign-off)
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
-* **Human Action:** Stakeholder tests the feature live in the local UAT container environment (feeding real/sample data, clicking web UI, or testing chat bots).
+* **Human Action:** 
+  1. Stakeholder reviews the automated UAT execution scorecard generated in `STEP-06`.
+  2. Stakeholder performs **physical human-only verifications** that cannot be automated (e.g. verifying physical alert buzz on mobile phone screen, subjective UI aesthetics).
 * **Audit Trail:** Sign-off recorded in `request.md`.
 * **Decisions:**
   * `[Accept & Sign Off]` → Feature accepted; advances to `STEP-07`.
@@ -161,8 +169,9 @@ Human oversight is concentrated at three strategic, high-leverage decision point
      * **Living Flows (`flows/<flow>.md`):** Merges updated sequence choreographies, event payloads, and communication paths.
      * **Living Architecture (`architecture/topology/<topology>.md`):** Merges newly operational containers, networks, ports, and storage volumes into the cumulative topology spec.
      * **Living Contracts (`contracts/`):** Seals and promotes backward-compatible schema updates.
-  3. **Change Request Archival:** Marks the Change Request folder (`meta/changes/CR-YYaXXX/`) as `PROMOTED`, preserving it as an immutable historical delta record.
-* **Output:** Clean `main` branches, updated living documentation, and archived CR audit trail.
+  3. **UAT-to-Integration Fixture Promotion (Feedback Loop):** Sanitizes real payloads captured during UAT and promotes them to `<repo>/tests/fixtures/real_*` to permanently harden Tier 2 regression tests.
+  4. **Change Request Archival:** Marks the Change Request folder (`meta/changes/CR-YYaXXX/`) as `PROMOTED`, preserving it as an immutable historical delta record.
+* **Output:** Clean `main` branches, updated living documentation, reinforced regression suites, and archived CR audit trail.
 
 #### `STEP-08`: Continuous Container Operation & Cloud Readiness
 * **Actor:** Local Container Daemon / Future Cloud Runner

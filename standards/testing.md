@@ -28,6 +28,33 @@ Stratum strictly follows **Test-Driven Development (TDD)** and organizes verific
 
 ---
 
+## 📚 Formal Testing Foundations & Taxonomy (ISO/IEC/IEEE 29119 & ISTQB)
+
+To ensure universal technical precision across all human reviews and autonomous AI engineering prompts, Stratum pins its verification taxonomy to canonical, version-dated international standards:
+
+### 1. Canonical Standards & Publication Lifecycles
+* **ISO/IEC/IEEE 29119 (Software and Systems Engineering — Software Testing):**
+  * *ISO/IEC/IEEE 29119-1:2022* (Concepts & Definitions — 2nd Edition, Published **January 2022**; original standard published September 2013).
+  * *ISO/IEC/IEEE 29119-2:2021* (Test Processes — 2nd Edition, Published **November 2021**).
+  * *ISO/IEC/IEEE 29119-3:2021* (Test Documentation & Test Cases — 2nd Edition, Published **October 2021**).
+  * *ISO/IEC/IEEE 29119-4:2021* (Test Techniques — 2nd Edition, Published **October 2021**).
+* **ISTQB Standard Glossary of Terms Used in Software Testing:**
+  * Version **4.0** (Published **May 2023** by the International Software Testing Qualifications Board; aligned with ISTQB Certified Tester Foundation Level v4.0).
+* **BDD (Behavior-Driven Development / Specification by Example):**
+  * Formalized by Dan North (**2006**) and canonical industry reference *Specification by Example: How Successful Teams Deliver the Right Software* by Gojko Adzic (**June 2011**).
+
+### 2. Standardized Testing Taxonomy
+
+| Concept | Formal ISTQB / ISO 29119 Definition | Meaning in Stratum (Human & AI) | Concrete Examples |
+| :--- | :--- | :--- | :--- |
+| **Test Assertion** | The atomic check of a single observable state or value. | A single line verification (`assert a == b`). | Checking that `status_code == 200` or `amount == Decimal("75000.00")`. |
+| **Test Case** | A set of preconditions, inputs, actions, expected results, and postconditions developed for a particular test condition (strictly agnostic to manual or automated execution). | A specific situation or input variation being evaluated. | • **Case 1:** Inbox is empty.<br>• **Case 2:** Inbox has 1 VIB email.<br>• **Case 3:** Inbox has multiple VIB emails.<br>• **Case 4:** Non-bank email noise.<br>• **Unhappy Case:** IMAP server unreachable. |
+| **Test Scenario** | An end-to-end operational story or business journey spanning multiple steps and boundaries. | Complete user workflow from external trigger to final stakeholder outcome. | Human has bank email in inbox → triggers batch → movement saved in DB → real Viber alert received on phone. |
+| **Test Fixture / Data** | Artifacts, data states, and external resources required to execute one or more test cases. | The actual sample emails, database seed rows, or configuration files fed into the test. | • Raw `.eml` files from mailbox<br>• Docker Testcontainers DB seed<br>• Mock server responses |
+| **Test Suite** | A collection of test cases or test scenarios grouped for a specific execution objective. | The package of tests run at a gate or lifecycle tier. | • Tier 1 Unit Suite<br>• Tier 2 Integration Suite<br>• Tier 3 UAT Verification Suite |
+
+---
+
 ## 📋 Comprehensive Testing Matrix
 
 | Dimension | Tier 1: Unit Tests | Tier 2: Integration Tests | Tier 3: End-to-End (E2E) Tests |
@@ -189,6 +216,81 @@ The optimal hybrid setup for Stratum is:
 
 ---
 
+### 3.5 Tier 3 (UAT) Universal Production-Parity Standards
+
+To eliminate artificial sandbox blind spots, UAT must mirror real operational conditions:
+
+1. **Maximum Real Components (Live Boundary Standard):**
+   * UAT must execute against live external boundaries (e.g., real mailbox polling via IMAP, real on-device host LLM GPU inference, real containerized database, real messaging webhooks like Viber).
+   * **FORBIDDEN:** Creating artificial "simulation" or "cheat" endpoints inside production containers solely for testing.
+2. **Maximum Real Data (Test Data Acceptable):**
+   * UAT prioritizes real historical data from active production channels (e.g. real emails from the stakeholder mailbox covering diverse layouts, formatting quirks, and real-world edge cases).
+   * Curated test data (sanitized fixtures or synthetic stress-test payloads) is acceptable when real data is unavailable or to safely evaluate critical failure/unhappy paths.
+
+---
+
+### 3.6 Shift-Left UAT Suite Review: GATE-02 vs. GATE-03
+
+A critical architectural invariant is that **the entire UAT Test Suite must be reviewed and approved at `GATE-02`, not `GATE-03`**:
+
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│ 🛡️ GATE-02: Contract & Test Scenario Gate (BEFORE Code Synthesis)     │
+├────────────────────────────────────────────────────────────────────────┤
+│ • Human Stakeholder reviews:                                          │
+│   1. Technical Specification & DB Schemas.                            │
+│   2. Tier 1 & Tier 2 Test Cases.                                      │
+│   3. Complete Tier 3 UAT Test Suite (Happy, Edge, and Unhappy Cases).  │
+│ • Impact: AI Dev Agent receives explicit requirements in STEP-05 for   │
+│   graceful error handling, retries, and structured logging BEFORE      │
+│   synthesizing code.                                                   │
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ (Code synthesized in STEP-05)
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│ 🛡️ GATE-03: User Acceptance Gate (Execution & Physical Verification)  │
+├────────────────────────────────────────────────────────────────────────┤
+│ • AI Agent executes the pre-approved UAT Suite automatically.         │
+│ • Human Stakeholder:                                                  │
+│   1. Reviews the automated execution scorecard.                       │
+│   2. Performs physical human-only verifications (e.g., verifying the   │
+│      Viber alert arrived on their physical mobile phone screen).       │
+│   3. Signs off on production promotion.                               │
+└────────────────────────────────────────────────────────────────────────┘
+```
+
+#### Why Shift-Left Suite Review is Mandatory:
+* If unhappy paths (e.g., external server unreachable, network timeout, malformed payload, empty inbox) are only introduced at `GATE-03`, implementation code will fail because the AI agent was never instructed to build the requisite error handlers and fallbacks.
+* Specifying the complete suite at `GATE-02` guarantees that code synthesized in `STEP-05` is resilient by design.
+
+---
+
+### 3.7 UAT-to-Integration Fixture Feedback Loop (Traffic Shadowing / Replay Fixtures)
+
+Live acceptance testing must continuously reinforce automated regression defenses:
+
+```
+[Phase 3: Live UAT] 
+         │ (1. Harvest Raw Payload)
+         ▼
+[Temp Capture Log: scratch/harvested_*.raw]
+         │ (2. Automated Sanitization: Redact Secrets/Tokens, Keep Structure)
+         ▼
+[Sanitized Fixture: <repo>/tests/fixtures/real_<source>_<timestamp>.<ext>]
+         │ (3. Promotion in STEP-07)
+         ▼
+[Tier 2 Integration Test parameterized with new fixture]
+         │ (4. Permanent Regression Defense)
+[Every future git commit runs pytest against this real fixture automatically]
+```
+
+1. **Harvesting:** During live UAT, raw incoming payloads (emails, webhooks, API requests) are captured into local run artifacts.
+2. **Sanitization:** Credentials, API keys, and private tokens are redacted or replaced with standard dummy values, while keeping exact character sequences, body formatting, timestamps, and numeric fields verbatim.
+3. **Promotion (`STEP-07`):** Upon `GATE-03` sign-off, sanitized files are promoted to the target repository's regression fixture directory (`<repo>/tests/fixtures/`).
+4. **Regression Binding:** The repository's Tier 2 integration test suite is parameterized with the new fixture. Future code synthesis can never regress against real-world data formats.
+
+---
+
 ## ⚖️ Mapping Testing Tiers to the 3 Human Governance Gates
 
 Stratum's testing tiers integrate directly with its **Three Human Governance Gates** across the 8-step SDLC:
@@ -205,26 +307,26 @@ Stratum's testing tiers integrate directly with its **Three Human Governance Gat
     ▼
 [STEP-04] TDD Phase 1: Author Test Scenarios (Red)
     │     AI QA Agent authors Tier 1 (Unit) and Tier 2 (Integration) tests.
-    │     Compiles plain-language scenario.md & fixtures/ in target repository.
+    │     Compiles full UAT Test Suite (Happy + Unhappy cases) in scenario.md.
     ▼
 [GATE-02] CONTRACT & TEST SCENARIO GATE ("What exact behavior to build?")
-    │     Human reviews & approves plain-language Test Scenarios & edge cases
+    │     Human reviews & approves DB schemas, Tier 1/2 tests, AND Tier 3 UAT Suite
     │     BEFORE any implementation code is synthesized.
     ▼
 [STEP-05] TDD Phase 2: Autonomous Code Synthesis (Green & Refactor)
-    │     AI Dev Agent synthesizes code until 100% of Tier 1 & Tier 2 tests pass.
+    │     AI Dev Agent synthesizes code handling happy + error paths until 100% green.
     ▼
 [STEP-06] Container Build & UAT Deployment (Pre-Flight Tier 3 Checks)
-    │     Builds Docker container, verifies /healthz and lightweight smoke/E2E checks.
+    │     Builds Docker container, executes pre-approved UAT Suite, generates report.
     ▼
 [GATE-03] USER ACCEPTANCE GATE (UAT Sign-off)
-    │     Human tests live in UAT (conversational/container) and authorizes release.
+    │     Human reviews scorecard and verifies physical outcomes (e.g. phone buzz).
     ▼
 [STEP-07] Living Specifications Synchronization & Production Promotion
-    │     Merges to main, updates living features, flows, and architecture topologies.
+    │     Merges to main, updates living specs, promotes harvested UAT fixtures.
     ▼
 [STEP-08] Continuous Container Operation & Cloud Readiness
-          Container runs stably in background on OrbStack (cloud lift-and-Shift ready).
+          Container runs stably in background on OrbStack (cloud lift-and-shift ready).
 ```
 
 ---

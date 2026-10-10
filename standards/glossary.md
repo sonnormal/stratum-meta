@@ -15,8 +15,8 @@
 | **`CER`** | Change Evaluation Report | The analytical artifact produced in `STEP-03` evaluating scope, cybersecurity threats (STRIDE), and cost-benefit feasibility before any code is written. |
 | **`HITL`** | Human-in-the-Loop | The governing architectural pattern where AI generates 100% of code, but humans retain strategic control via conversational review gates. |
 | **`GATE-01`** | Value & Feasibility Gate | Human checkpoint: *"Why do it & is it worth it?"* Inspects `evaluation.md` via Email, Zalo, or Viber. |
-| **`GATE-02`** | Contract & Test Scenario Gate | Human checkpoint: *"What exact behavior to build?"* Inspects plain-language test scenarios (`scenario.md`) before code synthesis. |
-| **`GATE-03`** | User Acceptance Gate (UAT) | Human checkpoint: *"Does it work in reality?"* Live verification on local/cloud container stack before operational sign-off. |
+| **`GATE-02`** | Contract & Test Scenario Gate | Human checkpoint: *"What exact behavior to build?"* Inspects plain-language specs, Tier 1/2 tests, AND the complete Tier 3 UAT Test Suite (happy, edge, and unhappy cases) before code synthesis. |
+| **`GATE-03`** | User Acceptance Gate (UAT) | Human checkpoint: *"Does it work in reality?"* Inspects automated scorecard of pre-approved UAT suite and performs physical verification (e.g. mobile phone alert buzz) before sign-off. |
 | **`request.md`** | Master Request Document | The primary record in a change folder containing the original stakeholder prompt, current lifecycle status, and the 3-gate audit trail. |
 
 ---
@@ -43,7 +43,13 @@
 | **`Tier 3 (E2E)`** | End-to-End test validating full user journeys across all deployed services. Deferred during initial development until APIs stabilize. |
 | **`Seam`** | The boundary where application code connects to external infrastructure (database queries, event serialization, cache hits/misses). |
 | **`Testcontainers`** | A library that automatically manages ephemeral Docker containers (Postgres, Redis) programmatically during test execution. |
-| **`scenario.md`** | The repository-scoped technical specification and executable test contract stored within the target repository (`<repo>/changes/CR-YYaXXX/scenario.md`). Combines internal technical scope, DB migrations, and Tier 1 & Tier 2 test scenarios. |
+| **`Test Assertion`** | The atomic verification of a single invariant (`assert a == b`). |
+| **`Test Case`** | A set of preconditions, inputs, actions, expected results, and postconditions developed for a particular test condition (strictly agnostic to manual or automated execution; ISTQB / ISO 29119 standard). |
+| **`Test Scenario`** | An end-to-end operational story or business journey spanning multiple steps and boundaries, from external trigger to final stakeholder outcome. |
+| **`Test Suite`** | A collection of test cases or test scenarios packaged for a specific execution objective (e.g. Tier 1 Suite, Tier 2 Suite, Tier 3 UAT Suite). |
+| **`Production-Parity`** | UAT standard requiring maximum real components and real production channel data; synthetic simulation endpoints are strictly forbidden. |
+| **`Fixture Loop`** | **UAT-to-Integration Fixture Feedback Loop:** The architectural process of capturing real payloads during UAT, sanitizing them, and promoting them into permanent Tier 2 regression test fixtures. |
+| **`scenario.md`** | The repository-scoped technical specification and executable test contract stored within the target repository (`<repo>/changes/CR-YYaXXX/scenario.md`). Combines internal technical scope, DB migrations, Tier 1/2 tests, and Tier 3 UAT suite specifications. |
 | **`fixtures/`** | Repository-specific directory containing sample test data (sample `.eml` raw emails, mock JSON payloads, SQL seed rows) consumed by Tier 1 and Tier 2 tests. |
 
 ---

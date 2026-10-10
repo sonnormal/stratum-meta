@@ -1,0 +1,14 @@
+# Enterprise Secrets & Local Overrides (NEVER COMMIT)
+.env.secrets*
+*.env.local
+*.secret
+*.pem
+*.key
+
+# Local Scratch & Temporary Runtime Artifacts
+scratch/
+tmp/
+
+# OS Artifacts
+.DS_Store
+Thumbs.db
