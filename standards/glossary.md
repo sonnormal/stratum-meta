@@ -40,17 +40,20 @@
 | **`TDD`** | **Test-Driven Development:** Strict engineering workflow where automated tests are authored first (`Red`), approved at `GATE-02`, and then minimal code is synthesized (`Green`). |
 | **`Tier 1 (Unit)`** | In-memory unit test (< 1ms). Tests algorithms, parsing, regex, and state transitions with **0 network calls and 0 disk access**. 100% mocked. |
 | **`Tier 2 (Integration)`** | Seam integration test (2–5s) using real containerized databases/caches via **Testcontainers**. Runs in complete repository isolation. |
-| **`Tier 3 (E2E)`** | End-to-End test validating full user journeys across all deployed services. Deferred during initial development until APIs stabilize. |
+| **`Tier 3 (E2E)`** | Automated End-to-End test validating cross-service journeys across containerized services. Executed in `STEP-06` pre-flight before `GATE-03`. Stored in `stratum-meta/tests/e2e/`. |
 | **`Seam`** | The boundary where application code connects to external infrastructure (database queries, event serialization, cache hits/misses). |
 | **`Testcontainers`** | A library that automatically manages ephemeral Docker containers (Postgres, Redis) programmatically during test execution. |
 | **`Test Assertion`** | The atomic verification of a single invariant (`assert a == b`). |
 | **`Test Case`** | A set of preconditions, inputs, actions, expected results, and postconditions developed for a particular test condition (strictly agnostic to manual or automated execution; ISTQB / ISO 29119 standard). |
 | **`Test Scenario`** | An end-to-end operational story or business journey spanning multiple steps and boundaries, from external trigger to final stakeholder outcome. |
-| **`Test Suite`** | A collection of test cases or test scenarios packaged for a specific execution objective (e.g. Tier 1 Suite, Tier 2 Suite, Tier 3 UAT Suite). |
+| **`Test Fixture`** | Baseline artifacts, environments, seed records, or configuration states required to execute one or more test cases deterministically. |
+| **`Test Suite`** | A collection of test cases or test scenarios packaged for a specific execution objective (e.g. Tier 1 Suite, Tier 2 Suite, Tier 3 Acceptance Suite). |
+| **`Smoke Test Suite`** | A selective subset of critical happy-path test cases executed to rapidly verify that core features and interfaces function before deeper testing (e.g. health checks, canonical happy path). |
+| **`Regression Test Suite`** | A comprehensive multi-tier test suite executed after code changes to ensure that previously developed and verified capabilities remain defect-free across all tiers. |
 | **`Production-Parity`** | UAT standard requiring maximum real components and real production channel data; synthetic simulation endpoints are strictly forbidden. |
 | **`Fixture Loop`** | **UAT-to-Integration Fixture Feedback Loop:** The architectural process of capturing real payloads during UAT, sanitizing them, and promoting them into permanent Tier 2 regression test fixtures. |
 | **`scenario.md`** | The repository-scoped technical specification and executable test contract stored within the target repository (`<repo>/changes/CR-YYaXXX/scenario.md`). Combines internal technical scope, DB migrations, Tier 1/2 tests, and Tier 3 UAT suite specifications. |
-| **`fixtures/`** | Repository-specific directory containing sample test data (sample `.eml` raw emails, mock JSON payloads, SQL seed rows) consumed by Tier 1 and Tier 2 tests. |
+| **`fixtures/`** | Repository-specific directory containing test fixtures (sample `.eml` raw emails, mock JSON payloads, SQL seed rows) consumed by Tier 1 and Tier 2 tests. |
 
 ---
 

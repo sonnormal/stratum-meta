@@ -224,7 +224,7 @@ Because Tier 1 (Unit) and Tier 2 (Integration) tests verify an isolated single r
 ```text
 <target-repo>/changes/CR-YYaXXX-<short-title>/
 ├── scenario.md       # STEP-04 / GATE-02 Approved plain-language test scenarios for this repo
-└── fixtures/         # Sample test data, raw emails (.eml), mock payloads for Unit & Integration tests
+└── fixtures/         # Test fixtures, raw sample emails (.eml), mock payloads for Unit & Integration tests
 ```
 
 * **`scenario.md`**: Plain-language test scenarios and edge cases authored specifically for this repository's unit and integration tests.
