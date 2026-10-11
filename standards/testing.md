@@ -14,16 +14,17 @@ Stratum strictly follows **Test-Driven Development (TDD)** and organizes automat
 
 ```
                             ▲
+                           / \
                           /   \
                          /     \     Tier 3: Automated E2E Testing (Cross-Service Journeys)
                         /  E2E  \    Target: Integrated Docker / OrbStack | Stored in: stratum-meta/tests/e2e
-                       /-------  \
+                       /---------\
                       /           \   Tier 2: Component & Seam Testing (Real DB / Redis Containers)
                      / Integration \  Target: Isolated Repo Sandbox (Testcontainers) | Stored in: <repo>/tests
-                    /-------------- \
+                    /---------------\
                    /                 \  Tier 1: Pure Logic in Memory (100% Mocked)
                   /    Unit Tests     \ Target: Local Workspace / CI (Sub-second) | Stored in: <repo>/tests
-                 /-------------------- \
+                 /---------------------\
 ```
 
 > [!IMPORTANT]
