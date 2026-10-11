@@ -15,7 +15,36 @@ This flow automates the ingestion of financial alert emails sent by banks (start
 
 ---
 
-## 🗺️ 2. Cross-Repo Sequence Diagram (Workflow)
+## 🗺️ 2. Visual Workflow Architecture
+
+### 2.1 User-Friendly Business Journey (Stakeholder View)
+
+```mermaid
+flowchart LR
+    subgraph S1["1. Bank Transaction"]
+        A["🏦 <b>Bank Alert Email</b><br/>VIB debit/credit email arrives"]
+    end
+
+    subgraph S2["2. Intelligent Ingestion"]
+        B["📥 <b>Noise Filter</b><br/>Discard non-bank newsletters"]
+        C["🤖 <b>AI Extraction</b><br/>Extract amount, merchant, date<br/>Verify exact amount"]
+        B --> C
+    end
+
+    subgraph S3["3. Financial Ledger"]
+        D["📒 <b>PostgreSQL Storage</b><br/>Record movement in cashflow<br/>Prevent duplicate entries"]
+    end
+
+    subgraph S4["4. Instant Alert"]
+        E["📱 <b>Mobile Notification</b><br/>Receive push on phone<br/>(Viber / Zalo message)"]
+    end
+
+    A --> B
+    C --> D
+    D --> E
+```
+
+### 2.2 Technical Component Sequence (System Choreography)
 
 ```mermaid
 sequenceDiagram

@@ -17,7 +17,7 @@ FIXTURES_DIR="$STRATUM_ROOT/gateway/changes/CR-26j001-bank-cashflow-ingestion/fi
 REPORT_DIR="$STRATUM_META/changes/CR-26j001-bank-cashflow-ingestion"
 
 TIMESTAMP="$(date +%Y%m%d_%H%M%S)"
-REPORT_FILE="$REPORT_DIR/uat_results_${TIMESTAMP}.md"
+REPORT_FILE="$REPORT_DIR/e2e_results_${TIMESTAMP}.md"
 
 echo "======================================================================"
 echo "🧪 Stratum Automated Tier 3 Pre-Flight E2E Verification Runner"
@@ -255,7 +255,7 @@ GATEWAY_SHA=$(git -C "$STRATUM_ROOT/gateway" rev-parse --short HEAD 2>/dev/null 
 CASHFLOW_SHA=$(git -C "$STRATUM_ROOT/services/cashflow" rev-parse --short HEAD 2>/dev/null || echo "unknown")
 
 cat <<EOF > "$REPORT_FILE"
-# 📋 UAT Verification Scorecard (CR-26j001)
+# 📋 Automated Tier 3 E2E Verification Report (CR-26j001)
 
 > **Execution Timestamp:** \`$(date -u +"%Y-%m-%d %H:%M:%S UTC")\`  
 > **Change Request:** [\`CR-26j001-bank-cashflow-ingestion\`](request.md)  

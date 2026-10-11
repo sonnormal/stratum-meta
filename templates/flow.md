@@ -14,7 +14,34 @@
 
 ---
 
-## 🗺️ 2. Cross-Repo Sequence Diagram (Workflow)
+## 🗺️ 2. Visual Workflow Architecture
+
+### 2.1 User-Friendly Business Journey (Stakeholder View)
+
+```mermaid
+flowchart LR
+    subgraph Trigger["1. External Trigger"]
+        A["External Event / User Action"]
+    end
+
+    subgraph Gateway["2. Edge Gateway"]
+        B["Ingress, Validation & Filter"]
+    end
+
+    subgraph Domain["3. Domain Core"]
+        C["Business Processing & Persistence"]
+    end
+
+    subgraph Outcome["4. Stakeholder Outcome"]
+        D["Notification / Dashboard Update"]
+    end
+
+    A --> B
+    B --> C
+    C --> D
+```
+
+### 2.2 Technical Component Sequence (System Choreography)
 
 ```mermaid
 sequenceDiagram

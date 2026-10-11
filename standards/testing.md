@@ -58,6 +58,7 @@ To ensure universal technical precision across all human reviews and autonomous 
 | **Test Scenario** | An end-to-end operational story or business journey spanning multiple steps and boundaries. | Complete user workflow from external trigger to final stakeholder outcome. | Human has bank email in inbox → triggers batch → movement saved in DB → real Viber alert received on phone. |
 | **Test Fixture** | The complete contextual baseline and test data required to execute one or more test cases deterministically (encompassing input datasets, sample files, mock server stubs, and pre-seeded database states). | All test data artifacts, sample emails, database seed rows, or configuration files fed into the test. | • Test Data: Raw `.eml` sample files<br>• Test Data: DB seed rows / JSON payloads<br>• Stubs: Mock HTTP server responses |
 | **Test Suite** | A collection of test cases or test scenarios grouped for a specific execution objective. | The package of tests run at a gate or lifecycle tier. | • Tier 1 Unit Suite<br>• Tier 2 Integration Suite<br>• Tier 3 E2E Acceptance Suite |
+| **Acceptance Test Suite** | A test suite specifically designed to verify that a system meets its specified acceptance criteria before authorization or release (ISTQB v4.0). | The comprehensive set of test cases approved by the human stakeholder at `GATE-02` (spanning the 5 canonical categories) in `e2e_scenario.md`. Fully automated in Tier 3 by AI agents, and selectively sampled by humans at `GATE-03` during UAT. | • The approved 6-case suite for CR-26j001 (`TC-01`..`TC-06` in `e2e_scenario.md`)<br>• Verifies core business outcomes, guardrails, and idempotency guarantees |
 | **Smoke Test Suite** | A selective subset of critical happy-path test cases executed to rapidly verify that core features and interfaces function before deeper testing. | The minimal sanity check run pre-flight or used by humans at `GATE-03`. | • Hitting `/healthz` on all containers<br>• Running 1 canonical happy-path end-to-end user journey |
 | **Regression Test Suite** | A comprehensive test suite executed after code changes to ensure that previously developed and verified capabilities remain defect-free across all tiers. | The full multi-tier regression safety net preventing regressions across all historical features and formats. | • Monotonic Tier 1 in-memory tests<br>• Tier 2 parameterized tests against all historical fixtures<br>• Tier 3 canonical flow verification |
 
@@ -198,13 +199,13 @@ The human-reviewed acceptance suite directly drives and comprises the automated 
 │ 2. AUTOMATION & PRE-FLIGHT (STEP-04 ➔ STEP-06)                         │
 │ AI implements TC-01..06 in stratum-meta/tests/e2e/ & scripts/          │
 │ AI executes automated E2E suite against live containers (OrbStack)     │
-│ Scorecard generated: uat_results_YYYYMMDD_HHMMSS.md                    │
+│ Report generated: e2e_results_YYYYMMDD_HHMMSS.md                       │
 └───────────────────────────────────┬────────────────────────────────────┘
-                                    │ Scorecard delivered to Human
+                                    │ E2E Report delivered to Human
                                     ▼
 ┌────────────────────────────────────────────────────────────────────────┐
 │ 3. VERIFICATION & SMOKE (GATE-03)                                      │
-│ Human inspects automated scorecard (validating all edge/unhappy paths) │
+│ Human inspects automated E2E report (validating all edge/unhappy paths)│
 │ Human picks critical paths (TC-02) to smoke-verify on physical phone   │
 └───────────────────────────────────┬────────────────────────────────────┘
                                     │ Promotion upon sign-off
@@ -217,16 +218,16 @@ The human-reviewed acceptance suite directly drives and comprises the automated 
 ```
 
 1. **Specification Mapping at `GATE-02`:**
-   * Human reviews the plain-language acceptance test suite in `scenario.md`.
+   * Human reviews the plain-language acceptance test suite in `e2e_scenario.md` (`stratum-meta/changes/<CR>/e2e_scenario.md`).
    * Each acceptance case defines explicit preconditions, trigger events, cross-service interactions, and expected side-effects (e.g., `TC-01` Empty Inbox, `TC-02` Happy Path Single, `TC-03` Batch, `TC-04` Noise Filter, `TC-05` Unhappy/Outage, `TC-06` Idempotency).
    * **Invariant:** The human defines *what* behaviors must be accepted; the AI agent translates every single accepted case 1-to-1 into executable Tier 3 E2E test code.
 2. **Autonomous E2E Implementation & Pre-Flight in `STEP-06`:**
    * The AI QA Agent authors the automated E2E harness in `stratum-meta/tests/e2e/` and `stratum-meta/scripts/uat-verify.sh`.
    * Before the human is notified for `GATE-03`, the test runner executes the entire automated suite against the live Docker stack.
-   * The test runner generates a timestamped execution scorecard (`uat_results_YYYYMMDD_HHMMSS.md`) recording pass/fail, execution durations, database state diffs, and structured error logs.
+   * The test runner generates a timestamped execution report (`e2e_results_YYYYMMDD_HHMMSS.md`) recording pass/fail, execution durations, database state diffs, and structured error logs.
 3. **Human Smoke Selection at `GATE-03`:**
    * Because the automated E2E suite proved all technical invariants (e.g., that an empty inbox cleanly exits without DB mutations, that timeouts log structured errors without crashing, that re-runs are idempotent), **the human does not need to manually repeat all edge cases.**
-   * The human reviews the automated scorecard, and selectively picks 1–2 canonical cases (such as triggering an email to see the physical Viber push notification on their physical phone) for smoke verification.
+   * The human reviews the automated report, and selectively picks 1–2 canonical cases (such as triggering an email to see the physical Viber push notification on their physical phone) for smoke verification.
 4. **Lean E2E Regression Promotion in `STEP-07`:**
    * Running hundreds of full multi-service E2E tests across dozens of CRs creates slow builds and network flakiness.
    * **CR Acceptance Suite:** Bound to the specific change request (`CR-26j001`). Exercises all permutations for that release candidate.

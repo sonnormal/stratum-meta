@@ -147,13 +147,13 @@ Human oversight is concentrated at three strategic, high-leverage decision point
   3. Verifies container health checks (`/healthz` returns `200 OK`).
   4. **Executes Automated Pre-Flight Tier 3 E2E Suite:** Runs pre-approved test cases (`TC-01`..`TC-06`) against live containers and external boundaries.
   5. **Harvests Raw Inbound Payloads:** Inbound payloads (e.g. live emails, webhooks) are captured byte-for-byte to `scratch/harvested/raw_<source>_<timestamp>.<ext>`.
-  6. **Generates Timestamped UAT Scorecard:** Outputs execution report to `meta/changes/CR-YYaXXX/uat_results_YYYYMMDD_HHMMSS.md`.
-* **Output:** Operational container stack, captured payload logs, and timestamped UAT scorecard ready for human sign-off.
+  6. **Generates Timestamped Tier 3 E2E Report:** Outputs execution report to `meta/changes/CR-YYaXXX/e2e_results_YYYYMMDD_HHMMSS.md`.
+* **Output:** Operational container stack, captured payload logs, and timestamped Tier 3 E2E execution report ready for human sign-off.
 
 #### `GATE-03`: Review Gate 3 — User Acceptance Gate (UAT Sign-off)
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
 * **Human Action:** 
-  1. Stakeholder reviews the automated Tier 3 E2E execution scorecard generated in `STEP-06`.
+  1. Stakeholder reviews the automated Tier 3 E2E execution report generated in `STEP-06`.
   2. Stakeholder performs **selective physical smoke verifications** that cannot be automated (e.g. verifying physical alert buzz on mobile phone screen, subjective UI aesthetics).
 * **Audit Trail:** Sign-off recorded in `request.md`.
 * **Decisions:**

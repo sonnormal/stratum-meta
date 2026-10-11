@@ -53,6 +53,7 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 | **Canonical Feature Spec** | [`features/vib-transaction-alert.md`](../../features/vib-transaction-alert.md) | `FEAT-001` Functional rules & acceptance criteria |
 | **System Choreography Flow** | [`flows/email-transaction-ingestion.md`](../../flows/email-transaction-ingestion.md) | `FLOW-001` Cross-repo sequence diagram |
 | **Shared Event Contract** | [`contracts/events/transaction_detected.v1.json`](../../contracts/events/transaction_detected.v1.json) | `TransactionDetectedEvent` v1 JSON Schema |
+| **Tier 3 E2E Acceptance Spec** | [`e2e_scenario.md`](e2e_scenario.md) | Canonical cross-repo E2E acceptance test suite & multi-service topology |
 
 ---
 
@@ -82,7 +83,7 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 
 ### 🛡️ GATE-02: Contract & Test Scenario Gate
 * **Core Question:** *"What exact behavior to build?"*
-* **Inspected Artifacts:** `scenario.md` in target repositories, JSON event contracts, and approved Acceptance Test Suite
+* **Inspected Artifacts:** [`e2e_scenario.md`](e2e_scenario.md), `scenario.md` in target repositories, JSON event contracts, and approved Acceptance Test Suite
 * **Status:** `APPROVED`
 * **Decision Timestamp:** `2026-10-07 06:15:00 UTC+7`
 * **Decided By:** Human Stakeholder (`sonnormal@gmail.com`)
@@ -106,7 +107,7 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 * **Core Question:** *"Does it work in reality?"*
 * **Inspected Environment:** Live container stack on OrbStack / Docker (`stratum-meta/deploy/docker-compose.yml`)
 * **Status:** `AWAITING_HUMAN_SIGN_OFF`
-* **Scorecard Artifact:** [`uat_results_20261011_190453.md`](uat_results_20261011_190453.md)
+* **Scorecard Artifact:** [`e2e_results_20261011_190453.md`](e2e_results_20261011_190453.md)
 * **Verification Scorecard (Automated Pre-Flight & Physical Human Verification):**
   - [x] **`TC-01` Empty Inbox Edge:** Automated pre-flight verified (13ms, 0 DB writes, 0 alerts).
   - [x] **`TC-02` Happy Path Single:** Automated pre-flight verified (6251ms, ledger write verified in PostgreSQL).
