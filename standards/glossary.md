@@ -46,7 +46,7 @@
 | **`Test Assertion`** | The atomic verification of a single invariant (`assert a == b`). |
 | **`Test Case`** | A set of preconditions, inputs, actions, expected results, and postconditions developed for a particular test condition (strictly agnostic to manual or automated execution; ISTQB / ISO 29119 standard). |
 | **`Test Scenario`** | An end-to-end operational story or business journey spanning multiple steps and boundaries, from external trigger to final stakeholder outcome. |
-| **`Test Fixture`** | Baseline artifacts, environments, seed records, or configuration states required to execute one or more test cases deterministically. |
+| **`Test Fixture`** | The complete contextual baseline and test data required to execute one or more test cases deterministically (including sample payload files, mock responses, database seed records, and pre-allocated state). |
 | **`Test Suite`** | A collection of test cases or test scenarios packaged for a specific execution objective (e.g. Tier 1 Suite, Tier 2 Suite, Tier 3 Acceptance Suite). |
 | **`Smoke Test Suite`** | A selective subset of critical happy-path test cases executed to rapidly verify that core features and interfaces function before deeper testing (e.g. health checks, canonical happy path). |
 | **`Regression Test Suite`** | A comprehensive multi-tier test suite executed after code changes to ensure that previously developed and verified capabilities remain defect-free across all tiers. |
