@@ -82,25 +82,37 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 
 ### 🛡️ GATE-02: Contract & Test Scenario Gate
 * **Core Question:** *"What exact behavior to build?"*
-* **Inspected Artifacts:** `scenario.md` and `fixtures/` in target repositories
+* **Inspected Artifacts:** `scenario.md` in target repositories, JSON event contracts, and approved Acceptance Test Suite
 * **Status:** `APPROVED`
 * **Decision Timestamp:** `2026-10-07 06:15:00 UTC+7`
 * **Decided By:** Human Stakeholder (`sonnormal@gmail.com`)
+* **Approved Acceptance Test Suite (The 6 Test Cases):**
+
+| ID | Category | Scenario & Invariant | Expected Outcome |
+| :--- | :--- | :--- | :--- |
+| **`TC-01`** | **Boundary / Edge** | Mailbox `INBOX` is completely empty (`count == 0`). | Ingestion logs info; 0 DB writes; 0 Viber alerts; exits cleanly with code 0. |
+| **`TC-02`** | **Happy Path Single** | 1 unread VIB debit email in `INBOX` (`-75,000 VND`). | Parsed; Ollama extracts fields; guardrail passes; 1 row saved in Postgres; 1 Viber push sent. |
+| **`TC-03`** | **Happy Path Batch** | Multiple unread VIB emails in `INBOX`. | Each transaction processed independently; N rows committed; N alerts sent. |
+| **`TC-04`** | **Noise Filtering** | Non-bank promotional/newsletter emails in `INBOX`. | Discarded by heuristic filter in < 1ms; Ollama not invoked; 0 DB writes. |
+| **`TC-05`** | **Unhappy / Recovery** | IMAP unreachable, Ollama GPU timeout, or Viber 500. | Structured error logged; batch cursor preserved; 0 container crashes; clean exit. |
+| **`TC-06`** | **Idempotency** | Re-polling inbox with already-processed emails. | Postgres `ON CONFLICT DO NOTHING`; returns `DUPLICATE_IGNORED`; 0 repeated Viber pushes. |
+
 * **Reviewer Directives / Notes:**
-  > *Approved delta scenario approach and test specifications across services/cashflow and gateway.*
+  > *Approved delta scenario approach and the 6-case test suite across services/cashflow and gateway. AI QA Agent authorized to implement Tier 3 automated pre-flight runner.*
 
 ---
 
 ### 🛡️ GATE-03: User Acceptance Gate (UAT Sign-off)
 * **Core Question:** *"Does it work in reality?"*
 * **Inspected Environment:** Live container stack on OrbStack / Docker (`stratum-meta/deploy/docker-compose.yml`)
-* **Status:** `READY_FOR_REVIEW`
-* **Decision Timestamp:** `—`
-* **Decided By:** `—`
-* **Verification Checklist:**
-  - [x] Live container health checks verified (`200 OK` on `http://localhost:8000/healthz` and `http://localhost:8001/healthz`)
-  - [x] Sample `.eml` bank emails parsed and persisted accurately (`Highlands Coffee`, `75,000 VND`, `*4321` into PostgreSQL `account_movements`)
-  - [x] Duplicate emails discarded with zero duplicate updates (`DUPLICATE_IGNORED` on second ingestion, table row count stays at 1)
-  - [x] Conversational notification formatted and dispatched (`ViberClient.send_alert`)
+* **Status:** `READY_FOR_EXECUTION`
+* **Verification Scorecard (Automated Pre-Flight & Physical Human Verification):**
+  - [ ] **`TC-01` Empty Inbox Edge:** Automated pre-flight verifies clean exit, 0 DB writes, 0 alerts.
+  - [ ] **`TC-02` Happy Path Single:** Automated pre-flight verifies end-to-end ingestion and ledger persistence.
+  - [ ] **`TC-03` Happy Path Batch:** Automated pre-flight verifies multi-email processing and transaction isolation.
+  - [ ] **`TC-04` Noise Filter:** Automated pre-flight verifies non-bank email discarded in < 1ms without Ollama invocation.
+  - [ ] **`TC-05` Unhappy Recovery:** Automated pre-flight verifies structured error logging and container resilience.
+  - [ ] **`TC-06` Idempotency Re-run:** Automated pre-flight verifies duplicate emails trigger `DUPLICATE_IGNORED` with 0 duplicate alerts.
+  - [ ] **Physical Device Smoke Check:** Human stakeholder verifies real Viber push notification arrives on physical mobile phone (`+84981801931`).
 * **Reviewer Directives / Notes:**
-  > *E2E simulation executed live against host Ollama (qwen3.6:27b on Apple Silicon Metal GPU) and multi-container stack. Ready for stakeholder UAT sign-off.*
+  > *Tier 3 E2E test runner executing the 6 pre-approved cases against live containers. Pending scorecard generation and physical mobile verification.*
