@@ -109,18 +109,18 @@ Human oversight is concentrated at three strategic, high-leverage decision point
 * **Process:** Synthesizes automated tests and acceptance suites *before* writing application code:
   * **Unit Tests (Tier 1):** Domain business logic, mathematical/state transitions, parsing regex, boundary values, and edge cases in memory.
   * **Integration Tests (Tier 2):** Database persistence, schema migrations, unique constraints, transactional rollbacks, and event bus emissions in ephemeral Testcontainers. Parametrically bound to existing fixtures in `<repo>/tests/fixtures/real/`.
-  * **Acceptance / UAT Test Suite Specification:** Authors the complete acceptance suite in `<target-repo>/changes/CR-YYaXXX/scenario.md` covering Happy Paths, Edge Cases (e.g. empty inputs), and Unhappy/Failure Paths (e.g. third-party network outages, timeouts).
-  * **Automated E2E Test Code (Tier 3):** Translates approved acceptance cases 1-to-1 into automated E2E test harnesses in `stratum-meta/tests/e2e/` and orchestration scripts (`stratum-meta/scripts/uat-verify.sh`).
+  * **Acceptance Test Suite Specification:** Authors repo-specific Tier 1/2 tests in `<target-repo>/changes/CR-YYaXXX/scenario.md` and the cross-repository Tier 3 acceptance suite in `stratum-meta/changes/CR-YYaXXX/e2e_scenario.md` covering the 5 canonical categories (Happy, Boundary, Noise, Unhappy, Idempotency).
+  * **Automated E2E Test Code (Tier 3):** Translates approved acceptance cases 1-to-1 into automated E2E test harnesses in `stratum-meta/tests/e2e/` and orchestration scripts (`stratum-meta/scripts/e2e-verify.sh`).
   * **Fixture Cold-Start:** Generates initial synthetic test fixtures in `<target-repo>/changes/CR-YYaXXX/fixtures/`.
   * Confirms all new tests fail cleanly in sandbox (`Red` state).
-* **Output:** Committed test suites + repo-specific `scenario.md`, initial `fixtures/`, and automated Tier 3 E2E scripts for human review.
+* **Output:** Committed test suites + repo-specific `scenario.md`, `e2e_scenario.md`, initial `fixtures/`, and automated Tier 3 E2E runner for human review.
 
 #### `GATE-02`: Review Gate 2 — Contract & Test Scenario Gate
 * **Delivered to:** **Email**, **Zalo**, and **Viber**.
 * **Human Action:** Stakeholder reviews:
   1. Plain-language technical specifications and schema invariants.
-  2. Tier 1 & Tier 2 automated test specifications.
-  3. **Complete Acceptance / UAT Test Suite:** Happy paths, edge cases, and critical failure/unhappy modes.
+  2. Tier 1 & Tier 2 automated test specifications (`scenario.md`).
+  3. **Complete Tier 3 Acceptance Test Suite (`e2e_scenario.md`):** Happy paths, boundary edges, noise filtering, unhappy recovery, and idempotency.
 * **Audit Trail:** Decision recorded in `request.md`.
 * **Decisions:**
   * `[Approve Scenarios]` → Advances to `STEP-05`. AI Dev Agent now has explicit requirements for resilient error handling, retries, and structured logging.
@@ -171,7 +171,7 @@ Human oversight is concentrated at three strategic, high-leverage decision point
      * **Living Flows (`flows/<flow>.md`):** Merges updated sequence choreographies, event payloads, and communication paths.
      * **Living Architecture (`architecture/topology/<topology>.md`):** Merges newly operational containers, networks, ports, and storage volumes into the cumulative topology spec.
      * **Living Contracts (`contracts/`):** Seals and promotes backward-compatible schema updates.
-  3. **UAT-to-Integration Fixture Feedback Loop (Permanent Promotion):**
+  3. **E2E-to-Integration Fixture Feedback Loop (Permanent Promotion):**
      * Sanitizes raw payloads captured in `STEP-06` (redacts account numbers, tokens, emails, while preserving exact MIME/HTML structure and encodings verbatim).
      * Promotes sanitized files to `<repo>/tests/fixtures/real/<bank>_<version>_<descriptor>.<ext>`.
      * **Permanent Retention Rule:** Every unique format or template variation is retained indefinitely. Never overwrite historical fixtures.

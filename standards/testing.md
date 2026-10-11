@@ -87,7 +87,7 @@ Automated testing is integrated into the software delivery pipeline, executing a
 | **Local Inner Loop** | File save / Inner-loop edit by AI Agent | **Tier 1 (Unit)**<br>Single Module | **Inner-Loop Unit Test** | Local `pytest <test_file>` (100% mocked) | < 500ms | Rapid Red-Green cycle during TDD (`STEP-04`/`05`). 0 network, 0 disk. Instant feedback. |
 | **`git commit`** | Pre-commit Git Hook | **Tier 1 (Unit)**<br>Single Repository | **Pre-Commit Unit Suite** | Local `pytest tests/unit/` + `ruff` + `mypy` | < 2s | Quality gatekeeper. Blocks committing broken algorithms, typing violations, or syntax regressions to git branch. |
 | **`git push` / PR** | Pre-Merge CI Pipeline | **Tier 1 (Unit) + Tier 2 (Integration)**<br>Single Repository | **Component & Seam Integration Suite** | Repo CI / `pytest tests/integration/` via **Testcontainers** | 10–30s | Spawns clean isolated PostgreSQL/Redis containers. Verifies DB migrations, SQL constraints, and OpenAPI contracts. Blocks PR merge on failure. |
-| **Container Build (`STEP-06`)** | Post-Build Pre-flight Launch | **Tier 3 (Automated E2E)**<br>Multi-Container Stack | **Release Candidate Acceptance Suite (Pre-Flight UAT)** | `stratum-meta/scripts/uat-verify.sh` / Playwright runner | 1–3 min | Executes pre-approved 5-category test suite (`TC-01`..`TC-06`) against live Docker/OrbStack stack. Harvests raw fixtures. Outputs UAT Scorecard for `GATE-03`. |
+| **Container Build (`STEP-06`)** | Post-Build Pre-flight Launch | **Tier 3 (Automated E2E)**<br>Multi-Container Stack | **Release Candidate Acceptance Suite (Pre-Flight Tier 3 E2E)** | `stratum-meta/scripts/e2e-verify.sh` / Playwright runner | 1–3 min | Executes pre-approved 5-category test suite (`TC-01`..`TC-06`) against live Docker/OrbStack stack. Harvests raw fixtures. Outputs E2E Verification Report for `GATE-03`. |
 | **Merge to `main` (`STEP-07`)** | Mainline Promotion / Post-Merge | **Tier 1 + Tier 2 + Tier 3 (Canonical)**<br>All Repositories | **Cumulative Multi-Tier Regression Suite** | Central CI / Promotion Pipeline | 2–4 min | Monotonic Tier 1, all Tier 2 parameterized against all historical fixtures in `tests/fixtures/real/`, and canonical Tier 3 happy path (`FLOW-001`). Zero regression guarantee. |
 | **Continuous Operation (`STEP-08`)** | Periodic Cron / Post-Deploy | **Perimeter & Infrastructure**<br>Live Environment | **Synthetic Smoke & Liveness Probes** | Container Daemon / Orchestrator Health Monitor | Continuous (< 1s per probe) | Queries `/healthz` and `/ready` endpoints, verifies container uptime and external network reachability without mutating state. |
 
@@ -180,11 +180,11 @@ To preserve strict microservice decoupling:
 * **Microservice Repositories (`services/cashflow`, `gateway`):** Contain **zero** multi-service E2E tests. Microservice repositories only contain Tier 1 (Unit) and Tier 2 (Integration via Testcontainers) suites.
 * **Meta Repository (`stratum-meta`):** Acts as the single central home for all multi-service E2E test code, orchestration scripts, and ecosystem fixtures:
   * **`stratum-meta/tests/e2e/`**: Python/Playwright E2E test scripts exercising cross-service boundaries.
-  * **`stratum-meta/scripts/`**: Orchestration and verification harnesses (e.g., `uat-verify.sh`).
+  * **`stratum-meta/scripts/`**: Orchestration and verification harnesses (e.g., `e2e-verify.sh`, `e2e-up.sh`, `e2e-down.sh`).
 
 ---
 
-### 3.3 How the Human-Reviewed UAT Suite Comprises the Automated E2E Suite
+### 3.3 How the Human-Reviewed Acceptance Test Suite Comprises the Automated E2E Suite
 
 The human-reviewed acceptance suite directly drives and comprises the automated Tier 3 E2E suite through a 4-phase lifecycle:
 
@@ -222,7 +222,7 @@ The human-reviewed acceptance suite directly drives and comprises the automated 
    * Each acceptance case defines explicit preconditions, trigger events, cross-service interactions, and expected side-effects (e.g., `TC-01` Empty Inbox, `TC-02` Happy Path Single, `TC-03` Batch, `TC-04` Noise Filter, `TC-05` Unhappy/Outage, `TC-06` Idempotency).
    * **Invariant:** The human defines *what* behaviors must be accepted; the AI agent translates every single accepted case 1-to-1 into executable Tier 3 E2E test code.
 2. **Autonomous E2E Implementation & Pre-Flight in `STEP-06`:**
-   * The AI QA Agent authors the automated E2E harness in `stratum-meta/tests/e2e/` and `stratum-meta/scripts/uat-verify.sh`.
+   * The AI QA Agent authors the automated E2E harness in `stratum-meta/tests/e2e/` and `stratum-meta/scripts/e2e-verify.sh`.
    * Before the human is notified for `GATE-03`, the test runner executes the entire automated suite against the live Docker stack.
    * The test runner generates a timestamped execution report (`e2e_results_YYYYMMDD_HHMMSS.md`) recording pass/fail, execution durations, database state diffs, and structured error logs.
 3. **Human Smoke Selection at `GATE-03`:**
@@ -232,7 +232,7 @@ The human-reviewed acceptance suite directly drives and comprises the automated 
    * Running hundreds of full multi-service E2E tests across dozens of CRs creates slow builds and network flakiness.
    * **CR Acceptance Suite:** Bound to the specific change request (`CR-26j001`). Exercises all permutations for that release candidate.
    * **Canonical E2E Regression Suite:** Upon promotion, only the primary happy-path business journey (e.g. `FLOW-001` Ingestion to Notification) is merged into the permanent cumulative E2E suite in `stratum-meta/tests/e2e/regression/`.
-   * **Push-Down to Tier 2:** Negative cases, parsing quirks, and timeout scenarios from the UAT suite are pushed down to Tier 2 Integration tests backed by captured fixtures.
+   * **Push-Down to Tier 2:** Negative cases, parsing quirks, and timeout scenarios from the Tier 3 Acceptance Suite are pushed down to Tier 2 Integration tests backed by captured fixtures.
 
 ---
 
@@ -245,7 +245,7 @@ Integration test fixtures must not remain static synthetic stubs. They evolve in
 Synthetic Stubs (<repo>/changes/CR-*/fixtures/synthetic_*.eml)
          │
          ▼
-[ STEP-06: Live Pre-flight & UAT ]
+[ STEP-06: Live Pre-flight & Tier 3 E2E Execution ]
 Ingestion Gateway captures raw real-world payloads
          │
          ▼
@@ -273,7 +273,7 @@ Every future commit automatically verifies every historical real-world format
 * *Limitation:* Handcrafted fixtures rarely capture subtle anomalies found in production (e.g. weird MIME transfer encodings, non-standard HTML table nestings, invisible non-breaking spaces `\u00a0`, or malformed header timestamps).
 
 #### 2. Phase 2: Live Payload Harvesting (`STEP-06`)
-* When live UAT executes against external boundaries (e.g., pulling live emails from stakeholder mailbox), the service writes raw incoming payloads byte-for-byte to a local capture buffer: `scratch/harvested/raw_<source>_<timestamp>.eml`.
+* When live E2E pre-flight executes against external boundaries (e.g., pulling live emails from stakeholder mailbox), the service writes raw incoming payloads byte-for-byte to a local capture buffer: `scratch/harvested/raw_<source>_<timestamp>.eml`.
 
 #### 3. Phase 3: Sanitization Protocol
 Before any harvested payload can be committed to a git repository, it must pass strict automated sanitization:
@@ -325,23 +325,23 @@ Stratum's testing tiers integrate directly with its **Three Human Governance Gat
     ▼
 [STEP-04] TDD Phase 1: Author Test Scenarios (Red)
     │     AI QA Agent authors Tier 1 (Unit) and Tier 2 (Integration) tests.
-    │     Compiles full UAT Test Suite (Happy + Unhappy cases) in scenario.md.
+    │     Compiles full Acceptance Test Suite in e2e_scenario.md.
     ▼
 [GATE-02] CONTRACT & TEST SCENARIO GATE ("What exact behavior to build?")
-    │     Human reviews & approves DB schemas, Tier 1/2 tests, AND Tier 3 UAT Suite
+    │     Human reviews & approves DB schemas, Tier 1/2 tests, AND Tier 3 Acceptance Suite
     │     BEFORE any implementation code is synthesized.
     ▼
 [STEP-05] TDD Phase 2: Autonomous Code Synthesis (Green & Refactor)
     │     AI Dev Agent synthesizes code handling happy + error paths until 100% green.
     ▼
-[STEP-06] Container Build & UAT Deployment (Pre-Flight Tier 3 Checks)
-    │     Builds Docker container, executes pre-approved UAT Suite, generates report.
+[STEP-06] Container Build & Tier 3 E2E Execution (Pre-Flight Checks)
+    │     Builds Docker container, executes pre-approved Acceptance Suite, generates e2e_results.
     ▼
 [GATE-03] USER ACCEPTANCE GATE (UAT Sign-off)
-    │     Human reviews scorecard and verifies physical outcomes (e.g. phone buzz).
+    │     Human reviews e2e_results report and verifies physical outcomes (e.g. phone buzz).
     ▼
 [STEP-07] Living Specifications Synchronization & Production Promotion
-    │     Merges to main, updates living specs, promotes harvested UAT fixtures.
+    │     Merges to main, updates living specs, promotes harvested test fixtures.
     ▼
 [STEP-08] Continuous Container Operation & Cloud Readiness
           Container runs stably in background on OrbStack (cloud lift-and-shift ready).
@@ -355,4 +355,4 @@ Stratum's testing tiers integrate directly with its **Three Human Governance Gat
 2. **Integration Tests (Tier 2):** Essential. Test real database constraints, transactions, and event streams via Testcontainers inside isolated repositories. Catch 85–90% of bugs before staging. Authored in `STEP-04` (Red), satisfied in `STEP-05` (Green).
 3. **End-to-End Tests (Tier 3):** Automated cross-service journeys stored in `stratum-meta/tests/e2e/` and `scripts/`. Executed in `STEP-06` as an automated pre-flight gatekeeper before `GATE-03`. Follows the Lean Regression policy: canonical flows are promoted to Tier 3 regression, while format permutations and error edges push down to Tier 2.
 4. **Pre-Flight Runs Before UAT:** Always pre-flight test automatically in `STEP-06` before asking a human to inspect UAT at `GATE-03`.
-5. **Local Portability:** Run Tier 1, Tier 2, and Tier 3 tests locally with zero cloud dependencies; live UAT containers run on OrbStack/Docker with cloud lift-and-shift readiness.
+5. **Local Portability:** Run Tier 1, Tier 2, and Tier 3 tests locally with zero cloud dependencies; live multi-container stacks run on OrbStack/Docker with cloud lift-and-shift readiness.

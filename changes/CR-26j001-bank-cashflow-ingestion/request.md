@@ -107,7 +107,7 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 * **Core Question:** *"Does it work in reality?"*
 * **Inspected Environment:** Live container stack on OrbStack / Docker (`stratum-meta/deploy/docker-compose.yml`)
 * **Status:** `AWAITING_HUMAN_SIGN_OFF`
-* **Scorecard Artifact:** [`e2e_results_20261011_190453.md`](e2e_results_20261011_190453.md)
+* **Scorecard Artifact:** [`e2e_results_20261011_195515.md`](e2e_results_20261011_195515.md)
 * **Verification Scorecard (Automated Pre-Flight & Physical Human Verification):**
   - [x] **`TC-01` Empty Inbox Edge:** Automated pre-flight verified (13ms, 0 DB writes, 0 alerts).
   - [x] **`TC-02` Happy Path Single:** Automated pre-flight verified (6251ms, ledger write verified in PostgreSQL).

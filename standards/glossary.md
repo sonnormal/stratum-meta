@@ -52,8 +52,8 @@
 | **`Smoke Test Suite`** | A selective subset of critical happy-path test cases executed to rapidly verify that core features and interfaces function before deeper testing (e.g. health checks, canonical happy path). |
 | **`Regression Test Suite`** | A comprehensive multi-tier test suite executed after code changes to ensure that previously developed and verified capabilities remain defect-free across all tiers. |
 | **`Production-Parity`** | UAT standard requiring maximum real components and real production channel data; synthetic simulation endpoints are strictly forbidden. |
-| **`Fixture Loop`** | **UAT-to-Integration Fixture Feedback Loop:** The architectural process of capturing real payloads during UAT, sanitizing them, and promoting them into permanent Tier 2 regression test fixtures. |
-| **`scenario.md`** | The repository-scoped technical specification and executable test contract stored within the target repository (`<repo>/changes/CR-YYaXXX/scenario.md`). Combines internal technical scope, DB migrations, Tier 1/2 tests, and Tier 3 UAT suite specifications. |
+| **`Fixture Loop`** | **E2E-to-Integration Fixture Feedback Loop:** The architectural process of capturing real payloads during E2E pre-flight execution, sanitizing them, and promoting them into permanent Tier 2 regression test fixtures. |
+| **`scenario.md`** | The repository-scoped technical specification and executable test contract stored within the target repository (`<repo>/changes/CR-YYaXXX/scenario.md`). Combines internal technical scope, DB migrations, and Tier 1/2 tests. (Cross-service Tier 3 Acceptance Suites are specified in `stratum-meta/changes/CR-YYaXXX/e2e_scenario.md`). |
 | **`fixtures/`** | Repository-specific directory containing test fixtures (sample `.eml` raw emails, mock JSON payloads, SQL seed rows) consumed by Tier 1 and Tier 2 tests. |
 
 ---

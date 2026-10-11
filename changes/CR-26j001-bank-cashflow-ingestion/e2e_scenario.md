@@ -18,8 +18,8 @@
 | **Bound Contracts** | [`TransactionDetectedEvent (v1)`](../../contracts/events/transaction_detected.v1.json) |
 | **Master CR Record** | [CR-26j001 Master Request](request.md) |
 | **Status** | `APPROVED` (Signed off at `GATE-02`) |
-| **Automated Runner** | [`scripts/uat-verify.sh`](../../scripts/uat-verify.sh) |
-| **Latest E2E Report** | [`e2e_results_20261011_190453.md`](e2e_results_20261011_190453.md) |
+| **Automated Runner** | [`scripts/e2e-verify.sh`](../../scripts/e2e-verify.sh) |
+| **Latest E2E Report** | [`e2e_results_20261011_195515.md`](e2e_results_20261011_195515.md) |
 
 ---
 
