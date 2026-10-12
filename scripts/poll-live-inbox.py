@@ -86,10 +86,34 @@ def main() -> None:
         default=None,
         help="Filter exclusively by year (e.g. 2026 sets 01-Jan-2026 to 01-Jan-2027)",
     )
+    parser.add_argument(
+        "--mailbox",
+        "--folder",
+        dest="mailbox",
+        default="INBOX",
+        help="IMAP mailbox folder to select (e.g. INBOX, '[Gmail]/All Mail')",
+    )
+    parser.add_argument(
+        "--all-mail",
+        action="store_true",
+        help="Convenience: select '[Gmail]/All Mail' folder (includes archived emails)",
+    )
+    parser.add_argument(
+        "--no-alert",
+        "--quiet",
+        dest="no_alert",
+        action="store_true",
+        help="Silently ingest into database without dispatching mobile push notifications (ideal for historical backfills)",
+    )
     parser.add_argument("--sender", default="vib.com.vn", help="Sender query string")
     parser.add_argument("--gateway-url", default="http://127.0.0.1:8000", help="Perimeter Gateway URL")
     parser.add_argument("--max", type=int, default=None, help="Max emails to process")
     args = parser.parse_args()
+
+    if args.all_mail:
+        args.mailbox = '"[Gmail]/All Mail"'
+    elif " " in args.mailbox and not args.mailbox.startswith('"'):
+        args.mailbox = f'"{args.mailbox}"'
 
     if args.year:
         try:
@@ -108,6 +132,8 @@ def main() -> None:
     print("======================================================================")
     print("🚀 Stratum Live Inbox Poller & Ingestion Runner")
     print(f"   Mailbox      : {user}")
+    print(f"   Folder       : {args.mailbox}")
+    print(f"   Alert Egress : {'SILENCED (Backfill mode)' if args.no_alert else 'ACTIVE (Telegram)'}")
     print(f"   Date Range   : SINCE {norm_since or 'ANY'} -> BEFORE {norm_before or 'NOW'}")
     print(f"   Sender Filter: {args.sender}")
     print(f"   Gateway API  : {args.gateway_url}")
@@ -117,7 +143,7 @@ def main() -> None:
     print("🔍 Connecting to imap.gmail.com:993 (SSL)...")
     mail = imaplib.IMAP4_SSL("imap.gmail.com", 993)
     mail.login(user, password)
-    mail.select("INBOX", readonly=True)
+    mail.select(args.mailbox, readonly=True)
 
     query_parts = [f'FROM "{args.sender}"']
     if norm_since:
@@ -167,10 +193,15 @@ def main() -> None:
                 res, msg_data = mail.fetch(mid, "(RFC822)")
                 raw_bytes = msg_data[0][1]
 
+                post_params = {}
+                if args.no_alert:
+                    post_params["dispatch_alert"] = "false"
+
                 response = client.post(
                     f"{args.gateway_url}/api/v1/ingest/email",
                     content=raw_bytes,
                     headers={"Content-Type": "message/rfc822"},
+                    params=post_params,
                 )
                 duration_ms = int((time.time() - t_start) * 1000)
 
@@ -220,9 +251,11 @@ def main() -> None:
     # Write Markdown Report
     with open(report_file, "w") as rf:
         rf.write(f"# 📊 Live Production Inbox Ingestion Report\n\n")
-        rf.write(f"> **Executed At:** `{datetime.utcnow().isoformat()}Z`  \n")
-        rf.write(f"> **Filter Criteria:** `{query}`  \n")
-        rf.write(f"> **Target Mailbox:** `{user}`  \n\n")
+        rf.write(f"> **Executed At:** `{datetime.now().astimezone().isoformat()}`  \n")
+        rf.write(f"> **Target Mailbox:** `{user}`  \n")
+        rf.write(f"> **Mailbox Folder:** `{args.mailbox}`  \n")
+        rf.write(f"> **Alert Mode:** `{'SILENCED (Backfill mode)' if args.no_alert else 'ACTIVE (Telegram)'}`  \n")
+        rf.write(f"> **Filter Criteria:** `{query}`  \n\n")
         rf.write(f"## Summary Metrics\n\n")
         rf.write(f"| Metric | Count |\n| :--- | :--- |\n")
         rf.write(f"| **Total Emails Evaluated** | `{len(msg_ids)}` |\n")
