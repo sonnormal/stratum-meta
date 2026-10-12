@@ -11,7 +11,7 @@
 
 ## 📌 1. Overview & Objective
 
-This flow automates the ingestion of financial alert emails sent by banks (starting with VIB). When an alert arrives, `gateway` parses the raw MIME email, normalizes the financial data, and emits a standard `TransactionDetectedEvent`. The domain service `services/cashflow` consumes the event, enforces idempotency, updates account movements and balances in PostgreSQL, and routes an instant alert notification to the stakeholder via Zalo/Viber through `gateway`.
+This flow automates the ingestion of financial alert emails sent by banks (starting with VIB). When an alert arrives, `gateway` parses the raw MIME email, normalizes the financial data, and emits a standard `TransactionDetectedEvent`. The domain service `services/cashflow` consumes the event, enforces idempotency, updates account movements in PostgreSQL, and routes an instant alert notification to the stakeholder via Telegram through `gateway`.
 
 ---
 
@@ -36,7 +36,7 @@ flowchart LR
     end
 
     subgraph S4["4. Instant Alert"]
-        E["📱 <b>Mobile Notification</b><br/>Receive push on phone<br/>(Viber / Zalo message)"]
+        E["📱 <b>Mobile Notification</b><br/>Receive push on phone<br/>(Telegram notification)"]
     end
 
     A --> B
@@ -53,16 +53,16 @@ sequenceDiagram
     participant Gateway as gateway
     participant Bus as Internal Event Bus
     participant Cashflow as services/cashflow
-    actor User as Stakeholder (Zalo/Viber)
+    actor User as Stakeholder (Telegram)
 
     VIB->>Gateway: New email in IMAP inbox
     Gateway->>Gateway: Fetch .eml, parse headers & regex body
     Gateway->>Bus: Emit TransactionDetectedEvent (v1)
     Bus->>Cashflow: Consume TransactionDetectedEvent
     Cashflow->>Cashflow: Check event_id idempotency (PostgreSQL)
-    Cashflow->>Cashflow: Persist movement & update account balance
+    Cashflow->>Cashflow: Persist movement in account_movements
     Cashflow->>Gateway: Dispatch alert notification request
-    Gateway-->>User: Deliver push message (Amount, Merchant, Balance)
+    Gateway-->>User: Deliver push message (Amount, Merchant, Category)
 ```
 
 ---

@@ -11,7 +11,7 @@
 
 ## 📌 1. Capability Overview
 
-The **Bank Transaction Ingestion & Cashflow Alerting** feature monitors bank transaction alert emails (starting with VIB), parses debit/credit amounts, timestamps, and remaining account balances, persists cashflow movements in a local PostgreSQL database, and delivers immediate push alerts to the stakeholder over Zalo/Viber.
+The **Bank Transaction Ingestion & Cashflow Alerting** feature monitors bank transaction alert emails (starting with VIB), parses debit/credit amounts, timestamps, and counterparties, persists cashflow movements in a local PostgreSQL database, and delivers immediate push alerts to the stakeholder over Telegram.
 
 ---
 
@@ -19,13 +19,13 @@ The **Bank Transaction Ingestion & Cashflow Alerting** feature monitors bank tra
 
 * **As a:** Stakeholder managing personal finances and bank accounts
 * **I want to:** Receive an instantaneous conversational notification whenever a bank account incurs a transaction
-* **So that:** I have immediate visibility over debits, credits, and current account balances without logging into banking apps.
+* **So that:** I have immediate visibility over debits, credits, and current account movements without logging into banking apps.
 
 ### Concrete Criteria
-- [ ] Parses debit transactions (e.g. `GD: -50,000VND`, merchant name, remaining balance).
-- [ ] Parses credit transactions (e.g. `GD: +1,200,000VND`, sender name).
-- [ ] Ignores promotional or non-transaction emails from the bank.
-- [ ] Strict idempotency: Duplicate emails received via IMAP never create duplicate cashflow records or duplicate push alerts.
+- [x] Parses debit transactions (e.g. `GD: -50,000VND`, merchant name, remaining balance).
+- [x] Parses credit transactions (e.g. `GD: +1,200,000VND`, sender name).
+- [x] Ignores promotional or non-transaction emails from the bank via heuristic diacritic-aware filter.
+- [x] Strict idempotency: Duplicate emails received via IMAP never create duplicate cashflow records or duplicate push alerts.
 
 ---
 
@@ -35,6 +35,7 @@ The **Bank Transaction Ingestion & Cashflow Alerting** feature monitors bank tra
 2. **Account Masking:** The bank account number must always be masked (e.g. `*4321`) in logs and conversational notifications for privacy.
 3. **Balance Tracking:** If the email reports available balance, the latest account balance is updated; if not, balance remains unchanged.
 4. **Idempotency Key:** Composite unique index on `(bank_code, raw_source_ref)` prevents double-counting.
+5. **Diacritic Normalization:** Inbound subject line and body text undergo NFD unicode diacritic normalization to match Vietnamese bank alert keywords reliably.
 
 ---
 
@@ -43,4 +44,4 @@ The **Bank Transaction Ingestion & Cashflow Alerting** feature monitors bank tra
 * **Implementing Service:** `services/cashflow`
 * **Storage:** PostgreSQL table `account_movements` (managed by `services/cashflow`)
 * **Inbound Event:** Consumes `TransactionDetectedEvent` (v1) from internal bus.
-* **Alert Delivery:** Dispatches message to `gateway` conversational bot webhook.
+* **Alert Delivery:** Dispatches message to `gateway` Telegram Bot client (`@Sonnormal_cashflow_alert_bot`).

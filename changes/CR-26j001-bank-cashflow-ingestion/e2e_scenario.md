@@ -29,7 +29,7 @@
 
 | Container / Component | Role in E2E Flow | Exposed Port | Healthcheck Endpoint |
 | :--- | :--- | :--- | :--- |
-| **`stratum-gateway`** | Ingress API, MIME parsing, Ollama client, Viber webhook | `8000` | `http://127.0.0.1:8000/healthz` |
+| **`stratum-gateway`** | Ingress API, MIME parsing, Ollama client, Telegram notification | `8000` | `http://127.0.0.1:8000/healthz` |
 | **`stratum-cashflow-service`** | Cashflow domain core, ledger rules, idempotency | `8001` | `http://127.0.0.1:8001/healthz` |
 | **`stratum-cashflow-db`** | PostgreSQL 16 database (`cashflow` DB) | `5432` | `pg_isready -U postgres -d cashflow` |
 | **Host Engine (Ollama)** | Local LLM extraction (`qwen3.6:27b` on Apple Silicon Metal GPU) | `11434` | `http://127.0.0.1:11434/api/tags` |
@@ -45,7 +45,7 @@
 * **Expected Invariants:**
   - HTTP 200 with payload `{"processed":false,"skip_reason":"NOT_BANK_ALERT"}`.
   - Zero PostgreSQL database mutations in `account_movements`.
-  - Zero external Viber notifications dispatched.
+  - Zero external Telegram notifications dispatched.
   - Exits in < 50ms with zero errors.
 
 ### TC-02: Happy Path Single — Single VIB Debit Email
@@ -57,7 +57,7 @@
   - Verbatim amount guardrail confirms `75000` exists in email text.
   - POSTs `TransactionDetectedEvent` to Cashflow Core (`http://cashflow-service:8001/api/v1/movements`).
   - Cashflow Core inserts 1 row into `account_movements` with `status: RECORDED`.
-  - Viber notification dispatched.
+  - Telegram notification dispatched to mobile phone.
   - HTTP 200 returned with `{"processed":true,"movement_status":"RECORDED"}`.
 
 ### TC-03: Happy Path Batch — Subsequent Inbound VIB Credit Email
@@ -76,7 +76,7 @@
 * **Expected Invariants:**
   - Fast heuristic filter discards email in < 100ms.
   - Ollama LLM is completely bypassed (0 GPU cycles wasted).
-  - 0 DB writes; 0 Viber notifications.
+  - 0 DB writes; 0 Telegram notifications.
   - HTTP 200 returned with `{"processed":false,"skip_reason":"NOT_BANK_ALERT"}`.
 
 ### TC-05: Unhappy / Fault Recovery — Email Missing Verbatim Amount
@@ -96,7 +96,7 @@
   - Cashflow Core triggers PostgreSQL `ON CONFLICT (bank_code, raw_source_ref) DO NOTHING`.
   - HTTP 200 returned with `{"processed":true,"movement_status":"DUPLICATE_IGNORED"}`.
   - Database row count in `account_movements` strictly unchanged (1 -> 1).
-  - 0 duplicate Viber messages dispatched.
+  - 0 duplicate Telegram messages dispatched.
 
 ---
 

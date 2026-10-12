@@ -14,9 +14,9 @@
 | **Title** | Bank Transaction Ingestion & Cashflow Alerting |
 | **Requester** | Human Stakeholder (`sonnormal@gmail.com` / `+84981801931`) |
 | **Ingress Channel** | Gmail IMAP (`sonnormal@gmail.com`, daily scheduled batch) |
-| **Egress Channel** | Viber Bot (`+84981801931`) |
+| **Egress Channel** | Telegram Bot (`@Sonnormal_cashflow_alert_bot` / `8502789411`) |
 | **Created Timestamp** | `2026-10-05 21:00:00 UTC+7` |
-| **Current Lifecycle State** | `INTAKE` (Configuring Concrete Parameters) |
+| **Current Lifecycle State** | `PROMOTED` (`GATE-03` Signed Off, Feature Operational) |
 
 ---
 
@@ -106,8 +106,8 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
 ### 🛡️ GATE-03: User Acceptance Gate (UAT Sign-off)
 * **Core Question:** *"Does it work in reality?"*
 * **Inspected Environment:** Live container stack on OrbStack / Docker (`stratum-meta/deploy/docker-compose.yml`)
-* **Status:** `AWAITING_HUMAN_SIGN_OFF`
-* **Scorecard Artifact:** [`e2e_results_20261011_195515.md`](e2e_results_20261011_195515.md)
+* **Status:** `APPROVED`
+* **Scorecard Artifact:** [`e2e_results_20261011_195515.md`](e2e_results_20261011_195515.md), [`live_ingestion_results_20261012_050857.md`](live_ingestion_results_20261012_050857.md)
 * **Verification Scorecard (Automated Pre-Flight & Physical Human Verification):**
   - [x] **`TC-01` Empty Inbox Edge:** Automated pre-flight verified (13ms, 0 DB writes, 0 alerts).
   - [x] **`TC-02` Happy Path Single:** Automated pre-flight verified (6251ms, ledger write verified in PostgreSQL).
@@ -115,6 +115,6 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
   - [x] **`TC-04` Noise Filter:** Automated pre-flight verified (15ms, non-bank email discarded without invoking LLM).
   - [x] **`TC-05` Unhappy Recovery:** Automated pre-flight verified (4938ms, structured error returned, 0 container crashes).
   - [x] **`TC-06` Idempotency Re-run:** Automated pre-flight verified (6176ms, `DUPLICATE_IGNORED`, 0 row drift).
-  - [ ] **Physical Device Smoke Check:** Human stakeholder verifies real Viber push notification arrives on physical mobile phone (`+84981801931`).
+  - [x] **Physical Device Smoke Check:** Human stakeholder verified real push notification delivered to mobile phone via Telegram (`@Sonnormal_cashflow_alert_bot`).
 * **Reviewer Directives / Notes:**
-  > *Tier 3 E2E test runner passed 100% (6 / 6 canonical cases). Automated pre-flight verified. Awaiting human stakeholder verification of physical Viber notification to sign off GATE-03.*
+  > *Tier 3 automated acceptance suite passed 100% (6/6). Real Gmail IMAP 2026 inbox batch ingested (118 emails scanned, 8 recorded, 110 noise discarded, 0 errors). Physical mobile alert received on Telegram. Stakeholder approved GATE-03 sign-off.*
