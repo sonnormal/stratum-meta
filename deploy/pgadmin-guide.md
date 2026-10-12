@@ -148,13 +148,23 @@ ORDER BY SUM(amount) DESC;
 
 ## 🛑 6. Stopping pgAdmin
 
-When you finish exploring the database, you can stop the pgAdmin container:
+When you finish exploring the database, you can stop the pgAdmin container using the matching method:
 
+### Option A: Via Docker Compose
 ```bash
-# If launched via docker-compose:
 docker compose -f stratum-meta/deploy/docker-compose.yml --profile tools stop pgadmin
+```
 
-# Or if launched via docker run:
+### Option B: Via Standalone Docker CLI
+```bash
 docker stop stratum-pgadmin && docker rm stratum-pgadmin
 ```
-The underlying PostgreSQL database (`stratum-cashflow-db`) and stored transaction data remain intact in the `cashflow-data` volume.
+
+### Option C: Via OrbStack Desktop GUI
+1. Open the **OrbStack** desktop app.
+2. Under **Containers**, locate **`stratum-pgadmin`**.
+3. Click the square **Stop** (■) button (or right-click → **Stop**).
+
+---
+
+> **Note on Data Persistence:** Stopping or removing the pgAdmin container has zero impact on your data. The PostgreSQL database (`stratum-cashflow-db`) and all stored transaction movements remain permanently persisted in the `cashflow-data` volume.
