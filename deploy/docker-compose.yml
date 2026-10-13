@@ -1,8 +1,15 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   cashflow-db:
     image: postgres:16-alpine
     container_name: stratum-cashflow-db
     restart: unless-stopped
+    logging: *default-logging
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
@@ -25,6 +32,7 @@ services:
       dockerfile: Dockerfile
     container_name: stratum-cashflow-service
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       cashflow-db:
         condition: service_healthy
@@ -48,6 +56,7 @@ services:
       dockerfile: Dockerfile
     container_name: stratum-gateway
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       cashflow-service:
         condition: service_healthy
@@ -75,6 +84,7 @@ services:
     image: dpage/pgadmin4:latest
     container_name: stratum-pgadmin
     restart: unless-stopped
+    logging: *default-logging
     profiles:
       - tools
     environment:

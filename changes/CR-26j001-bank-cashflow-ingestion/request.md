@@ -118,3 +118,30 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
   - [x] **Physical Device Smoke Check:** Human stakeholder verified real push notification delivered to mobile phone via Telegram (`@Sonnormal_cashflow_alert_bot`).
 * **Reviewer Directives / Notes:**
   > *Tier 3 automated acceptance suite passed 100% (6/6). Real Gmail IMAP 2026 inbox batch ingested (118 emails scanned, 8 recorded, 110 noise discarded, 0 errors). Physical mobile alert received on Telegram. Stakeholder approved GATE-03 sign-off.*
+
+---
+
+## 🚀 6. Delivery & Operational Promotion Audit Log
+
+### 📚 STEP-07: Living Specifications Synchronization & Main Promotion
+* **Git Main Promotion:** Merged feature branches to `main` across `gateway`, `services/cashflow`, and `stratum-meta`.
+* **Living Specs Synchronized:**
+  - [`features/vib-transaction-alert.md`](../../features/vib-transaction-alert.md): Canonical rules & acceptance criteria.
+  - [`flows/email-transaction-ingestion.md`](../../flows/email-transaction-ingestion.md): Cumulative choreography sequence.
+  - [`architecture/topology/container-runtime.md`](../../architecture/topology/container-runtime.md): C4 level 2 multi-container topology.
+* **Fixture Promotion:** Baseline fixtures promoted and regression test suites established.
+
+### 🚀 STEP-08: Continuous Container Operation & Cloud Readiness
+* **Container Daemon:** Operating stably in the background on OrbStack (`stratum-gateway`, `stratum-cashflow-service`, `stratum-cashflow-db`).
+* **Continuous Operations Tooling:**
+  - `make status` / `make ps`: Inspect live multi-service healthchecks and host Ollama GPU daemon.
+  - `make backup-db`: Automated timestamped SQL backup via [`scripts/backup-db.sh`](../../scripts/backup-db.sh).
+  - `make poll` / `make poll-quiet`: Automated watermark ingestion with persistent cursor tracking.
+* **Log Rotation & Hygiene:** Configured `json-file` log caps (`max-size: 10m`, `max-file: 3`) in `deploy/docker-compose.yml` to prevent disk space exhaustion.
+* **Operational Runbook:** Published complete runbook in [`deploy/operations-guide.md`](../../deploy/operations-guide.md).
+* **Cloud Readiness Checklist:**
+  - 100% standard OCI container images (`Dockerfile` in `gateway` and `services/cashflow`).
+  - Strict network segmentation (`perimeter`, `internal`, `data`).
+  - Zero hardcoded secrets (`.env.secrets` externalized).
+  - Ready for cloud lift-and-shift deployment to Kubernetes or managed containers.
+

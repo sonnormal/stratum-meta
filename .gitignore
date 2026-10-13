@@ -8,6 +8,8 @@
 # Local Scratch & Temporary Runtime Artifacts
 scratch/
 tmp/
+backups/
+*.sql
 .inbox_cursor.json
 *.cursor.json
 
