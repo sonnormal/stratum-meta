@@ -8,6 +8,8 @@
 # Local Scratch & Temporary Runtime Artifacts
 scratch/
 tmp/
+.inbox_cursor.json
+*.cursor.json
 
 # OS Artifacts
 .DS_Store
