@@ -35,7 +35,7 @@ graph TD
         DeployUAT["📦 [STEP-06] Build & Run Pre-Flight E2E<br/>(Execute Automated Tier 3 & Harvest Payloads)"]
         Gate3{"🛡️ [GATE-03] User Acceptance Gate (UAT)<br/>Stakeholder Verifies Real Behavior in UAT"}
         SyncDoc["📚 [STEP-07] Living Specs Sync & Promotion<br/>(Merge main, update living specs, promote fixtures)"]
-        Operate["🚀 [STEP-08] Container Operation & Observability<br/>(Ready for Cloud Lift-and-Shift)"]
+        Operate["🚀 [STEP-08] AI Observer & Cloud Readiness<br/>(Continuous Telemetry, Alerting & Capacity Advisor)"]
 
         TDDPhase2 --> DeployUAT
         DeployUAT --> Gate3
@@ -182,11 +182,14 @@ Human oversight is concentrated at three strategic, high-leverage decision point
   5. **Change Request Archival:** Marks the Change Request folder (`meta/changes/CR-YYaXXX/`) as `PROMOTED`, preserving it as an immutable historical delta record.
 * **Output:** Clean `main` branches, updated living documentation, permanently hardened regression suites, and archived CR audit trail.
 
-#### `STEP-08`: Continuous Container Operation & Cloud Readiness
-* **Actor:** Local Container Daemon / Future Cloud Runner
+#### `STEP-08`: Autonomous Infrastructure Observer & Capacity Advisor
+* **Actor:** Autonomous AI Observer Daemon (`scripts/ai-observer.py`) & Container Daemon
 * **Process:**
-  - Container runs stably in the background on OrbStack.
-  - Architecture is 100% standard Docker/OCI—ready to be deployed to Kubernetes whenever 24/7 public access is needed.
+  1. **Continuous Telemetry Probing (Interval: Seconds/Minutes):** Periodically samples container CPU %, memory working set, storage volume growth, endpoint latencies (`/healthz`), and host Metal GPU inference responsiveness.
+  2. **Real-Time Anomaly & Threshold Alerting:** Evaluates infrastructure anomalies (container restarts, memory bounds, elevated latency, process crashes) and pushes immediate alerts to stakeholder via Telegram (`@Sonnormal_cashflow_alert_bot`).
+  3. **Periodic Review & Capacity Advisor (Weekly / Monthly):** Synthesizes historical telemetry curves using local LLM (`qwen3.6:27b`), evaluates resource headroom, and provides formal hardware/cloud upgrade advisories.
+  4. **Cloud Portability Guarantee:** Architecture adheres strictly to 100% OCI standards, stateless scaling patterns, and externalized configuration—ready for immediate cloud lift-and-shift to Kubernetes.
+* **Output:** Operational background stack, persistent time-series telemetry (`telemetry/observer-metrics.jsonl`), instant mobile alert dispatch, and periodic infrastructure capacity reviews.
 
 ---
 

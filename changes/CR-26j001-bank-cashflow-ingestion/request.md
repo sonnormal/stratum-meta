@@ -131,9 +131,12 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
   - [`architecture/topology/container-runtime.md`](../../architecture/topology/container-runtime.md): C4 level 2 multi-container topology.
 * **Fixture Promotion:** Baseline fixtures promoted and regression test suites established.
 
-### 🚀 STEP-08: Continuous Container Operation & Cloud Readiness
+### 🚀 STEP-08: Autonomous Infrastructure Observer & Cloud Readiness
 * **Container Daemon:** Operating stably in the background on OrbStack (`stratum-gateway`, `stratum-cashflow-service`, `stratum-cashflow-db`).
-* **Continuous Operations Tooling:**
+* **Continuous Operations & AI Observer Tooling:**
+  - `make observer`: One-shot telemetry probe, threshold verification, and terminal dashboard.
+  - `make observer-daemon`: Autonomous background daemon logging to `telemetry/observer-metrics.jsonl` and pushing instant alerts to Telegram on anomalies.
+  - `make observer-review`: Executive AI capacity planning and hardware upgrade advisory powered by local Ollama (`qwen3.6:27b`).
   - `make status` / `make ps`: Inspect live multi-service healthchecks and host Ollama GPU daemon.
   - `make backup-db`: Automated timestamped SQL backup via [`scripts/backup-db.sh`](../../scripts/backup-db.sh).
   - `make poll` / `make poll-quiet`: Automated watermark ingestion with persistent cursor tracking.
@@ -144,4 +147,5 @@ Automate the ingestion of bank transaction alert emails (starting with VIB), par
   - Strict network segmentation (`perimeter`, `internal`, `data`).
   - Zero hardcoded secrets (`.env.secrets` externalized).
   - Ready for cloud lift-and-shift deployment to Kubernetes or managed containers.
+
 

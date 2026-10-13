@@ -9,9 +9,12 @@
 scratch/
 tmp/
 backups/
+telemetry/
+reports/
 *.sql
 .inbox_cursor.json
 *.cursor.json
+.observer_alert_state.json
 
 # OS Artifacts
 .DS_Store

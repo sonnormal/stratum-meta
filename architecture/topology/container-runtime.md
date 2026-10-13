@@ -14,6 +14,8 @@ graph TD
     subgraph Host_Environment ["Host Machine (Mac Studio / PC)"]
         HostOllama["Host Ollama LLM Service<br/><i>qwen3.6:27b on Apple Silicon Metal GPU</i><br/>Port: 11434"]
         ClientHost["Host Browser / HTTP Client<br/>Ports: 8000, 8001, 5432"]
+        Observer["AI Observer Daemon<br/>(scripts/ai-observer.py)<br/>Telemetry, Alerting & Capacity Review"]
+        Telegram["Telegram Cloud API<br/>@Sonnormal_cashflow_alert_bot"]
     end
 
     subgraph Docker_Engine ["Docker / OrbStack Container Runtime"]
@@ -37,6 +39,11 @@ graph TD
     Gateway -->|HTTP :8001 / Internal DNS| Cashflow
     Cashflow -->|TCP :5432 / Internal DNS| Postgres
     Postgres --- DataVol
+    Observer -.->|Docker Engine Stats & /healthz| Gateway
+    Observer -.->|Docker Engine Stats & /healthz| Cashflow
+    Observer -.->|Docker Engine Stats & pg_isready| Postgres
+    Observer -.->|Latency Probe & AI Review| HostOllama
+    Observer -.->|Instant Anomaly Push Alerts| Telegram
 ```
 
 ---
@@ -56,3 +63,4 @@ graph TD
 * **Network Boundary Isolation:** `stratum-gateway` belongs strictly to `perimeter` and `internal` networks with **zero route to `stratum-cashflow-db`**.
 * **Host Hardware Acceleration Bridge:** `stratum-gateway` reaches the host Metal GPU Ollama service strictly via `http://host.docker.internal:11434` (`extra_hosts`).
 * **Authoritative State Isolation:** Only `stratum-cashflow-service` can access `cashflow-data` via internal TCP 5432; direct external SQL access is prohibited.
+* **Autonomous Infrastructure Observability:** The AI Observer daemon operates out-of-band on the host, continually sampling container resource footprints and pushing real-time anomalies to the stakeholder over Telegram.
