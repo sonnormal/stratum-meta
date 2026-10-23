@@ -66,4 +66,5 @@ To keep `GATE-02` reviews focused and prevent redundant specification churn:
 
 | ID | Title | Status | Date | Folder |
 | :--- | :--- | :--- | :--- | :--- |
-| `CR-26j001` | Bank Email Ingestion & Cashflow Alerting | `INTAKE` | 2026-10-05 | [`CR-26j001-bank-cashflow-ingestion/`](CR-26j001-bank-cashflow-ingestion/) |
+| `CR-26j001` | Bank Email Ingestion & Cashflow Alerting | `PROMOTED` | 2026-10-05 | [`CR-26j001-bank-cashflow-ingestion/`](CR-26j001-bank-cashflow-ingestion/) |
+| `CR-26j002` | Two-Way Conversational Telegram Commands | `INITIALIZED` | 2026-10-13 | [`CR-26j002-telegram-commands/`](CR-26j002-telegram-commands/) |
